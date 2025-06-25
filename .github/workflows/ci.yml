@@ -28,7 +28,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Lint
-        run: echo 'Add lint command'
-      - name: Test
-        run: echo 'Add test command'
+      - name: Lint Python
+        run: |
+          ruff check packages/mkdocs-marktrace
+          black --check packages/mkdocs-marktrace
+      - name: Run Tests
+        run: |
+          pnpm --filter marktrace-cli test
+          pytest packages/mkdocs-marktrace/tests
