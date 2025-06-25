@@ -32,16 +32,19 @@ def test_docusaurus_build(tmp_path):
             """
             const pluginFactory = require(process.argv[2]);
             const siteDir = process.argv[3];
+            const baseUrl = '/sub/';
             const path = require('path');
             const fs = require('fs');
             (async () => {
-              const plugin = pluginFactory({ siteDir });
+              const plugin = pluginFactory({ siteDir, baseUrl });
               const opts = plugin.configureMDX({});
               if (!Array.isArray(opts.remarkPlugins) || opts.remarkPlugins.length === 0) process.exit(1);
               await plugin.loadContent();
+              const tags = plugin.injectHtmlTags();
               const css = fs.existsSync(path.join(siteDir, 'static', 'marktrace.css'));
               const js = fs.existsSync(path.join(siteDir, 'static', 'marktrace.js'));
-              if (css && js) process.exit(0); else process.exit(1);
+              const injected = JSON.stringify(tags);
+              if (css && js && injected.includes('/sub/marktrace.js') && injected.includes('/sub/marktrace.css')) process.exit(0); else process.exit(1);
             })();
             """
         )
