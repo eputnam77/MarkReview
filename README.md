@@ -1,11 +1,11 @@
 # MarkTrace Monorepo
 
-This repository contains packages for MkDocs and Docusaurus plugins as well as a Node-based CLI for processing CriticMarkup changes.
+This repository contains plugins for MkDocs and Docusaurus plus a CLI for processing CriticMarkup changes.
+
+Run the CLI tests with:
 
 ```bash
 pnpm --filter marktrace-cli run test
 ```
 
-The `marktrace` command accepts, rejects or strips CriticMarkup annotations in place.
-
-See `prd.md` for the full product requirements.
+See the [docs](docs/index.md) for setup and usage instructions.
