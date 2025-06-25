@@ -29,6 +29,15 @@ Start the dev server:
 pnpm start
 ```
 
+## Testing from Source
+
+Install the plugins directly from this repository if a packaged release isn't available:
+
+```bash
+pip install -e packages/mkdocs-marktrace
+pnpm add -D file:packages/docusaurus-plugin-trackchanges
+```
+
 ## Persisting Changes
 
 Accepting or rejecting edits in the browser updates only the current page.

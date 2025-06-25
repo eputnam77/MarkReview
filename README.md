@@ -11,6 +11,13 @@ pip install mkdocs-marktrace
 pnpm add -D docusaurus-plugin-trackchanges
 ```
 
+If the packages haven't been published yet, install them directly from this repository to test locally:
+
+```bash
+pip install -e packages/mkdocs-marktrace
+pnpm add -D file:packages/docusaurus-plugin-trackchanges
+```
+
 ### MkDocs
 
 Add the plugin name to the `plugins` section of your `mkdocs.yml`:
