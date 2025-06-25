@@ -22,7 +22,7 @@ mkdocs serve
 // docusaurus.config.js
 plugins: ['docusaurus-plugin-trackchanges'];
 ```
-
+The plugin copies the runtime assets and injects the required tags automatically.
 Start the dev server:
 
 ```bash

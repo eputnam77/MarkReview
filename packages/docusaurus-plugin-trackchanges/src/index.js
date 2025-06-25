@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = function (context) {
-  const { siteDir } = context;
+  const { siteDir, baseUrl = '/' } = context;
   const staticDir = path.join(siteDir, 'static');
   const assetsDir = __dirname;
   const assets = ['marktrace.css', 'marktrace.js'];
@@ -27,6 +27,13 @@ module.exports = function (context) {
           }
         }),
       );
+    },
+
+    injectHtmlTags() {
+      return {
+        headTags: [`<link rel="stylesheet" href="${baseUrl}marktrace.css" />`],
+        postBodyTags: [`<script src="${baseUrl}marktrace.js"></script>`],
+      };
     },
   };
 };
