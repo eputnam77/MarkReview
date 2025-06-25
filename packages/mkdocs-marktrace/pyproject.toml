@@ -4,6 +4,25 @@ version = "0.1.0"
 description = "MkDocs plugin for MarkTrace"
 readme = "README.md"
 requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [{name = "The MarkTrace Team", email = "marktrace@example.com"}]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: MkDocs",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = [
+    "mkdocs>=1.5",
+    "pymdown-extensions>=10",
+]
+
+[project.entry-points."mkdocs.plugins"]
+marktrace = "marktrace.plugin:MarkTracePlugin"
+
+[tool.setuptools.package-data]
+marktrace = ["assets/*"]
 
 [build-system]
 requires = ["setuptools", "wheel"]
