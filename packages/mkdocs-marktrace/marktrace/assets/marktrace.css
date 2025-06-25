@@ -3,6 +3,7 @@
   --marktrace-add-color: #005fa3;
   --marktrace-del-color: #b32020;
   --marktrace-bar-color: #666666;
+  --marktrace-highlight-bg: #fffd75;
   --marktrace-toggle-bg: #ffffff;
   --marktrace-toggle-border: #cccccc;
   --marktrace-toggle-text: #000000;
@@ -30,6 +31,25 @@ body.marktrace-accepted ins {
 }
 body.marktrace-accepted del {
   display: none;
+}
+
+body.marktrace-original mark,
+body.marktrace-accepted mark {
+  background: none;
+}
+
+body.marktrace-markup mark {
+  background: var(--marktrace-highlight-bg);
+}
+
+body.marktrace-original .critic-comment,
+body.marktrace-accepted .critic-comment {
+  display: none;
+}
+
+body.marktrace-markup .critic-comment {
+  color: var(--marktrace-del-color);
+  background: rgba(179, 32, 32, 0.1);
 }
 
 .marktrace-block {

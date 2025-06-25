@@ -1,6 +1,6 @@
 (function () {
   function applyBars() {
-    document.querySelectorAll('ins, del').forEach(function (el) {
+    document.querySelectorAll('ins, del, mark, .critic').forEach(function (el) {
       var block = el.closest('p, li, div, blockquote, td, th');
       if (block && !block.classList.contains('marktrace-block')) {
         block.classList.add('marktrace-block');
@@ -37,11 +37,17 @@
     document.querySelectorAll('del').forEach(function (el) {
       if (!el.hasAttribute('aria-label')) el.setAttribute('aria-label', 'deletion');
     });
+    document.querySelectorAll('mark').forEach(function (el) {
+      if (!el.hasAttribute('aria-label')) el.setAttribute('aria-label', 'highlight');
+    });
+    document.querySelectorAll('.critic.comment, .critic-comment').forEach(function (el) {
+      if (!el.hasAttribute('aria-label')) el.setAttribute('aria-label', 'comment');
+    });
   }
 
   function findEdit(node) {
     var el = node.nodeType === 1 ? node : node.parentElement;
-    while (el && !el.matches('ins, del')) {
+    while (el && !el.matches('ins, del, mark, .critic')) {
       el = el.parentElement;
     }
     return el;
@@ -53,6 +59,10 @@
       el.replaceWith.apply(el, el.childNodes);
     } else if (el.tagName === 'DEL') {
       el.remove();
+    } else if (el.tagName === 'MARK') {
+      el.replaceWith.apply(el, el.childNodes);
+    } else if (el.classList.contains('critic-comment') || el.classList.contains('critic') && el.classList.contains('comment')) {
+      el.remove();
     }
   }
 
@@ -62,6 +72,10 @@
       el.remove();
     } else if (el.tagName === 'DEL') {
       el.replaceWith.apply(el, el.childNodes);
+    } else if (el.tagName === 'MARK') {
+      el.replaceWith.apply(el, el.childNodes);
+    } else if (el.classList.contains('critic-comment') || el.classList.contains('critic') && el.classList.contains('comment')) {
+      el.remove();
     }
   }
 
