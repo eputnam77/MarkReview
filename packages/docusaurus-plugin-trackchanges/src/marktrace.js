@@ -17,7 +17,7 @@
   function createToggle(initial) {
     var wrap = document.createElement('div');
     wrap.className = 'marktrace-toggle';
-    wrap.innerHTML = '<select>' +
+    wrap.innerHTML = '<select aria-label="Change view">' +
       '<option value="original">Original</option>' +
       '<option value="markup">Markup</option>' +
       '<option value="accepted">Accepted</option>' +
@@ -30,10 +30,73 @@
     });
   }
 
+  function applyAria() {
+    document.querySelectorAll('ins').forEach(function (el) {
+      if (!el.hasAttribute('aria-label')) el.setAttribute('aria-label', 'addition');
+    });
+    document.querySelectorAll('del').forEach(function (el) {
+      if (!el.hasAttribute('aria-label')) el.setAttribute('aria-label', 'deletion');
+    });
+  }
+
+  function findEdit(node) {
+    var el = node.nodeType === 1 ? node : node.parentElement;
+    while (el && !el.matches('ins, del')) {
+      el = el.parentElement;
+    }
+    return el;
+  }
+
+  function accept(el) {
+    if (!el) return;
+    if (el.tagName === 'INS') {
+      el.replaceWith.apply(el, el.childNodes);
+    } else if (el.tagName === 'DEL') {
+      el.remove();
+    }
+  }
+
+  function reject(el) {
+    if (!el) return;
+    if (el.tagName === 'INS') {
+      el.remove();
+    } else if (el.tagName === 'DEL') {
+      el.replaceWith.apply(el, el.childNodes);
+    }
+  }
+
+  function nextView() {
+    var views = ['original', 'markup', 'accepted'];
+    var current = document.body.className.match(/marktrace-(\w+)/);
+    var idx = views.indexOf(current ? current[1] : 'markup');
+    var next = views[(idx + 1) % views.length];
+    applyView(next);
+    var select = document.querySelector('.marktrace-toggle select');
+    if (select) select.value = next;
+  }
+
+  function handleKey(e) {
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+      return;
+    }
+    if (e.key === 'm') {
+      nextView();
+    } else if (e.key === 'a') {
+      var sel = window.getSelection();
+      if (sel.rangeCount) accept(findEdit(sel.getRangeAt(0).startContainer));
+    } else if (e.key === 'r') {
+      var selr = window.getSelection();
+      if (selr.rangeCount) reject(findEdit(selr.getRangeAt(0).startContainer));
+    }
+    applyBars();
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     var view = localStorage.getItem('marktrace-view') || 'markup';
     applyBars();
+    applyAria();
     applyView(view);
     createToggle(view);
+    document.addEventListener('keydown', handleKey);
   });
 })();

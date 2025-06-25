@@ -1,4 +1,12 @@
 /* Track changes styles */
+:root {
+  --marktrace-add-color: #005fa3;
+  --marktrace-del-color: #b32020;
+  --marktrace-bar-color: #666666;
+  --marktrace-toggle-bg: #ffffff;
+  --marktrace-toggle-border: #cccccc;
+  --marktrace-toggle-text: #000000;
+}
 body.marktrace-original ins {
   display: none;
 }
@@ -8,11 +16,11 @@ body.marktrace-original del {
 }
 
 body.marktrace-markup ins {
-  color: blue;
+  color: var(--marktrace-add-color);
   text-decoration: none;
 }
 body.marktrace-markup del {
-  color: red;
+  color: var(--marktrace-del-color);
   text-decoration: line-through;
 }
 
@@ -26,7 +34,7 @@ body.marktrace-accepted del {
 
 .marktrace-block {
   position: relative;
-  border-left: 3px solid #666;
+  border-left: 3px solid var(--marktrace-bar-color);
   padding-left: 0.5rem;
 }
 
@@ -34,8 +42,9 @@ body.marktrace-accepted del {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
-  background: #fff;
-  border: 1px solid #ccc;
+  background: var(--marktrace-toggle-bg);
+  border: 1px solid var(--marktrace-toggle-border);
+  color: var(--marktrace-toggle-text);
   padding: 0.5rem;
   z-index: 1000;
   border-radius: 4px;
