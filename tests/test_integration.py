@@ -113,4 +113,10 @@ def test_accessibility_and_performance(tmp_path):
     parser.feed(out)
     delta = time.perf_counter() - start - base
     assert delta * 1000 < 20
-    assert "aria-label" in js_path.read_text()
+    js_text = js_path.read_text()
+    css_text = css_path.read_text()
+    assert "aria-label" in js_text
+    assert "highlight" in js_text
+    assert "comment" in js_text
+    assert "critic-comment" in css_text
+    assert "--marktrace-highlight-bg" in css_text
