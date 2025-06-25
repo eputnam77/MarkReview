@@ -28,3 +28,15 @@ Start the dev server:
 ```bash
 pnpm start
 ```
+
+## Persisting Changes
+
+Accepting or rejecting edits in the browser updates only the current page.
+The source Markdown files remain unchanged. Use the CLI to apply the edits
+and restart your dev server:
+
+```bash
+marktrace accept docs/**/*.md
+# now restart to reload the files
+pnpm start
+```
