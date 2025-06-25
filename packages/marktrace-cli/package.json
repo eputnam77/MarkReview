@@ -1,0 +1,11 @@
+{
+  "name": "marktrace-cli",
+  "version": "0.1.0",
+  "bin": {
+    "marktrace": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "license": "MIT"
+}
