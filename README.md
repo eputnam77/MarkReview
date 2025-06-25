@@ -34,6 +34,9 @@ plugins: ['docusaurus-plugin-trackchanges'];
 
 Run `pnpm start` (or `npm start`) to view your site.
 
+**Accepting or rejecting edits in the browser does not modify your source files.**
+Use the `marktrace` CLI to apply changes and restart the dev server.
+
 You can override the highlight colours in your CSS:
 
 ```css
