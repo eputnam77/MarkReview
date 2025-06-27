@@ -4,8 +4,8 @@ import types
 from typing import Any
 
 # Stub mkdocs modules before importing the plugin
-mkdocs = types.ModuleType("mkdocs")
-plugins = types.ModuleType("mkdocs.plugins")
+mkdocs: Any = types.ModuleType("mkdocs")
+plugins: Any = types.ModuleType("mkdocs.plugins")
 
 
 class FakePlugin:
