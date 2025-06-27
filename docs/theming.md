@@ -1,6 +1,6 @@
 # Theming
 
-MarkTrace provides accessible default colours. Override them in your theme's CSS.
+MarkReview provides accessible default colours. Override them in your theme's CSS.
 
 ```css
 /* Add to your CSS */

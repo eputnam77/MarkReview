@@ -17,22 +17,22 @@ mkdocs.plugins = plugins
 sys.modules.setdefault("mkdocs", mkdocs)
 sys.modules.setdefault("mkdocs.plugins", plugins)
 
-MarkTracePlugin = importlib.import_module("marktrace.plugin").MarkTracePlugin
+MarkReviewPlugin = importlib.import_module("markreview.plugin").MarkReviewPlugin
 
 
 def test_on_config_adds_extension(tmp_path: Any) -> None:
-    plugin = MarkTracePlugin()
+    plugin = MarkReviewPlugin()
     config = {"markdown_extensions": [], "site_dir": str(tmp_path)}
     plugin.on_config(config)
     assert "pymdownx.critic" in config["markdown_extensions"]
 
 
 def test_post_page_injects_assets(tmp_path: Any) -> None:
-    plugin = MarkTracePlugin()
+    plugin = MarkReviewPlugin()
     config = {"markdown_extensions": [], "site_dir": str(tmp_path)}
     plugin.on_config(config)
 
     html = "<html><head></head><body></body></html>"
     out = plugin.on_post_page(html)
-    assert "marktrace.css" in out
-    assert "marktrace.js" in out
+    assert "markreview.css" in out
+    assert "markreview.js" in out

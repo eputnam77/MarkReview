@@ -1,1 +1,1 @@
-The documentation for MarkTrace is built with MkDocs. Run `mkdocs serve` to preview locally.
+The documentation for MarkReview is built with MkDocs. Run `mkdocs serve` to preview locally.

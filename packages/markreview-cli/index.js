@@ -27,7 +27,7 @@ async function processFile(file, mode) {
 async function main() {
   const [mode, pattern] = process.argv.slice(2);
   if (!['accept', 'reject', 'strip'].includes(mode) || !pattern) {
-    console.error('Usage: marktrace <accept|reject|strip> <glob>');
+    console.error('Usage: markreview <accept|reject|strip> <glob>');
     process.exit(2);
   }
   const files = glob.sync(pattern, { nodir: true });

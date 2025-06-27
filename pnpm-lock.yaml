@@ -10,4 +10,4 @@ importers:
 
   packages/docusaurus-plugin-trackchanges: {}
 
-  packages/marktrace-cli: {}
+  packages/markreview-cli: {}

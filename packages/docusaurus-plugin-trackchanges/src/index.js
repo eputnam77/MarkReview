@@ -5,7 +5,7 @@ module.exports = function (context) {
   const { siteDir, baseUrl = '/' } = context;
   const staticDir = path.join(siteDir, 'static');
   const assetsDir = __dirname;
-  const assets = ['marktrace.css', 'marktrace.js'];
+  const assets = ['markreview.css', 'markreview.js'];
 
   return {
     name: 'docusaurus-plugin-trackchanges',
@@ -31,8 +31,8 @@ module.exports = function (context) {
 
     injectHtmlTags() {
       return {
-        headTags: [`<link rel="stylesheet" href="${baseUrl}marktrace.css" />`],
-        postBodyTags: [`<script src="${baseUrl}marktrace.js"></script>`],
+        headTags: [`<link rel="stylesheet" href="${baseUrl}markreview.css" />`],
+        postBodyTags: [`<script src="${baseUrl}markreview.js"></script>`],
       };
     },
   };

@@ -6,20 +6,20 @@ import time
 from html.parser import HTMLParser
 from pathlib import Path
 
-from marktrace.plugin import MarkTracePlugin
+from markreview.plugin import MarkReviewPlugin
 
 
 def test_mkdocs_build(tmp_path):
-    plugin = MarkTracePlugin()
+    plugin = MarkReviewPlugin()
     config = {"markdown_extensions": [], "site_dir": str(tmp_path / "site")}
     plugin.on_config(config)
     html = "<html><head></head><body>Hello {++World++}!</body></html>"
     out = plugin.on_post_page(html)
     plugin.on_post_build()
-    assert "marktrace.css" in out
-    assert "marktrace.js" in out
-    assert (tmp_path / "site" / "marktrace.css").exists()
-    assert (tmp_path / "site" / "marktrace.js").exists()
+    assert "markreview.css" in out
+    assert "markreview.js" in out
+    assert (tmp_path / "site" / "markreview.css").exists()
+    assert (tmp_path / "site" / "markreview.js").exists()
 
 
 def test_docusaurus_build(tmp_path):
@@ -41,10 +41,10 @@ def test_docusaurus_build(tmp_path):
               if (!Array.isArray(opts.remarkPlugins) || opts.remarkPlugins.length === 0) process.exit(1);
               await plugin.loadContent();
               const tags = plugin.injectHtmlTags();
-              const css = fs.existsSync(path.join(siteDir, 'static', 'marktrace.css'));
-              const js = fs.existsSync(path.join(siteDir, 'static', 'marktrace.js'));
+              const css = fs.existsSync(path.join(siteDir, 'static', 'markreview.css'));
+              const js = fs.existsSync(path.join(siteDir, 'static', 'markreview.js'));
               const injected = JSON.stringify(tags);
-              if (css && js && injected.includes('/sub/marktrace.js') && injected.includes('/sub/marktrace.css')) process.exit(0); else process.exit(1);
+              if (css && js && injected.includes('/sub/markreview.js') && injected.includes('/sub/markreview.css')) process.exit(0); else process.exit(1);
             })();
             """
         )
@@ -87,18 +87,18 @@ def contrast_ratio(foreground: str, background: str) -> float:
 
 
 def test_accessibility_and_performance(tmp_path):
-    js_path = Path("packages/mkdocs-marktrace/marktrace/assets/marktrace.js")
-    css_path = Path("packages/mkdocs-marktrace/marktrace/assets/marktrace.css")
+    js_path = Path("packages/mkdocs-markreview/markreview/assets/markreview.js")
+    css_path = Path("packages/mkdocs-markreview/markreview/assets/markreview.css")
     assert js_path.stat().st_size <= 8 * 1024
     assert css_path.stat().st_size <= 5 * 1024
 
     css = css_path.read_text()
-    add_color = re.search(r"--marktrace-add-color:\s*(#[0-9a-fA-F]{6})", css).group(1)
-    del_color = re.search(r"--marktrace-del-color:\s*(#[0-9a-fA-F]{6})", css).group(1)
+    add_color = re.search(r"--markreview-add-color:\s*(#[0-9a-fA-F]{6})", css).group(1)
+    del_color = re.search(r"--markreview-del-color:\s*(#[0-9a-fA-F]{6})", css).group(1)
     assert contrast_ratio(add_color, "#ffffff") >= 4.5
     assert contrast_ratio(del_color, "#ffffff") >= 4.5
 
-    plugin = MarkTracePlugin()
+    plugin = MarkReviewPlugin()
     config = {"markdown_extensions": [], "site_dir": str(tmp_path)}
     plugin.on_config(config)
     base_html = "<html><head></head><body><p>Hello</p></body></html>"
@@ -119,4 +119,4 @@ def test_accessibility_and_performance(tmp_path):
     assert "highlight" in js_text
     assert "comment" in js_text
     assert "critic-comment" in css_text
-    assert "--marktrace-highlight-bg" in css_text
+    assert "--markreview-highlight-bg" in css_text

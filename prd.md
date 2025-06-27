@@ -1,4 +1,4 @@
-### **Full Product Requirements Document — *MarkTrace***
+### **Full Product Requirements Document — *MarkReview***
 
 (Track‐changes for Markdown in MkDocs & Docusaurus)
 
@@ -6,7 +6,7 @@
 
 ## 0. Executive Summary
 
-*MarkTrace* adds Word‑style **track‑changes** — colour‑coded insertions, deletions, substitutions, comments **and now first‑class vertical change‑bars next to edited lines/blocks** — to any static site built with **MkDocs** or **Docusaurus**. It leverages the human‑readable **\[CriticMarkup]¹** syntax, existing parsers (`pymdownx.critic`, `remark-critic-markup`), and a lightweight slice of CSS + JS + CLI utilities. Installation is a one‑liner via **PyPI** or **npm**.
+*MarkReview* adds Word‑style **track‑changes** — colour‑coded insertions, deletions, substitutions, comments **and now first‑class vertical change‑bars next to edited lines/blocks** — to any static site built with **MkDocs** or **Docusaurus**. It leverages the human‑readable **\[CriticMarkup]¹** syntax, existing parsers (`pymdownx.critic`, `remark-critic-markup`), and a lightweight slice of CSS + JS + CLI utilities. Installation is a one‑liner via **PyPI** or **npm**.
 
 ---
 
@@ -17,7 +17,7 @@
 | P‑1 | Reviewers forced back to Word/Google Docs to visualise edits.             | Render clear inline diffs *inside* the docs site — incl. change‑bars for fast scanning. |
 | P‑2 | Git diffs are noisy; no “accept/reject” in rendered view.                 | Offer **Original∕Markup∕Accepted** toggles & one‑click merge/strip.                     |
 | P‑3 | Current CriticMarkup parsers expose raw `<ins>/<del>` without UI or bars. | Add vertical bars, colour themes, keyboard shortcuts, toolbar.                          |
-| P‑4 | Authors need a painless way to strip edits before release.                | Provide CLI & CI hooks (`marktrace accept/reject`).                                     |
+| P‑4 | Authors need a painless way to strip edits before release.                | Provide CLI & CI hooks (`markreview accept/reject`).                                     |
 
 ---
 
@@ -25,7 +25,7 @@
 
 1. **Technical Writer** — “I push a branch; the preview highlights edits *and* shows a bar so the SME can skim.”
 2. **SME Reviewer** — “I toggle *Original* view to read fluidly, then switch back to *Markup* to comment.”
-3. **Doc Lead / CI** — “Before publishing, my pipeline runs `marktrace accept` so the public site is squeaky‑clean.”
+3. **Doc Lead / CI** — “Before publishing, my pipeline runs `markreview accept` so the public site is squeaky‑clean.”
 
 ---
 
@@ -47,11 +47,11 @@
 | F‑2     | Render colours: **blue underline for additions**, **red strike for deletions**; configurable via CSS custom properties.                                                                                                                                                                                                                | Must     |
 | **F‑3** | **Generate a 2–3 px vertical change‑bar along the inline‑start edge of any block containing at least one `<ins>`/`<del>`/`<span class="cm‑change">` node.** Bar colour follows highest‑priority change inside block (blue = add, red = delete, purple = substitute). Users may override width, colour, or “dotted” style via CSS vars. | Must     |
 | F‑4     | Floating pill‑switch: *Original∕Markup∕Accepted* with local‑storage persistence.                                                                                                                                                                                                                                                       | Must     |
-| F‑5     | Node CLI `marktrace accept <glob>` / `reject` / `strip` with exit codes for CI.                                                                                                                                                                                                                                                        | Should   |
+| F‑5     | Node CLI `markreview accept <glob>` / `reject` / `strip` with exit codes for CI.                                                                                                                                                                                                                                                        | Should   |
 | F‑6     | Keybindings (Phase 2): `a` = accept under cursor, `r` = reject, `m` = toggle mode.                                                                                                                                                                                                                                                     | Should   |
 | F‑7     | A11y: bars include `aria-hidden="true"`, edits labelled, contrast ≥ 4.5∶1 under both light/dark.                                                                                                                                                                                                                                       | Must     |
 | F‑8     | Performance: added assets ≤ 8 KiB JS + 5 KiB CSS (gzip); DOM scan completes < 5 ms on 2 MB page.                                                                                                                                                                                                                                       | Must     |
-| F‑9     | PyPI package `mkdocs‑marktrace` ships with `pyproject.toml` as single source of truth; `requirements*.txt` are auto‑exported for alt envs.                                                                                                                                                                                             | Must     |
+| F‑9     | PyPI package `mkdocs‑markreview` ships with `pyproject.toml` as single source of truth; `requirements*.txt` are auto‑exported for alt envs.                                                                                                                                                                                             | Must     |
 
 ---
 
@@ -73,10 +73,10 @@ graph TD
     C[.mdx w/ CriticMarkup] -->|Docusaurus| D[remark-critic-markup HTML]
   end
   subgraph Runtime (Browser)
-    B & D --> E[MarkTrace JS]\n(scan DOM ‑> add `.mt‑changed` class)
+    B & D --> E[MarkReview JS]\n(scan DOM ‑> add `.mt‑changed` class)
     E --> F[CSS ::before pseudo‑element = change‑bar]
   end
-  CLI[[marktrace‑cli]] -. accept/reject .-> A & C
+  CLI[[markreview‑cli]] -. accept/reject .-> A & C
 ```
 
 * **Change‑bar algorithm (JS)**
@@ -109,26 +109,26 @@ graph TD
 ## 7. Folder / Repo Structure (monorepo — pnpm workspaces)
 
 ```
-marktrace/
+markreview/
 ├─ packages/
-│  ├─ mkdocs-marktrace/
-│  │  ├─ marktrace/
+│  ├─ mkdocs-markreview/
+│  │  ├─ markreview/
 │  │  │  ├─ __init__.py
 │  │  │  ├─ plugin.py
 │  │  │  └─ assets/
-│  │  │     ├─ marktrace.js  ⚑ change‑bar logic
-│  │  │     └─ marktrace.css ⚑ styles incl. bars
+│  │  │     ├─ markreview.js  ⚑ change‑bar logic
+│  │  │     └─ markreview.css ⚑ styles incl. bars
 │  │  ├─ pyproject.toml  ← single‑source deps
 │  │  └─ README.md
 │  ├─ docusaurus-plugin-trackchanges/
 │  │  ├─ src/
 │  │  │  ├─ index.js
 │  │  │  ├─ injectPlugin.js
-│  │  │  ├─ marktrace.css
-│  │  │  └─ marktrace.js
+│  │  │  ├─ markreview.css
+│  │  │  └─ markreview.js
 │  │  ├─ package.json
 │  │  └─ README.md
-│  └─ marktrace-cli/
+│  └─ markreview-cli/
 │     ├─ src/index.ts
 │     ├─ package.json
 │     └─ README.md
@@ -180,6 +180,6 @@ Unchanged (see v0); add **Usability score for change‑bar visibility ≥ 95�
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Bar colour: first or highest‑priority change?** | **Highest‑priority change wins (default: deletion > substitution > addition).**                                                                                                           | Gives reviewers an at‑a‑glance sense of *impact*. Rule can be overridden via `--mt-bar-colour-mode="first"` in plugin config.                          |
 | **Expose dotted vs solid bar style?**             | **Surface as a CSS custom property (`--mt-bar-style`) in Phase 1; UI toggle deferred to Phase 2.**                                                                                        | Keeps bundle small while letting theme authors opt‑in: `--mt-bar-style: dotted 2px`. A toolbar button can be added alongside keybindings later.        |
-| **Auto‑collapse long sequences of bars?**         | **Yes — ship a heuristic in Phase 1.** If ≥ 10 consecutive change‑bars span > 30 % of viewport height, MarkTrace collapses them into a single bar with a clickable “▼ expand” affordance. | Prevents visual overload on large deletions while preserving detail on demand. Thresholds configurable (`mt-collapse-threshold`, `mt-collapse-ratio`). |
+| **Auto‑collapse long sequences of bars?**         | **Yes — ship a heuristic in Phase 1.** If ≥ 10 consecutive change‑bars span > 30 % of viewport height, MarkReview collapses them into a single bar with a clickable “▼ expand” affordance. | Prevents visual overload on large deletions while preserving detail on demand. Thresholds configurable (`mt-collapse-threshold`, `mt-collapse-ratio`). |
 
 These decisions are now locked into v1.0 and reflected in updated Functional Requirements (F‑3, F‑8) and implementation tasks.

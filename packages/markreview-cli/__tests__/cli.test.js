@@ -9,7 +9,7 @@ afterEach(() => {
   if (fs.existsSync(tmp)) fs.unlinkSync(tmp);
 });
 
-describe('marktrace CLI', () => {
+describe('markreview CLI', () => {
   test('accepts changes', () => {
     fs.writeFileSync(tmp, 'Hello {++World++}');
     const { status } = spawnSync('node', [cli, 'accept', tmp]);

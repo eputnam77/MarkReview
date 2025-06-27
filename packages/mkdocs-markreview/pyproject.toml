@@ -1,11 +1,11 @@
 [project]
-name = "mkdocs-marktrace"
+name = "mkdocs-markreview"
 version = "0.1.0"
-description = "MkDocs plugin for MarkTrace"
+description = "MkDocs plugin for MarkReview"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
-authors = [{name = "The MarkTrace Team", email = "marktrace@example.com"}]
+authors = [{name = "The MarkReview Team", email = "markreview@example.com"}]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Framework :: MkDocs",
@@ -19,10 +19,10 @@ dependencies = [
 ]
 
 [project.entry-points."mkdocs.plugins"]
-marktrace = "marktrace.plugin:MarkTracePlugin"
+markreview = "markreview.plugin:MarkReviewPlugin"
 
 [tool.setuptools.package-data]
-marktrace = ["assets/*"]
+markreview = ["assets/*"]
 
 [build-system]
 requires = ["setuptools", "wheel"]
