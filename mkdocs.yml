@@ -5,3 +5,8 @@ nav:
   - Usage: usage.md
   - Theming: theming.md
   - Troubleshooting: troubleshooting.md
+  - API:
+      - Overview: api/index.md
+      - CLI: api/cli.md
+      - MkDocs Plugin: api/mkdocs.md
+      - Docusaurus Plugin: api/docusaurus.md

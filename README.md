@@ -48,8 +48,8 @@ You can override the highlight colours in your CSS:
 
 ```css
 :root {
-  --mt-insert-color: #0044ff;
-  --mt-delete-color: #d20f39;
+  --markreview-add-color: #0044ff;
+  --markreview-del-color: #d20f39;
 }
 ```
 
@@ -62,3 +62,4 @@ pnpm --filter markreview-cli run test
 ```
 
 See the [docs](docs/index.md) for setup and usage instructions.
+The [API reference](docs/api/index.md) describes the CLI and plugin modules.
