@@ -11,11 +11,11 @@ class MkDocsBasePlugin:  # pragma: no cover - fallback when MkDocs is missing
     """Fallback BasePlugin when MkDocs isn't installed."""
 
 
-class MarkTracePlugin(MkDocsBasePlugin):
+class MarkReviewPlugin(MkDocsBasePlugin):
     """Inject ``pymdownx.critic`` and copy JS/CSS assets."""
 
-    _css_name = "marktrace.css"
-    _js_name = "marktrace.js"
+    _css_name = "markreview.css"
+    _js_name = "markreview.js"
 
     def on_config(self, config: dict[str, Any]) -> dict[str, Any]:
         """Ensure ``pymdownx.critic`` is enabled."""

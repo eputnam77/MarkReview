@@ -1,8 +1,8 @@
 {
-  "name": "marktrace-cli",
+  "name": "markreview-cli",
   "version": "0.1.0",
   "bin": {
-    "marktrace": "index.js"
+    "markreview": "index.js"
   },
   "scripts": {
     "test": "jest"

@@ -10,4 +10,4 @@ The Docusaurus plugin automatically injects the CSS and JS. If styles are missin
 
 ## Edits not persisted
 
-Keyboard shortcuts only modify the live page. Run the `marktrace` CLI on your Markdown files and restart the dev server to see the changes.
+Keyboard shortcuts only modify the live page. Run the `markreview` CLI on your Markdown files and restart the dev server to see the changes.

@@ -1,12 +1,12 @@
-# MarkTrace Documentation
+# MarkReview Documentation
 
-Welcome to the MarkTrace docs. These pages cover setup, usage and customization for the MkDocs and Docusaurus plugins.
+Welcome to the MarkReview docs. These pages cover setup, usage and customization for the MkDocs and Docusaurus plugins.
 
 ## Quick Setup (≈5 minutes)
 
 1. Install the plugins:
    ```bash
-   pip install mkdocs-marktrace
+   pip install mkdocs-markreview
    pnpm add -D docusaurus-plugin-trackchanges
    ```
 2. Enable the plugin in your `mkdocs.yml` or `docusaurus.config.js`.

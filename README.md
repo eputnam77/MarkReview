@@ -1,20 +1,20 @@
-# MarkTrace Monorepo
+# MarkReview Monorepo
 
 This repository contains plugins for MkDocs and Docusaurus plus a CLI for processing CriticMarkup changes.
 
-## Using MarkTrace in Your Project
+## Using MarkReview in Your Project
 
 Install the plugin for your static site generator and enable it in your configuration.
 
 ```bash
-pip install mkdocs-marktrace
+pip install mkdocs-markreview
 pnpm add -D docusaurus-plugin-trackchanges
 ```
 
 If the packages haven't been published yet, install them directly from this repository to test locally:
 
 ```bash
-pip install -e packages/mkdocs-marktrace
+pip install -e packages/mkdocs-markreview
 pnpm add -D file:packages/docusaurus-plugin-trackchanges
 ```
 
@@ -25,7 +25,7 @@ Add the plugin name to the `plugins` section of your `mkdocs.yml`:
 ```yaml
 # mkdocs.yml
 plugins:
-  - marktrace
+  - markreview
 ```
 
 Start your site with `mkdocs serve`.
@@ -42,7 +42,7 @@ plugins: ['docusaurus-plugin-trackchanges'];
 Run `pnpm start` (or `npm start`) to view your site.
 
 **Accepting or rejecting edits in the browser does not modify your source files.**
-Use the `marktrace` CLI to apply changes and restart the dev server.
+Use the `markreview` CLI to apply changes and restart the dev server.
 
 You can override the highlight colours in your CSS:
 
@@ -58,7 +58,7 @@ The plugin automatically injects the runtime assets so tracked changes appear wi
 Run the CLI tests with:
 
 ```bash
-pnpm --filter marktrace-cli run test
+pnpm --filter markreview-cli run test
 ```
 
 See the [docs](docs/index.md) for setup and usage instructions.

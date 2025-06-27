@@ -2,21 +2,21 @@
   function applyBars() {
     document.querySelectorAll('ins, del, mark, .critic').forEach(function (el) {
       var block = el.closest('p, li, div, blockquote, td, th');
-      if (block && !block.classList.contains('marktrace-block')) {
-        block.classList.add('marktrace-block');
+      if (block && !block.classList.contains('markreview-block')) {
+        block.classList.add('markreview-block');
       }
     });
   }
 
   function applyView(view) {
-    document.body.classList.remove('marktrace-original', 'marktrace-markup', 'marktrace-accepted');
-    document.body.classList.add('marktrace-' + view);
-    localStorage.setItem('marktrace-view', view);
+    document.body.classList.remove('markreview-original', 'markreview-markup', 'markreview-accepted');
+    document.body.classList.add('markreview-' + view);
+    localStorage.setItem('markreview-view', view);
   }
 
   function createToggle(initial) {
     var wrap = document.createElement('div');
-    wrap.className = 'marktrace-toggle';
+    wrap.className = 'markreview-toggle';
     wrap.innerHTML = '<select aria-label="Change view">' +
       '<option value="original">Original</option>' +
       '<option value="markup">Markup</option>' +
@@ -81,11 +81,11 @@
 
   function nextView() {
     var views = ['original', 'markup', 'accepted'];
-    var current = document.body.className.match(/marktrace-(\w+)/);
+    var current = document.body.className.match(/markreview-(\w+)/);
     var idx = views.indexOf(current ? current[1] : 'markup');
     var next = views[(idx + 1) % views.length];
     applyView(next);
-    var select = document.querySelector('.marktrace-toggle select');
+    var select = document.querySelector('.markreview-toggle select');
     if (select) select.value = next;
   }
 
@@ -106,7 +106,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    var view = localStorage.getItem('marktrace-view') || 'markup';
+    var view = localStorage.getItem('markreview-view') || 'markup';
     applyBars();
     applyAria();
     applyView(view);

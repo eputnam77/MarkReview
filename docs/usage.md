@@ -7,7 +7,7 @@ Add the plugin to your project configuration and start your site.
 ```yaml
 # mkdocs.yml
 plugins:
-  - marktrace
+  - markreview
 ```
 
 Start the dev server:
@@ -34,7 +34,7 @@ pnpm start
 Install the plugins directly from this repository if a packaged release isn't available:
 
 ```bash
-pip install -e packages/mkdocs-marktrace
+pip install -e packages/mkdocs-markreview
 pnpm add -D file:packages/docusaurus-plugin-trackchanges
 ```
 
@@ -45,7 +45,7 @@ The source Markdown files remain unchanged. Use the CLI to apply the edits
 and restart your dev server:
 
 ```bash
-marktrace accept docs/**/*.md
+markreview accept docs/**/*.md
 # now restart to reload the files
 pnpm start
 ```

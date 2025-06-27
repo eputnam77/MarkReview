@@ -35,11 +35,11 @@
   - Example Docusaurus site builds with change bars and toggle enabled.
 - **Labels**: docusaurus, phase:1
 
-## Epic: MarkTrace CLI
+## Epic: MarkReview CLI
 
 ### Issue: Implement accept/reject/strip commands
 - **Acceptance Criteria**
-  - `marktrace <accept|reject|strip> <glob>` processes matching files using critic-markup.
+  - `markreview <accept|reject|strip> <glob>` processes matching files using critic-markup.
   - Exits with code `1` if markup remains after processing, otherwise `0`.
   - Unit tests cover all modes.
 - **Labels**: cli, tooling, phase:1
@@ -49,7 +49,7 @@
 ### Issue: Integration tests for MkDocs and Docusaurus
 - **Acceptance Criteria**
   - CI runs `mkdocs build` and `docusaurus build` on sample projects.
-  - Output includes `marktrace.js` and `marktrace.css` in the site directories.
+  - Output includes `markreview.js` and `markreview.css` in the site directories.
   - Tests assert asset size ≤8 KiB JS and ≤5 KiB CSS; DOM scan under 5 ms on a 2 MB page.
 - **Labels**: testing, qa, phase:1
 

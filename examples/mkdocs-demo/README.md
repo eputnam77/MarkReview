@@ -1,6 +1,6 @@
 # MkDocs Demo
 
-This example shows a minimal MkDocs project using the MarkTrace plugin.
+This example shows a minimal MkDocs project using the MarkReview plugin.
 
 ```bash
 mkdocs serve

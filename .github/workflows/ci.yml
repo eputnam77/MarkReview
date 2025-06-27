@@ -30,9 +30,9 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Lint Python
         run: |
-          ruff check packages/mkdocs-marktrace
-          black --check packages/mkdocs-marktrace
+          ruff check packages/mkdocs-markreview
+          black --check packages/mkdocs-markreview
       - name: Run Tests
         run: |
-          pnpm --filter marktrace-cli test
-          pytest packages/mkdocs-marktrace/tests
+          pnpm --filter markreview-cli test
+          pytest packages/mkdocs-markreview/tests
