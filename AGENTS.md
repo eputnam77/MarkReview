@@ -1,138 +1,183 @@
 # AGENTS.md
-*Authoritative playbook for the OpenAI Codex multi-agent workflow in this monorepo*
+
+*Authoritative playbook for the OpenAI Codex multi‑agent workflow in this repository*
 
 ---
 
-## 0 · Global Settings ( Python side only )
-| Key                  | Value / Path                                                  |
-| -------------------- | ------------------------------------------------------------- |
-| Python package root  | `packages/mkdocs-markreview/`                                 |
-| Source dir           | `packages/mkdocs-markreview/mkdocs_markreview/`               |
-| Test dir             | `packages/mkdocs-markreview/tests/`                           |
-| Python version       | **3.12**                                                      |
-| Package manager      | **poetry** (`poetry install --with dev`)                      |
-| Test runner          | **pytest** + **pytest-cov**                                   |
-| Coverage thresholds  | 70 % (feature branches) → 90 % (`main`)                       |
-| Code formatter       | **black**                                                     |
-| Linter               | **ruff** (import-sort on)                                     |
-| Type checker         | **mypy --strict**                                             |
-| Security scanner     | **bandit -r mkdocs_markreview -lll**                          |
-| Doc generator        | **MkDocs Material** (JS packages use their own tools)         |
-| CI provider          | **GitHub Actions**                                            |
+## 0 · Global Settings
 
-> **JavaScript packages** in this repo use **pnpm workspaces** and have their own `package.json` workflows;  
-> the table above applies **only to the Python plugin**.
+| Key                  | Value                                                |
+| -------------------- | ---------------------------------------------------- |
+| Default shell        | `bash` (Linux)                                       |
+| Python version       | **3.12**                                             |
+| Virtual env manager  | **uv** (falls back to `python -m venv`)              |
+| Package manager      | **poetry** (`poetry install`)                        |
+| Test runner          | **pytest**                                           |
+| Coverage thresholds  | 70 % on feature branches → 90 % on `main`           |
+| Code formatter       | **black**                                            |
+| Linter               | **ruff** (includes import‑sorting)                   |
+| Static‑type checker  | **mypy --strict**                                    |
+| Security scanners    | **bandit -r src**, **pip-audit -r requirements.txt** |
+| Docs generator       | **MkDocs Material** (`mkdocs build`)                 |
+| Commit message style | **Conventional Commits**                             |
+| CI provider          | **GitHub Actions**                                   |
+
+> **Data flow** Every agent works from the latest commit on its branch and communicates only via GitHub Issues/PRs.
 
 ---
 
 ## 1 · Agents & Execution Order
 
-| # | Agent ID    | Purpose (summary)                                                       | Auto-trigger condition          |
-|---|-------------|-------------------------------------------------------------------------|---------------------------------|
-| 0 | `planner`   | Parse `PRD.md`, create `TASKS.md` (issues & labels).                    | manual                          |
-| 1 | `architect` | Folder layout, ADRs, initial `pyproject.toml`, CI skeleton.             | `planner` PR merged             |
-| 2 | `scaffolder`| Generate skeleton code/tests in **packages/mkdocs-markreview**.        | `architect` PR merged           |
-| 3 | `builder`   | Implement code for **ready** issues; must satisfy the *dev gate*.      | new ready issue                 |
-| 4 | `linter`    | `ruff --fix` + `black`; open PR if diff.                               | after builder push              |
-| 5 | `fixer`     | Patch whatever fails the gate until green.                             | any gate failure                |
-| 6 | `security`  | Bandit & pip-audit, open CVE issues.                                   | nightly · before merge → `main` |
-| 7 | `docwriter` | Update README, changelog, MkDocs site.                                 | branch green & cov ≥ 90 %       |
-| 8 | `reviewer`  | Human-style review; request approvals.                                 | after docwriter                 |
-| 9 | `releasebot`| Tag, build wheel, publish release.                                     | PR merged → `main`              |
+|  #  | Agent ID     | Purpose (summary)                                                                     | Auto‑trigger condition        |
+| --- | ------------ | ------------------------------------------------------------------------------------- | ----------------------------- |
+|  0  | `planner`    | Parse `PRD.md`, create `TASKS.md` (epics → issues with acceptance criteria & labels). | manual                        |
+|  1  | `architect`  | Design folder layout, write ADRs, initialise `pyproject.toml`, CI workflow.           | `planner` PR merged           |
+|  2  | `scaffolder` | Generate skeleton code/tests for each open issue.                                     | `architect` PR merged         |
+|  3  | `builder`    | Implement code for issues marked **ready**; keep tests ≥70 % cov.                     | new ready issue               |
+|  4  | `verifier`   | Cross-reference PRD.md → TASKS.md → implemented code. Generate completeness report.   | after reviewer                |
+|  5  | `linter`     | Run `ruff --fix` & `black`; open PR if diff.                                          | after builder push            |
+|  6  | `tester`     | Execute dev‑gate (`pytest`, type‑check, coverage ≥70 %).                              | after linter green            |
+|  7  | `fixer`      | Patch only failing files, re‑run gate until green.                                    | on test failure               |
+|  8  | `security`   | Run Bandit & pip‑audit; open CVE issues.                                              | nightly · before merge → main |
+|  9  | `docwriter`  | Update `README.md`, API refs, examples, changelog.                                    | branch green & cov ≥90 %      |
+|  10  | `reviewer`   | Human‑style review; request approvals.                                                | after docwriter               |
+|  11  | `releasebot` | Bump semver, tag, build & push Docker image, draft release notes.                     | PR merged → main              |
 
-**Handoff rule**  
-Each agent that passes its tasks adds `ready-for:<next-agent>`;  
-the GitHub Action router reads that label and launches the next agent.
+### Agent Handoff Conventions
+
+* **Feature branches** enforce the *dev gate* (70 % coverage).
+* The **main** branch enforces the *release gate* (90 % coverage, security pass, docs build).
+* Each agent finishing successfully applies the label `ready-for:<next-agent>`; a GitHub Action reads this label and triggers the next agent via the Codex API.
 
 ---
 
-## 2 · Quality Gate (executed by CI, not a separate agent)
+## 2 · Quality Gates
+
+### Dev Gate (feature branches)
 
 ```bash
-# run from packages/mkdocs-markreview
-ruff check mkdocs_markreview tests
-black --check mkdocs_markreview tests
-mypy --strict mkdocs_markreview
-bandit -r mkdocs_markreview -lll --skip B101        # asserts allowed on feature branches
-pytest -q --cov=mkdocs_markreview --cov-fail-under=70
+ruff check src tests
+black --check src tests
+mypy --strict src
+bandit -r src -lll --skip B101      # allow asserts during early dev
+pytest -q --cov=src --cov-fail-under=70
 ```
 
-On the main branch the CI job raises the coverage minimum to 90 % and drops --skip B101.
-Any failure pushes control to fixer.
+### Release Gate (`main`)
+
+```bash
+ruff check src tests
+black --check src tests
+mypy --strict src
+bandit -r src -lll
+pip-audit -r requirements.txt
+pytest -q --cov=src --cov-fail-under=90
+mkdocs build --strict
+```
+
+Any non‑zero exit hands control to **fixer**.
 
 ---
 
-## 3 · Branch & Commit Policy
+## 3 · Writing Style Guidelines
 
-* **Branches**  `plan/<slug>` · `scaffold/<slug>` · `feat/<slug>` · `fix/<issue>` · `docs/<topic>` · `test/<scope>`
-* **Commits** follow Conventional Commits, e.g.
+### Documentation Standards
+
+All documentation generated by the `docwriter` agent must follow these style guidelines:
+
+#### Tone & Voice
+- **Friendly and conversational** - Write like you're explaining to a colleague over coffee
+- **Enthusiastic but not over-the-top** - Show genuine excitement about features and solutions
+- **Active voice preferred** - "The system processes data" not "Data is processed by the system"
+- **Confident and helpful** - Use encouraging language that builds user confidence
+- **Inclusive and welcoming** - Use "they/them" pronouns and create an inviting atmosphere
+- **Avoid corporate jargon** - Use plain language that feels human and relatable
+- **Celebrate user success** - Frame features as helping users achieve their goals
+
+#### Structure & Formatting
+- **Clear hierarchical headings** - Use consistent heading levels (H1 → H2 → H3)
+- **Code examples for every feature** - Include practical, runnable examples
+- **Step-by-step instructions** - Break complex processes into numbered steps
+- **Cross-references** - Link related sections and external resources
+
+#### Content Guidelines
+- **Start with the problem** - Explain what the feature solves before how it works
+- **Include use cases** - Show real-world scenarios where features apply
+- **Error handling** - Document common errors and their solutions
+- **Performance notes** - Mention any performance implications or limitations
+
+#### Technical Writing Standards
+- **Consistent terminology** - Use the same terms throughout all documentation
+- **API documentation** - Include parameter types, return values, and examples
+- **Changelog format** - Follow [Keep a Changelog](https://keepachangelog.com/) standards
+- **README structure** - Installation, quick start, features, contributing, license
+
+### Style Templates
+
+The `docwriter` agent should reference these templates:
+- `templates/README.md` - Standard README structure
+- `templates/API_DOCS.md` - API documentation format
+- `templates/CHANGELOG.md` - Release notes template
+
+---
+
+## 4 · Branch & Commit Policy
+
+* **Branches** `plan/<slug>` · `scaffold/<slug>` · `feat/<slug>` · `fix/<issue>` · `docs/<topic>` · `test/<scope>`
+* **Commits** follow Conventional Commits, e.g.
 
   ```
   feat(auth): add OAuth2 login flow
   fix(api): prevent division‑by‑zero in calculator
   chore(ci): raise coverage threshold to 90%
   ```
-* Default merge strategy: **squash‑merge**, with required‑status checks on `main`.
+* Default merge strategy: **squash-merge**, with required-status checks on `main`.
 
 ---
 
-## 4 · Automation Workflow (GitHub Actions)
+## 5 · Automation Workflow (GitHub Actions)
 
 The central router (`.github/workflows/agents.yml`) decides which agent to launch next:
 
 ```yaml
+on:
+  push:
+    branches: ["**"]
 jobs:
-  python-dev-gate:
-    runs-on: ubuntu-latest
-    defaults:
-      working-directory: packages/mkdocs-markreview
+  codex-router:
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Poetry
-        run: pip install poetry
-
-      - name: Install project + dev deps
-        run: poetry install --no-interaction --with dev
-
-      - name: Run Dev Gate
-        run: |
-          ruff check mkdocs_markreview tests
-          black --check mkdocs_markreview tests
-          mypy --strict mkdocs_markreview
-          bandit -r mkdocs_markreview -lll --skip B101
-          pytest -q --cov=mkdocs_markreview --cov-fail-under=70
-
+      - name: Detect next agent
+        run: >-
+          ./scripts/next-agent.sh  # sets $NEXT_AGENT env var
+      - name: Trigger agent via Codex API
+        if: env.NEXT_AGENT != ''
+        run: >-
+          codex run --agent "$NEXT_AGENT"
 ```
 
 ---
 
-## 5 · Environment Setup
+## 6 · Environment Setup
 
-* **Python 3.12** via `pyenv` or container.
-* Local dev startup:
+* **Python 3.12** via `pyenv` or container.
+* Local dev startup:
 
   ```bash
   uv venv
   uv pip install -r requirements-dev.txt
   pre-commit install
   ```
-* Codespaces/VS Code: devcontainer runs pre‑commit on open.
+* Codespaces/VS Code: devcontainer runs pre-commit on open.
 
 ---
 
-## 6 · Failure‑Recovery Matrix
-Tester row removed – fixer now handles any gate failures raised by CI.
+## 7 · Failure‑Recovery Matrix
 
-| Problem            | Responsible Agent | Remedy                         |
+| Problem            | Responsible Agent | Remedy                         |
 | ------------------ | ----------------- | ------------------------------ |
-| Lint error         | linter            | Auto‑fix & push                |
-| Type error         | tester → fixer    | Patch types/code               |
+| Lint error         | linter            | Auto-fix & push                |
+| Type error         | tester → fixer    | Patch types/code               |
 | Test failure       | fixer             | Minimal diff fix, ensure green |
 | Coverage drop      | builder/tester    | Add tests or mark exceptions   |
 | High CVE           | security          | Bump dependency or patch code  |
@@ -140,13 +185,13 @@ Tester row removed – fixer now handles any gate failures raised by CI.
 
 ---
 
-## 7 · References
+## 8 · References
 
 * [Ruff documentation](https://docs.astral.sh/ruff/)
 * [Black documentation](https://black.readthedocs.io/)
 * [Pytest documentation](https://docs.pytest.org/)
 * [Bandit documentation](https://bandit.readthedocs.io/)
-* [pip‑audit](https://pypi.org/project/pip-audit/)
+* [pip-audit](https://pypi.org/project/pip-audit/)
 
 ---
 
