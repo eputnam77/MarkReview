@@ -32,6 +32,7 @@ pnpm start
 ## Testing from Source
 
 Install the plugins directly from this repository if a packaged release isn't available:
+Run these commands from the MarkReview repository root so the relative `packages/` paths resolve correctly.
 
 ```bash
 pip install -e packages/mkdocs-markreview

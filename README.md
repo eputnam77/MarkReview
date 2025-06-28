@@ -12,6 +12,7 @@ pnpm add -D docusaurus-plugin-trackchanges
 ```
 
 If the packages haven't been published yet, install them directly from this repository to test locally:
+Run these commands from the MarkReview repository root so the relative `packages/` paths resolve correctly.
 
 ```bash
 pip install -e packages/mkdocs-markreview
