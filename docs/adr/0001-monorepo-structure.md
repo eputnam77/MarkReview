@@ -35,5 +35,4 @@ integration tests.
 - The Python plugin directory is renamed to `mkdocs_markreview` so tests and CI
   follow the paths mandated by `AGENTS.md`.
 - Example projects will be organised under `examples/basic-html`,
-  `examples/tiptap-editor`, `examples/toast-ui-editor` and
-  `examples/docusaurus-demo` as noted in `TASKS.md`.
+  `examples/tiptap-editor`, and `examples/toast-ui-editor` as noted in `TASKS.md`.
