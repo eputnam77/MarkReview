@@ -11,3 +11,7 @@ The Docusaurus plugin automatically injects the CSS and JS. If styles are missin
 ## Edits not persisted
 
 Keyboard shortcuts only modify the live page. Run the `markreview` CLI on your Markdown files and restart the dev server to see the changes.
+
+## Installation errors
+
+The error `packages/mkdocs-markreview is not a valid editable requirement` usually means you ran the install command outside the repository root.
