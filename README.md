@@ -5,6 +5,11 @@ This repository contains plugins for MkDocs and Docusaurus plus a CLI for proces
 ## Using MarkReview in Your Project
 
 Install the plugin for your static site generator and enable it in your configuration.
+For isolated testing, create and activate a virtual environment in your site project
+(for example with `python -m venv .venv` and `source .venv/bin/activate` on
+macOS/Linux or `.venv\Scripts\activate` on Windows). Run the installation
+commands from the **MarkReview repository root** so the relative `packages/`
+paths resolve correctly.
 
 ```bash
 pip install mkdocs-markreview
@@ -18,6 +23,8 @@ Run these commands from the MarkReview repository root so the relative `packages
 pip install -e packages/mkdocs-markreview
 pnpm add -D file:packages/docusaurus-plugin-trackchanges
 ```
+After installing, open your MkDocs or Docusaurus project in your IDE (for example VS Code)
+and list the plugin in `mkdocs.yml` or `docusaurus.config.js`.
 
 ### MkDocs
 

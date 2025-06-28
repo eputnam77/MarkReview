@@ -31,8 +31,17 @@ pnpm start
 
 ## Testing from Source
 
-Install the plugins directly from this repository if a packaged release isn't available:
-Run these commands from the MarkReview repository root so the relative `packages/` paths resolve correctly.
+Create and activate a virtual environment in your site directory before installing so the dependencies stay isolated:
+
+```bash
+python -m venv .venv
+# Windows
+.\.venv\Scripts\activate
+# macOS/Linux
+source .venv/bin/activate
+```
+
+Install the plugins directly from this repository if a packaged release isn't available. Run these commands from the **MarkReview repository root** so the relative `packages/` paths resolve correctly. After installation, open your MkDocs or Docusaurus project in your IDE (e.g. VS Code) and enable the plugin in `mkdocs.yml` or `docusaurus.config.js`.
 
 ```bash
 pip install -e packages/mkdocs-markreview

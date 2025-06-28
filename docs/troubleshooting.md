@@ -15,3 +15,4 @@ Keyboard shortcuts only modify the live page. Run the `markreview` CLI on your M
 ## Installation errors
 
 The error `packages/mkdocs-markreview is not a valid editable requirement` usually means you ran the install command outside the repository root.
+Activate your virtual environment first, then rerun the commands from the **MarkReview repository root** so the relative paths resolve.
