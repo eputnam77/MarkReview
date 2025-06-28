@@ -219,6 +219,32 @@
 - **Estimate**: 2d
 - **Labels**: release, phase:1
 
+## Epic: Security & Code Quality
+
+### Issue: Enforce ESLint/Prettier and coverage gate
+- **Acceptance Criteria**
+  - CI runs `eslint` and `prettier --check` on all TypeScript packages.
+  - Unit tests executed with coverage threshold ≥90 %.
+- **Priority**: High
+- **Estimate**: 1d
+- **Labels**: ci, quality, phase:1
+
+### Issue: CLI path sanitisation & CSP audit
+- **Acceptance Criteria**
+  - CLI rejects paths escaping the workspace via `..` traversal.
+  - JavaScript bundles contain no `eval` usage and pass CSP checks.
+- **Priority**: Medium
+- **Estimate**: 1d
+- **Labels**: security, phase:1
+
+### Issue: Dependency vulnerability checks
+- **Acceptance Criteria**
+  - CI job runs `npm audit --production` and Python `bandit` scanning.
+  - Fails build on high severity advisories.
+- **Priority**: Medium
+- **Estimate**: 1d
+- **Labels**: security, ci, phase:1
+
 ## Epic: Remove Obsolete Features
 
 ### Issue: Drop Pandiff integration
