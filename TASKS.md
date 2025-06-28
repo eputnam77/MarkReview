@@ -15,10 +15,19 @@
 - **Acceptance Criteria**
   - Move JS/CSS from plugin assets into the new package.
   - CLI code consolidated under `packages/markreview`.
-  - MkDocs and Docusaurus plugins load assets from this build.
+  - Build outputs consumed by existing integration packages.
 - **Priority**: High
 - **Estimate**: 2d
 - **Labels**: refactor, frontend, phase:1
+
+### Issue: Node CLI accept/reject/strip commands
+- **Acceptance Criteria**
+  - `markreview accept <glob>` applies changes and exits `0` if all markup removed.
+  - `markreview reject <glob>` reverts edits; `markreview strip` removes markup.
+  - Non-zero exit code when CriticMarkup remains; unit tests via Vitest.
+- **Priority**: High
+- **Estimate**: 1d
+- **Labels**: cli, phase:1
 
 ## Epic: Change-Bar & UI Features
 
@@ -46,6 +55,14 @@
 - **Priority**: High
 - **Estimate**: 2d
 - **Labels**: frontend, ui, phase:1
+
+### Issue: Undo stack for accept/reject
+- **Acceptance Criteria**
+  - Provide undo functionality for recent accept/reject actions.
+  - Shortcut `Ctrl+Z` restores last change; history limited to session.
+- **Priority**: Medium
+- **Estimate**: 1d
+- **Labels**: enhancement, phase:2
 
 ### Issue: Keyboard shortcuts
 - **Acceptance Criteria**
@@ -77,6 +94,14 @@
 - **Estimate**: 1d
 - **Labels**: enhancement, phase:2
 
+### Issue: Sidebar comments and Git attribution
+- **Acceptance Criteria**
+  - Comments displayed in sidebar with links back to changes.
+  - Each change optionally shows Git commit author when available.
+- **Priority**: Medium
+- **Estimate**: 2d
+- **Labels**: frontend, integration, phase:2
+
 ## Epic: Suggestions & History
 
 ### Issue: Change suggestions support
@@ -99,6 +124,22 @@
 - **Priority**: Medium
 - **Estimate**: 2d
 - **Labels**: frontend, enhancement, phase:2
+
+## Epic: Advanced Review Tools
+
+### Issue: Bulk Review dashboard
+- **Acceptance Criteria**
+  - Dashboard lists all changes with filters and bulk accept/reject options.
+- **Priority**: Medium
+- **Estimate**: 3d
+- **Labels**: frontend, phase:2
+
+### Issue: VS Code extension
+- **Acceptance Criteria**
+  - Extension highlights CriticMarkup in Markdown files and provides accept/reject actions.
+- **Priority**: Medium
+- **Estimate**: 3d
+- **Labels**: tooling, vscode, phase:2
 
 ## Epic: Export & Reporting
 
@@ -141,7 +182,7 @@
 
 ## Epic: Editor Integrations
 
-### Issue: Integration modules for TipTap, Milkdown, Toast UI and Docusaurus
+### Issue: Integration modules for TipTap, Milkdown and Toast UI
 - **Acceptance Criteria**
   - Exported helpers to attach MarkReview to each editor with event hooks.
 - **Priority**: Medium
@@ -199,7 +240,7 @@
 
 ### Issue: Organise examples directory
 - **Acceptance Criteria**
-  - Examples moved under `examples/basic-html`, `examples/tiptap-editor`, `examples/toast-ui-editor`, `examples/docusaurus-demo`.
+  - Examples moved under `examples/basic-html`, `examples/tiptap-editor` and `examples/toast-ui-editor`.
 - **Priority**: Medium
 - **Estimate**: 0.5d
 - **Labels**: examples, docs, phase:1
@@ -210,4 +251,48 @@
 - **Priority**: Medium
 - **Estimate**: 0.5d
 - **Labels**: cleanup, packaging, phase:1
+
+## Epic: Collaboration Features
+
+### Issue: Real-time presence indicators
+- **Acceptance Criteria**
+  - Display active reviewers and cursors in supported editors.
+- **Priority**: Low
+- **Estimate**: 3d
+- **Labels**: collaboration, phase:3
+
+### Issue: WebSocket collaboration server
+- **Acceptance Criteria**
+  - Node-based server broadcasts document changes and presence events.
+- **Priority**: Low
+- **Estimate**: 4d
+- **Labels**: backend, phase:3
+
+### Issue: Conflict detection and resolution
+- **Acceptance Criteria**
+  - Detect concurrent edits and surface merge options to users.
+- **Priority**: Low
+- **Estimate**: 3d
+- **Labels**: collaboration, phase:3
+
+### Issue: Collaborative review workflows
+- **Acceptance Criteria**
+  - Approvals and change requests tracked per reviewer with notifications.
+- **Priority**: Low
+- **Estimate**: 3d
+- **Labels**: workflow, phase:3
+
+### Issue: Performance optimisation for real-time collab
+- **Acceptance Criteria**
+  - Maintain sub-100 ms latency with 10 concurrent users in tests.
+- **Priority**: Low
+- **Estimate**: 2d
+- **Labels**: perf, phase:3
+
+### Issue: Phase 3 GA release
+- **Acceptance Criteria**
+  - All collaboration features stable; documentation updated; version 3.0.0 tagged.
+- **Priority**: Low
+- **Estimate**: 2d
+- **Labels**: release, phase:3
 
