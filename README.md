@@ -71,3 +71,11 @@ pnpm --filter markreview-cli run test
 
 See the [docs](docs/index.md) for setup and usage instructions.
 The [API reference](docs/api/index.md) describes the CLI and plugin modules.
+
+## Versioning
+
+MarkReview follows [Semantic Versioning](https://semver.org/). Major versions
+align with the ProseMirror major series supported by the library. When a new
+ProseMirror major is released, MarkReview increments its own major version. Minor
+and patch releases deliver backwards‑compatible improvements and fixes.
+

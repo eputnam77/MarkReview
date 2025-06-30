@@ -21,6 +21,17 @@ bandit = "^1.7"
 pip-audit = "^2.7"
 pre-commit = "^3.7"
 
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.mypy]
+python_version = "3.12"
+warn_unused_configs = true
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
