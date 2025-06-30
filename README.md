@@ -1,6 +1,6 @@
 # MarkReview Monorepo
 
-This repository contains a MkDocs plugin for processing CriticMarkup changes.
+MarkReview adds lightweight review tools to any ProseMirror based editor. It includes a MkDocs plugin that renders CriticMarkup, a tiny CLI for applying edits and a small set of helper utilities.
 
 ## Using MarkReview in Your Project
 
@@ -29,6 +29,11 @@ Start your site with `mkdocs serve`.
 **Accepting or rejecting edits in the browser does not modify your source files.**
 Use the `markreview` CLI to apply changes and restart the dev server.
 
+```bash
+markreview accept docs/**/*.md
+mkdocs serve
+```
+
 You can override the highlight colours in your CSS:
 
 ```css
@@ -42,6 +47,26 @@ The plugin automatically injects the runtime assets so tracked changes appear wi
 
 See the [docs](docs/index.md) for setup and usage instructions.
 The [API reference](docs/api/index.md) describes the CLI and plugin modules.
+
+## Features
+
+- Attach to any ProseMirror editor with a single call:
+
+```ts
+import { attach } from 'markreview'
+const controller = attach(editor)
+controller.acceptAll()
+```
+
+- Comment threads stored with `CommentThread` helpers.
+- Headless `diffDoc()` for simple comparisons.
+- Remappable keyboard shortcuts via `bindAction()` and `loadKeymap()`.
+
+```ts
+import { bindAction, loadKeymap } from 'markreview/keymap'
+bindAction('accept', 'KeyZ')
+console.log(loadKeymap())
+```
 
 ## Versioning
 
