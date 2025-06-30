@@ -2,7 +2,7 @@
 name = "markreview-monorepo"
 version = "0.1.0"
 description = "Development environment for MarkReview"
-authors = ["MarkReview Team <team@example.com>"]
+authors = ["Eric Putnam <team@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
