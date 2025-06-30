@@ -1,33 +1,14 @@
 # MarkReview Monorepo
 
-MarkReview adds lightweight review tools to any ProseMirror based editor. It includes a MkDocs plugin that renders CriticMarkup and a small set of helper utilities.
+MarkReview adds lightweight review tools to any ProseMirror based editor. The library exposes utilities for parsing CriticMarkup and wiring a friendly review UI into your editor.
 
 ## Using MarkReview in Your Project
 
-Install the plugin for your static site generator and enable it in your configuration.
-For isolated testing, create and activate a virtual environment in your site project
-(for example with `python -m venv .venv` and `source .venv/bin/activate` on
-macOS/Linux or `.venv\Scripts\activate` on Windows). Run the installation
+Install the package from source and import the helpers in your project.
 ```bash
-pip install -e .
+pnpm install
+pnpm build
 ```
-After installing, open your MkDocs project in your IDE (for example VS Code)
-and list the plugin in `mkdocs.yml`.
-
-### MkDocs
-
-Add the plugin name to the `plugins` section of your `mkdocs.yml`:
-
-```yaml
-# mkdocs.yml
-plugins:
-  - mkdocs_markreview
-```
-
-Start your site with `mkdocs serve`.
-
-**Accepting or rejecting edits in the browser does not modify your source files.**
-Remove CriticMarkup from your documents and restart the dev server to see the changes.
 
 You can override the highlight colours in your CSS:
 
@@ -38,10 +19,8 @@ You can override the highlight colours in your CSS:
 }
 ```
 
-The plugin automatically injects the runtime assets so tracked changes appear without manual imports.
-
 See the [docs](docs/index.md) for setup and usage instructions.
-The [API reference](docs/api/index.md) describes the plugin modules and helper APIs.
+The [API reference](docs/api/index.md) covers the available modules and helper APIs.
 
 ## Features
 
@@ -72,9 +51,7 @@ and patch releases deliver backwards‑compatible improvements and fixes.
 
 ## Migrating from earlier versions
 
-Older releases exposed the MkDocs plugin as ``markreview.plugin`` and shipped a
-``markreview`` command line tool. The plugin now lives in the
-``mkdocs_markreview`` package and the CLI has been removed. Update your imports
-to ``from mkdocs_markreview.plugin import MarkReviewPlugin`` and remove any
-calls to the deprecated ``markreview`` command.
+Older releases shipped a Python-based MkDocs plugin and a separate CLI. Both
+have been removed in favour of a single JavaScript library. Update any old
+imports or scripts accordingly.
 

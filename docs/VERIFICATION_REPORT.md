@@ -33,7 +33,7 @@ Each task in `TASKS.md` references the relevant PRD requirement. For example, th
 ### ✅ Implemented Features
 - CriticMarkup parsing via `parseCriticMarkup`【F:src/core/criticParser.ts†L1-L39】
 - Format-change detection in `trackFormatChanges`【F:src/core/formatTracker.ts†L1-L22】
-- Accessible palette defined in CSS variables【F:mkdocs_markreview/assets/markreview.css†L1-L10】
+- Accessible palette defined in CSS variables【F:src/styles.css†L1-L10】
 - Change-bar helper `applyChangeBars`【F:src/ui/changeBars.ts†L1-L8】
 - Toolbar state persistence using `setupToolbar`【F:src/ui/toolbar.ts†L1-L5】
 - Pop-up controls implemented in `attachPopupControls`【F:src/ui/popupWidget.ts†L1-L19】
