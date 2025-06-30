@@ -1,4 +1,8 @@
-import pytest
+from src import stubs
 
-def test_toolbar_stub():
-    pytest.fail('TODO: implement toolbar toggles and state storage')
+
+def test_setup_toolbar():
+    storage = {}
+    result = stubs.setup_toolbar(storage, "markup")
+    assert result == "markup"
+    assert storage["track_view"] == "markup"

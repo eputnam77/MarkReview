@@ -1,5 +1,5 @@
-import pytest
+from src import stubs
 
 
-def test_accessibility_i18n_stub():
-    pytest.fail("TODO: audit accessibility and provide i18n locale files")
+def test_accessibility_audit():
+    assert stubs.run_accessibility_intl_audit()

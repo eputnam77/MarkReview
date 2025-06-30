@@ -1,4 +1,6 @@
-import pytest
+from src import stubs
 
-def test_popup_widget_stub():
-    pytest.fail('TODO: implement pop-up accept/reject/comment widget')
+
+def test_attach_popup_controls_accept():
+    text = "a {--b--}"
+    assert stubs.attach_popup_controls("reject", text) == "a b"

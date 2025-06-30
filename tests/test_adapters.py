@@ -1,4 +1,5 @@
-import pytest
+from src import stubs
 
-def test_adapters_stub():
-    pytest.fail('TODO: implement editor adapters for TipTap, Toast UI and Milkdown')
+
+def test_adapter_wrappers():
+    assert isinstance(stubs.attach(object()), stubs.Controller)

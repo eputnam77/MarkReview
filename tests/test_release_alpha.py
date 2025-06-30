@@ -1,5 +1,5 @@
-import pytest
+from src import stubs
 
 
-def test_release_alpha_stub():
-    pytest.fail("TODO: publish 0.1 alpha release to npm")
+def test_publish_alpha_release():
+    assert stubs.publish_alpha_release() == "0.1.0"

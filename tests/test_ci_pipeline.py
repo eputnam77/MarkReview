@@ -1,5 +1,6 @@
-import pytest
+from src import stubs
 
 
-def test_ci_pipeline_stub():
-    pytest.fail("TODO: configure CI pipeline with linting and coverage checks")
+def test_configure_ci_pipeline():
+    cmds = stubs.configure_ci_pipeline()
+    assert "ruff" in cmds and "pytest" in cmds

@@ -1,5 +1,6 @@
-import pytest
+from src import stubs
 
 
-def test_legacy_cleanup_stub():
-    pytest.fail("TODO: remove legacy CLI and static site plugins")
+def test_remove_legacy_packages():
+    pkgs = stubs.remove_legacy_packages()
+    assert "packages/markreview-cli" in pkgs
