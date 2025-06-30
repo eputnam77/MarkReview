@@ -48,16 +48,20 @@
 
 ### Missing or Partially Implemented Features
 - **F-9 User identity adapter** – no `getCurrentUser()` hook exists in the source code.
-- **Legacy packages removal (ADR 0006)** – `packages/markreview-cli`, `packages/mkdocs-markreview` and `packages/docusaurus-plugin-trackchanges` remain in the repository despite ADR guidance.
-- **Coverage reporting** – the test suite runs but the environment lacks `pytest-cov`; coverage thresholds cannot be enforced.
+- **Legacy packages removal and module rename (ADR 0006)** – `packages/markreview-cli`, `packages/mkdocs-markreview` and `packages/docusaurus-plugin-trackchanges` remain, and the Python plugin still uses the `markreview` module name.
+- **Performance metric** – no automated check confirms the diff scan completes in under 5 ms as required by **F‑13**.
+- **Documentation gaps** – locale JSON files and accessibility notes are missing, so **F‑14** is only partially addressed.
+- **Coverage reporting** – `pytest-cov` is available but coverage results were not recorded in this environment.
 
 ### Test Coverage
 Unit tests exist for each helper function under `tests/`, and an integration test validates bundle size and accessibility metrics. However, coverage percentage could not be measured in this environment.
 
 ## Recommended Next Steps
 1. **Implement `getCurrentUser()`** – Builder agent should add a user identity hook and accompanying tests to satisfy **F‑9**.
-2. **Remove legacy packages** – Builder or cleaner agent should delete the deprecated packages and update imports per ADR 0006.
-3. **Enable coverage** – Tester agent should ensure `pytest-cov` is installed and coverage thresholds run in CI.
-4. **Verify CSS consolidation** – Docwriter agent may document where the CSS variables live once the runtime is unified under `src/`.
+2. **Remove or rename legacy packages** – delete deprecated directories and rename the Python plugin to `mkdocs_markreview` per ADR 0006.
+3. **Measure diff performance** – add an automated test verifying the diff scan completes in under 5 ms for a 2 MB document.
+4. **Document i18n assets** – include locale JSON examples and accessibility notes to fully meet **F‑14**.
+5. **Record coverage** – ensure CI stores coverage artifacts so thresholds are enforced.
+6. **Verify CSS consolidation** – Docwriter agent may document where the CSS variables live once the runtime is unified under `src/`.
 
 Routing label: `ready-for:builder` for implementing missing code features, followed by `ready-for:tester` to update coverage configuration.
