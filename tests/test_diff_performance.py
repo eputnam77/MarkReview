@@ -9,4 +9,4 @@ def test_diff_performance():
     start = time.perf_counter()
     stubs.diff_doc(old, new)
     delta = time.perf_counter() - start
-    assert delta < 0.01
+    assert delta < 0.005

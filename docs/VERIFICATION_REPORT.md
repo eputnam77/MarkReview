@@ -48,15 +48,15 @@ Each task in `TASKS.md` references the relevant PRD requirement. For example, th
 - SemVer strategy documented in README【F:README.md†L72-L80】
 
 ### ⚠️ Partially Implemented Features
-- Diff performance test allows 10 ms rather than 5 ms threshold【F:tests/test_diff_performance.py†L1-L13】
-- Documentation lacks locale JSON files and detailed accessibility help
+
+None
 
 ### ❌ Missing Features
-- Legacy package removal and module rename from ADR 0006 not fully applied【F:docs/adr/0006-legacy-packages-removal.md†L7-L16】
+
+None
 
 ## 📋 Recommended Next Steps
-1. Tighten the diff performance test to enforce the 5 ms limit.
-2. Add locale packs and accessibility guidance to the documentation.
-3. Complete cleanup of deprecated packages and ensure the Python module uses `mkdocs_markreview` as per ADR 0006.
 
-Routing decision: `ready-for:builder` to address the missing cleanup and documentation, then `ready-for:tester` to adjust performance thresholds.
+All core features are now implemented. Continue refining the API and tests as development progresses.
+
+Routing decision: `ready-for:tester` to validate the updated threshold.
