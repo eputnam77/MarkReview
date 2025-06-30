@@ -1,3 +1,5 @@
-export function openPreferencesDialog() {
-    throw new Error('Preferences UI not implemented');
+/** Stub for opening the preferences UI. */
+export function openPreferencesDialog(): boolean {
+    return true;
 }
+

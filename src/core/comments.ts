@@ -8,6 +8,25 @@ export interface Comment {
     replies: Comment[];
 }
 
-export function createCommentThread(): void {
-    throw new Error('Threaded comments system not implemented');
+/** Simple in-memory comment thread manager. */
+export class CommentThread {
+    private _comments = new Map<string, Comment>();
+
+    add(comment: Comment): void {
+        this._comments.set(comment.id, comment);
+    }
+
+    resolve(commentId: string): void {
+        const c = this._comments.get(commentId);
+        if (c) c.resolved = true;
+    }
+
+    list(): Comment[] {
+        return Array.from(this._comments.values());
+    }
 }
+
+export function createCommentThread(): CommentThread {
+    return new CommentThread();
+}
+
