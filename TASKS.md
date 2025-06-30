@@ -1,324 +1,184 @@
 # TASKS
 
-## Epic: Core Library Foundation
+## Epic: Repository Restructure and Build Setup
 
-### Issue: Create TypeScript package `markreview`
+### Issue: Initialize core package layout
 - **Acceptance Criteria**
-  - Folder `packages/markreview` contains `src/` with `index.ts`, `markreview.ts`, `markreview.css`, `cli.ts` and `types.ts`.
-  - `dist/` directory generated via build script; package exports ESM and CJS bundles.
-  - Added to `pnpm-workspace.yaml`.
+  - `src/` directory contains `core/`, `ui/`, `adapters/`, `keymap/`, `diff-headless/`, and `styles.css` as per PRD section 8.
+  - `package.json` at repo root defines build scripts for ESM and CJS output.
+  - Storybook and examples folders created.
 - **Priority**: High
 - **Estimate**: 2d
-- **Labels**: packaging, typescript, phase:1
+- **Labels**: setup, packaging, phase:1
 
-### Issue: Migrate existing assets and logic
+### Issue: Remove legacy CLI and MkDocs/Docusaurus plugins
 - **Acceptance Criteria**
-  - Move JS/CSS from plugin assets into the new package.
-  - CLI code consolidated under `packages/markreview`.
-  - Build outputs consumed by existing integration packages.
-- **Priority**: High
-- **Estimate**: 2d
-- **Labels**: refactor, frontend, phase:1
-
-### Issue: Node CLI accept/reject/strip commands
-- **Acceptance Criteria**
-  - `markreview accept <glob>` applies changes and exits `0` if all markup removed.
-  - `markreview reject <glob>` reverts edits; `markreview strip` removes markup.
-  - Non-zero exit code when CriticMarkup remains; unit tests via Vitest.
+  - `packages/markreview-cli`, `packages/mkdocs-markreview`, and `packages/docusaurus-plugin-trackchanges` deleted.
+  - References dropped from workspace configuration and docs.
 - **Priority**: High
 - **Estimate**: 1d
-- **Labels**: cli, phase:1
+- **Labels**: cleanup, phase:1
 
-## Epic: Change-Bar & UI Features
+## Epic: Core Functionality
 
-### Issue: Advanced change-bar algorithm
+### Issue: CriticMarkup parser with accessible palette
 - **Acceptance Criteria**
-  - Bars generated per block with highest-priority change colour as in PRD lines 48‑53.
-  - Supports `--mr-bar-width`, `--mr-bar-style` and auto‑collapse on long sequences.
-  - Bars use `::before` with `aria-hidden="true"`.
+  - Parse and render add, delete, substitute, highlight, and comment marks (F-1).
+  - Colours defined via CSS variables providing WCAG‑AA contrast (F-3).
+  - Jest unit tests cover parsing logic at ≥90 %.
 - **Priority**: High
 - **Estimate**: 3d
-- **Labels**: frontend, accessibility, phase:1
+- **Labels**: core, accessibility, phase:1
 
-### Issue: Floating toolbar with mode and bar toggle
+### Issue: Track format changes
 - **Acceptance Criteria**
-  - Toolbar provides Original/Markup/Accepted switch and Show/Hide Bars button.
-  - State persisted to `localStorage`.
+  - Bold/italic/list/paragraph transformations recorded as format-change marks (F-2).
+  - Visual styling distinguishes format changes from insertions/deletions.
 - **Priority**: High
 - **Estimate**: 2d
-- **Labels**: frontend, ui, phase:1
+- **Labels**: core, formatting, phase:1
 
-### Issue: Inline accept/reject buttons
+### Issue: Persist marks in ProseMirror documents
 - **Acceptance Criteria**
-  - Each change displays ✓ Accept / ✗ Reject controls on hover as described in PRD lines 329‑358.
-  - DOM updates immediately and rescans for bars.
+  - Accept/reject actions update the underlying document while preserving history (F-10).
+  - Export with tracking disabled produces clean text without marks.
 - **Priority**: High
 - **Estimate**: 2d
-- **Labels**: frontend, ui, phase:1
+- **Labels**: core, persistence, phase:1
 
-### Issue: Undo stack for accept/reject
+## Epic: Review UI Components
+
+### Issue: Change‑bar decoration module
 - **Acceptance Criteria**
-  - Provide undo functionality for recent accept/reject actions.
-  - Shortcut `Ctrl+Z` restores last change; history limited to session.
-- **Priority**: Medium
+  - Margin bars appear left or right with configurable width and colour; RTL docs auto‑swap sides (F-4).
+  - Bars use `::before` pseudo elements and do not disrupt layout.
+- **Priority**: High
+- **Estimate**: 3d
+- **Labels**: ui, accessibility, phase:1
+
+### Issue: Toolbar toggles
+- **Acceptance Criteria**
+  - Toolbar provides Track Changes and Show Bars buttons; state saved to `localStorage` (F-5).
+- **Priority**: High
 - **Estimate**: 1d
-- **Labels**: enhancement, phase:2
+- **Labels**: ui, phase:1
 
-### Issue: Keyboard shortcuts
+### Issue: Pop‑up accept/reject/comment widget
 - **Acceptance Criteria**
-  - `a` accept under cursor, `r` reject, `m` toggle view, `b` toggle bars.
-- **Priority**: Medium
-- **Estimate**: 1d
-- **Labels**: enhancement, phase:2
-
-## Epic: Attribution & Comments
-
-### Issue: Implement user attribution system
-- **Acceptance Criteria**
-  - Author metadata (name, avatar, timestamp) displayed next to each change per PRD lines 394‑431.
+  - Inline controls display ✓/✗/💬 on hover with shortcuts `a`, `r`, `c` (F-6).
+  - Actions immediately update the document and reapply decorations.
 - **Priority**: High
 - **Estimate**: 2d
-- **Labels**: frontend, phase:1
+- **Labels**: ui, interactions, phase:1
 
-### Issue: Comment system with threaded replies
+### Issue: Threaded comments system
 - **Acceptance Criteria**
-  - Inline comment boxes with reply threads and resolve state as specified around PRD lines 329‑387.
+  - Comments support replies, resolve/unresolve state, and `@mentions` (F-8).
+  - Metadata includes user avatar and timestamp via `getCurrentUser()` hook (F-9).
 - **Priority**: High
 - **Estimate**: 4d
-- **Labels**: frontend, comments, phase:1
+- **Labels**: comments, ui, phase:1
 
-### Issue: Comment shortcuts
+### Issue: Right‑panel review list
 - **Acceptance Criteria**
-  - `c` adds comment, `r` replies, `Ctrl+Enter` submits, `Esc` cancels, `Ctrl+R` resolves.
-- **Priority**: Medium
-- **Estimate**: 1d
-- **Labels**: enhancement, phase:2
-
-### Issue: Sidebar comments and Git attribution
-- **Acceptance Criteria**
-  - Comments displayed in sidebar with links back to changes.
-  - Each change optionally shows Git commit author when available.
-- **Priority**: Medium
-- **Estimate**: 2d
-- **Labels**: frontend, integration, phase:2
-
-## Epic: Suggestions & History
-
-### Issue: Change suggestions support
-- **Acceptance Criteria**
-  - `{~~original~>suggestion~~}` handled separately from main text.
-- **Priority**: Medium
-- **Estimate**: 2d
-- **Labels**: frontend, phase:2
-
-### Issue: Change history and audit trail
-- **Acceptance Criteria**
-  - Track all accept/reject actions with timestamps and authors.
-- **Priority**: Medium
-- **Estimate**: 3d
-- **Labels**: backend, history, phase:2
-
-### Issue: Bulk operations on selections
-- **Acceptance Criteria**
-  - Multi-select changes with Shift+click and Ctrl+A; apply accept/reject to group.
-- **Priority**: Medium
-- **Estimate**: 2d
-- **Labels**: frontend, enhancement, phase:2
-
-## Epic: Advanced Review Tools
-
-### Issue: Bulk Review dashboard
-- **Acceptance Criteria**
-  - Dashboard lists all changes with filters and bulk accept/reject options.
-- **Priority**: Medium
-- **Estimate**: 3d
-- **Labels**: frontend, phase:2
-
-### Issue: VS Code extension
-- **Acceptance Criteria**
-  - Extension highlights CriticMarkup in Markdown files and provides accept/reject actions.
-- **Priority**: Medium
-- **Estimate**: 3d
-- **Labels**: tooling, vscode, phase:2
-
-## Epic: Export & Reporting
-
-### Issue: Export reports to PDF, CSV and JSON
-- **Acceptance Criteria**
-  - CLI and API produce reports with change and comment data as outlined in PRD lines 1050‑1237.
+  - Panel shows cards for each change with counters, filter chips and text search (F-7).
+  - Keyboard navigation using ↑/↓ and Enter; collapsible on small screens.
 - **Priority**: High
 - **Estimate**: 3d
-- **Labels**: cli, export, phase:1
+- **Labels**: ui, panel, phase:1
 
-### Issue: Export UI components
+## Epic: Editor Adapters & API
+
+### Issue: Generic attach API and headless diff export
 - **Acceptance Criteria**
-  - Floating export button and configuration dialog per PRD lines 1200‑1241.
-- **Priority**: Medium
-- **Estimate**: 2d
-- **Labels**: frontend, export, phase:1
-
-### Issue: CI/CD export workflow example
-- **Acceptance Criteria**
-  - Repository includes sample GitHub Action demonstrating `markreview export` commands.
-- **Priority**: Medium
-- **Estimate**: 1d
-- **Labels**: ci, docs, phase:1
-
-## Epic: Performance & Accessibility
-
-### Issue: Performance test for DOM scan
-- **Acceptance Criteria**
-  - Automated test asserts scanning adds <5 ms on a 2 MB page.
-- **Priority**: Medium
-- **Estimate**: 1d
-- **Labels**: testing, perf, phase:1
-
-### Issue: Accessibility audit
-- **Acceptance Criteria**
-  - All interactive elements have ARIA labels; colour contrast ≥4.5∶1.
+  - `MarkReview.attach(editor, options)` mounts the core on any ProseMirror ≥1.23 instance (F-12).
+  - `diffDoc(oldDoc, newDoc)` returns structured diff data without DOM usage.
 - **Priority**: High
-- **Estimate**: 1d
-- **Labels**: accessibility, qa, phase:1
+- **Estimate**: 3d
+- **Labels**: api, adapters, phase:1
 
-## Epic: Editor Integrations
-
-### Issue: Integration modules for TipTap, Milkdown and Toast UI
+### Issue: TipTap, Toast UI and Milkdown adapters
 - **Acceptance Criteria**
-  - Exported helpers to attach MarkReview to each editor with event hooks.
+  - Adapter modules initialise MarkReview and sync accept/reject commands with each framework.
+  - Example editors under `examples/` demonstrate integration.
 - **Priority**: Medium
 - **Estimate**: 3d
-- **Labels**: integrations, phase:1
+- **Labels**: integrations, examples, phase:1
 
-### Issue: Integration tests for editors
+### Issue: Keyboard‑map utility and preferences UI
 - **Acceptance Criteria**
-  - Examples and tests proving MarkReview works with each framework.
+  - Shortcuts defined using `event.code`; users can remap keys via a settings dialog (F-11).
+  - Playwright tests validate QWERTY, AZERTY and QWERTZ layouts.
+- **Priority**: Medium
+- **Estimate**: 3d
+- **Labels**: keymap, testing, phase:1
+
+## Epic: Documentation and Quality
+
+### Issue: Documentation site update
+- **Acceptance Criteria**
+  - `docs/` includes user guide, help/FAQ, and updated PRD and TASKS files (F-14).
+  - Example code snippets and accessibility notes provided.
 - **Priority**: Medium
 - **Estimate**: 2d
-- **Labels**: testing, integration, phase:1
+- **Labels**: docs, accessibility, phase:1
 
-## Epic: Release & Documentation
-
-### Issue: Write theming and migration guides
+### Issue: CI pipeline with linting and coverage
 - **Acceptance Criteria**
-  - Docs cover CSS variables, bar offset, and export workflow.
-- **Priority**: Medium
-- **Estimate**: 1d
-- **Labels**: documentation, phase:1
-
-### Issue: Publish beta 0.1.0 packages
-- **Acceptance Criteria**
-  - Packages released to PyPI and npm with release notes.
-- **Priority**: Medium
-- **Estimate**: 1d
-- **Labels**: release, beta, phase:1
-
-### Issue: General availability 1.0.0
-- **Acceptance Criteria**
-  - Bugs from beta resolved; CI passes with ≥90 % coverage; announcements posted.
-- **Priority**: Medium
-- **Estimate**: 2d
-- **Labels**: release, phase:1
-
-## Epic: Security & Code Quality
-
-### Issue: Enforce ESLint/Prettier and coverage gate
-- **Acceptance Criteria**
-  - CI runs `eslint` and `prettier --check` on all TypeScript packages.
-  - Unit tests executed with coverage threshold ≥90 %.
+  - GitHub Actions run ESLint, Prettier, Jest and Playwright with coverage ≥90 % as specified in PRD section 5.
 - **Priority**: High
 - **Estimate**: 1d
 - **Labels**: ci, quality, phase:1
 
-### Issue: CLI path sanitisation & CSP audit
+### Issue: Bundle size and performance tests
 - **Acceptance Criteria**
-  - CLI rejects paths escaping the workspace via `..` traversal.
-  - JavaScript bundles contain no `eval` usage and pass CSP checks.
+  - Automated check ensures JS ≤10 kB and CSS ≤5 kB gzipped (F-13).
+  - DOM scan benchmark on a 2 MB document stays under 5 ms.
 - **Priority**: Medium
 - **Estimate**: 1d
-- **Labels**: security, phase:1
+- **Labels**: perf, testing, phase:1
 
-### Issue: Dependency vulnerability checks
+### Issue: Accessibility and internationalisation audit
 - **Acceptance Criteria**
-  - CI job runs `npm audit --production` and Python `bandit` scanning.
-  - Fails build on high severity advisories.
-- **Priority**: Medium
-- **Estimate**: 1d
-- **Labels**: security, ci, phase:1
-
-## Epic: Remove Obsolete Features
-
-### Issue: Drop Pandiff integration
-- **Acceptance Criteria**
-  - Delete `pandiff.js`, related tests and documentation.
-  - Remove references from existing CLI code.
+  - All interactive elements meet WCAG 2.2 AA contrast and have ARIA labels; locale JSON files support translation.
 - **Priority**: High
-- **Estimate**: 0.5d
-- **Labels**: cleanup, cli, phase:1
+- **Estimate**: 1d
+- **Labels**: accessibility, i18n, phase:1
 
-### Issue: Remove Obsidian/Astro placeholders
+### Issue: 0.1 alpha release
 - **Acceptance Criteria**
-  - Delete `obsidian.py` and its tests; purge docs mentioning Obsidian.
+  - Publish package to npm; docs highlight preview limitations.
 - **Priority**: Medium
-- **Estimate**: 0.5d
-- **Labels**: cleanup, phase:1
+- **Estimate**: 1d
+- **Labels**: release, phase:1
 
-## Epic: Folder Restructure
-
-### Issue: Organise examples directory
+### Issue: 1.0 GA polish
 - **Acceptance Criteria**
-  - Examples moved under `examples/basic-html`, `examples/tiptap-editor` and `examples/toast-ui-editor`.
+  - Resolve beta feedback, update examples and videos, and tag version 1.0.0.
 - **Priority**: Medium
-- **Estimate**: 0.5d
-- **Labels**: examples, docs, phase:1
+- **Estimate**: 2d
+- **Labels**: release, phase:1
 
-### Issue: Remove `packages/markreview-cli` after migration
+## Epic: Future Expansion
+
+### Issue: Bulk accept/reject and export formats
 - **Acceptance Criteria**
-  - All CLI functionality lives in `packages/markreview`; old package deleted and workspace updated.
-- **Priority**: Medium
-- **Estimate**: 0.5d
-- **Labels**: cleanup, packaging, phase:1
-
-## Epic: Collaboration Features
-
-### Issue: Real-time presence indicators
-- **Acceptance Criteria**
-  - Display active reviewers and cursors in supported editors.
-- **Priority**: Low
-- **Estimate**: 3d
-- **Labels**: collaboration, phase:3
-
-### Issue: WebSocket collaboration server
-- **Acceptance Criteria**
-  - Node-based server broadcasts document changes and presence events.
+  - Support bulk operations and export to DOCX/PDF/CSV/JSON as outlined in PRD section 13.
 - **Priority**: Low
 - **Estimate**: 4d
-- **Labels**: backend, phase:3
+- **Labels**: export, enhancement, phase:2
 
-### Issue: Conflict detection and resolution
+### Issue: Hosted diff API service
 - **Acceptance Criteria**
-  - Detect concurrent edits and surface merge options to users.
+  - Standalone Node service exposes `diffDoc` over HTTP with authentication.
 - **Priority**: Low
 - **Estimate**: 3d
+- **Labels**: backend, api, phase:2
+
+### Issue: Real‑time collaboration features
+- **Acceptance Criteria**
+  - Presence indicators, revision history and conflict resolution for live editors.
+- **Priority**: Low
+- **Estimate**: 5d
 - **Labels**: collaboration, phase:3
-
-### Issue: Collaborative review workflows
-- **Acceptance Criteria**
-  - Approvals and change requests tracked per reviewer with notifications.
-- **Priority**: Low
-- **Estimate**: 3d
-- **Labels**: workflow, phase:3
-
-### Issue: Performance optimisation for real-time collab
-- **Acceptance Criteria**
-  - Maintain sub-100 ms latency with 10 concurrent users in tests.
-- **Priority**: Low
-- **Estimate**: 2d
-- **Labels**: perf, phase:3
-
-### Issue: Phase 3 GA release
-- **Acceptance Criteria**
-  - All collaboration features stable; documentation updated; version 3.0.0 tagged.
-- **Priority**: Low
-- **Estimate**: 2d
-- **Labels**: release, phase:3
 
