@@ -1,18 +1,17 @@
 # MarkReview Documentation
 
-Welcome to the MarkReview docs. These pages cover setup, usage and customization for the MkDocs plugin.
+Welcome to the MarkReview docs. These pages cover setup, usage and customisation for the core library.
 
 ## Quick Setup (≈5 minutes)
 
-1. Install the plugin:
+1. Install the package:
    ```bash
-   pip install -e .
+   pnpm install
+   pnpm build
    ```
-2. Enable the plugin in your `mkdocs.yml`.
-3. Start the dev server and view your site with tracked changes rendered.
+2. Include the bundle in your ProseMirror-based editor.
 
 
 
-See [Usage](usage.md) for detailed commands. The [API reference](api/index.md)
-documents each package in detail.
+See the [API reference](api/index.md) for detailed module documentation.
 
