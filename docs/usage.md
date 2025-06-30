@@ -47,3 +47,13 @@ markreview accept docs/**/*.md
 # now restart to reload the files
 pnpm start
 ```
+
+### Customising Shortcuts
+
+The default keys work on US layouts. Remap them when needed:
+
+```ts
+import { bindAction } from 'markreview/keymap'
+bindAction('accept', 'KeyZ')
+```
+
