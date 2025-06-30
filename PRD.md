@@ -13,7 +13,7 @@ Features delivered in-editor:
 | --------------------- | ------------------------------------------------------------------------------------------------------------- |
 | Track Changes         | colored insertions, deletions, substitutions, **format-change tracking** (bold→italic, list→paragraph, etc.) |
 | Change-Bars           | 2-3 px bar on left or right margin; width & color customizable; auto-swaps for RTL docs                      |
-| Review UI             | inline pop-up ✓ / ✗ / 💬, **right-panel list** with filter chips & live counters                              |
+| Review UI             | inline pop-up ✓ / ✗ / 💬, right-panel list with filter chips & live counters                              |
 | Comments              | threaded, resolve/unresolve, author avatar, `@mentions`                                                       |
 | Accessibility/i18n    | WCAG-AA palette, full keyboard path, locale packs                                                             |
 | Developer API         | `MarkReview.attach(editor, options)` adapters + headless diff export                                          |
@@ -60,16 +60,16 @@ All review data is stored as **ProseMirror marks** (or CriticMarkup in Markdown)
 | ID      | Requirement                                                                                                                                        | Priority |
 | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
 | F-1  | Parse/render CriticMarkup (add/del/subst/highlight/comment).                                                                 | Must          |
-| F-2  | Track **format changes** and display them.                                                                                   | Must          |
+| F-2  | Track format changes and display them.                                                                                   | Must          |
 | F-3  | Accessible palette (blue ins, red del, purple subst) via CSS vars.                                                           | Must          |
 | F-4  | Change-bar on left/right; width & colour configurable; auto RTL swap.                                                        | Must          |
 | F-5  | Toolbar toggles – Track, Bars (state in `localStorage`).                                                                     | Must          |
 | F-6  | Pop-up ✓ / ✗ / 💬 (`a`/`r`/`c` shortcuts).                                                                                   | Must          |
-| F-7  | **Right-panel list** – cards, counters, collapse/resize, filter chips, text search, ↑/↓ + Enter nav.                         | Must          |
+| F-7  | Right-panel list – cards, counters, collapse/resize, filter chips, text search, ↑/↓ + Enter nav.                         | Must          |
 | F-8  | Threaded comments with `@mentions`; resolve/unresolve.                                                                       | Must          |
 | F-9  | User-identity adapter (`getCurrentUser()` hook).                                                                             | Must          |
 | F-10 | Actions persist to ProseMirror doc; clean export when Track OFF.                                                             | Must          |
-| F-11 | **Keyboard-map utility:** shortcuts bound to `event.code`, user-remappable UI; works on QWERTY, AZERTY, QWERTZ, RTL layouts. | Must          |
+| F-11 | Keyboard-map utility: shortcuts bound to `event.code`, user-remappable UI; works on QWERTY, AZERTY, QWERTZ, RTL layouts. | Must          |
 | F-12 | Public TS API & adapters; headless `diffDoc()` export (Should).                                                              | Must / Should |
 | F-13 | Bundle ≤ 10 kB JS + 5 kB CSS (gzip); scan < 5 ms on 2 MB doc.                                                                | Must          |
 | F-14 | Docs folder + tooltip help; WCAG 2.2 AA compliance; locale JSON.                                                             | Must          |
@@ -121,7 +121,7 @@ markreview/
 │  ├─ keymap/      # cross-layout keyboard utility
 │  ├─ diff-headless/
 │  └─ styles.css
-├─ docs/           # PRD.md, user-guide.md, help/faq.md
+├─ docs/           # PRD.md, user-guide.md, help/faq.md, TASKS.md
 ├─ storybook/
 ├─ examples/
 └─ package.json
