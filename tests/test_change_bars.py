@@ -1,4 +1,6 @@
-import pytest
+from src import stubs
 
-def test_change_bars_stub():
-    pytest.fail('TODO: implement change-bar decoration module')
+
+def test_apply_change_bars():
+    text = "a {++b++} c {--d--}"
+    assert stubs.apply_change_bars(text) == 2

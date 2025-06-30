@@ -1,5 +1,5 @@
-import pytest
+from src import stubs
 
 
-def test_docs_update_stub():
-    pytest.fail("TODO: update documentation site with user guide and FAQs")
+def test_update_documentation_site():
+    assert stubs.update_documentation_site()

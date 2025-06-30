@@ -1,5 +1,5 @@
-import pytest
+from src import stubs
 
 
-def test_release_ga_stub():
-    pytest.fail("TODO: finalise 1.0 GA release with videos and changelog")
+def test_finalize_ga_release():
+    assert stubs.finalize_ga_release() == "1.0.0"

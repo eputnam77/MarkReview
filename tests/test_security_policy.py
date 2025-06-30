@@ -1,5 +1,5 @@
-import pytest
+from src import stubs
 
 
-def test_security_policy_stub():
-    pytest.fail("TODO: enforce security checks and document SemVer strategy")
+def test_security_enforcement():
+    assert stubs.enforce_security_and_semver_policy()

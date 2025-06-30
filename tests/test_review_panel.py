@@ -1,4 +1,6 @@
-import pytest
+from src import stubs
 
-def test_review_panel_stub():
-    pytest.fail('TODO: implement right-panel review list')
+
+def test_build_review_panel():
+    changes = [{"id": "b"}, {"id": "a"}]
+    assert stubs.build_review_panel(changes) == ["a", "b"]

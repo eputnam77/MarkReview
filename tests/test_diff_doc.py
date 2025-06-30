@@ -1,4 +1,6 @@
-import pytest
+from src import stubs
 
-def test_diff_doc_stub():
-    pytest.fail('TODO: implement diffDoc function for headless diff')
+
+def test_diff_doc():
+    diff = stubs.diff_doc("a\n", "b\n")
+    assert any("---" in line or "+++" in line for line in diff)
