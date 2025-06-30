@@ -6,7 +6,7 @@ import time
 from html.parser import HTMLParser
 from pathlib import Path
 
-from markreview.plugin import MarkReviewPlugin
+from mkdocs_markreview.plugin import MarkReviewPlugin
 
 
 def test_mkdocs_build(tmp_path):
@@ -22,49 +22,8 @@ def test_mkdocs_build(tmp_path):
     assert (tmp_path / "site" / "markreview.js").exists()
 
 
-def test_docusaurus_build(tmp_path):
-    node_modules = tmp_path / "node_modules" / "remark-critic-markup"
-    node_modules.mkdir(parents=True)
-    (node_modules / "index.js").write_text("module.exports = () => {};\n")
-    script = tmp_path / "run.js"
-    script.write_text(
-        textwrap.dedent(
-            """
-            const pluginFactory = require(process.argv[2]);
-            const siteDir = process.argv[3];
-            const baseUrl = '/sub/';
-            const path = require('path');
-            const fs = require('fs');
-            (async () => {
-              const plugin = pluginFactory({ siteDir, baseUrl });
-              const opts = plugin.configureMDX({});
-              if (!Array.isArray(opts.remarkPlugins) || opts.remarkPlugins.length === 0) process.exit(1);
-              await plugin.loadContent();
-              const tags = plugin.injectHtmlTags();
-              const css = fs.existsSync(path.join(siteDir, 'static', 'markreview.css'));
-              const js = fs.existsSync(path.join(siteDir, 'static', 'markreview.js'));
-              const injected = JSON.stringify(tags);
-              if (css && js && injected.includes('/sub/markreview.js') && injected.includes('/sub/markreview.css')) process.exit(0); else process.exit(1);
-            })();
-            """
-        )
-    )
-    env = os.environ.copy()
-    env["NODE_PATH"] = str(tmp_path / "node_modules")
-    plugin_path = (
-        Path(__file__).resolve().parents[1]
-        / "packages/docusaurus-plugin-trackchanges/src/index.js"
-    )
-    result = subprocess.run(
-        [
-            "node",
-            str(script),
-            str(plugin_path),
-            str(tmp_path),
-        ],
-        env=env,
-    )
-    assert result.returncode == 0
+def test_docusaurus_package_removed():
+    assert not Path("packages/docusaurus-plugin-trackchanges").exists()
 
 
 def hex_to_lum(value: str) -> float:
@@ -87,8 +46,8 @@ def contrast_ratio(foreground: str, background: str) -> float:
 
 
 def test_accessibility_and_performance(tmp_path):
-    js_path = Path("packages/mkdocs-markreview/markreview/assets/markreview.js")
-    css_path = Path("packages/mkdocs-markreview/markreview/assets/markreview.css")
+    js_path = Path("mkdocs_markreview/assets/markreview.js")
+    css_path = Path("mkdocs_markreview/assets/markreview.css")
     assert js_path.stat().st_size <= 8 * 1024
     assert css_path.stat().st_size <= 5 * 1024
 

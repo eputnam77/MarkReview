@@ -211,12 +211,13 @@ def run_accessibility_intl_audit() -> bool:
     return True
 
 
+def get_current_user() -> Dict[str, str]:
+    """Return the current user identity."""
+    return {"id": "anonymous", "name": "Anonymous"}
+
+
 def remove_legacy_packages() -> List[str]:
-    return [
-        "packages/markreview-cli",
-        "packages/mkdocs-markreview",
-        "packages/docusaurus-plugin-trackchanges",
-    ]
+    return []
 
 
 def enforce_security_and_semver_policy() -> bool:

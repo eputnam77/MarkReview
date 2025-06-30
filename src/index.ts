@@ -34,3 +34,5 @@ export function attach(
     };
 }
 
+export { getCurrentUser, setUserProvider } from './api/user';
+
