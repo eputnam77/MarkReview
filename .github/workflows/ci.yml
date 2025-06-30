@@ -23,6 +23,9 @@ jobs:
           pip install poetry
           poetry install --with dev
           pnpm install --frozen-lockfile
+      - name: Set coverage threshold
+        run: |
+          if [ "$GITHUB_REF" = "refs/heads/main" ]; then echo "COV=90" >> $GITHUB_ENV; else echo "COV=70" >> $GITHUB_ENV; fi
       - name: Run Python checks
         run: |
           poetry run ruff check src tests
@@ -30,7 +33,7 @@ jobs:
           poetry run mypy --strict src
           poetry run bandit -r src -lll --skip B101
           poetry run pip-audit -r <(pip freeze)
-          poetry run pytest -q --cov=src --cov-fail-under=70
+          poetry run pytest -q --cov=src --cov-fail-under=$COV
       - name: Run Node checks
         run: |
           pnpm exec eslint .
