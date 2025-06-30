@@ -158,6 +158,16 @@
 - **Estimate**: 1d
 - **Labels**: security, docs, phase:1
 
+### Issue: Usability and success metrics validation
+- **Acceptance Criteria**
+  - Conduct usability tests measuring time-to-first-accept below 30 seconds.
+  - Regression run confirms zero shortcut failures on AZERTY and QWERTZ keyboards.
+  - Participants achieve at least 95% task completion for accept/reject/comment and panel navigation.
+  - Document results in `docs/user-study.md`.
+- **Priority**: Medium
+- **Estimate**: 2d
+- **Labels**: testing, usability, phase:1
+
 ### Issue: 0.1 alpha release
 - **Acceptance Criteria**
   - Publish package to npm; docs highlight preview limitations.
