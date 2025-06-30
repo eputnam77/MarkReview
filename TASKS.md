@@ -5,7 +5,9 @@
 ### Issue: Initialize core package layout
 - **Acceptance Criteria**
   - `src/` directory contains `core/`, `ui/`, `adapters/`, `keymap/`, `diff-headless/`, and `styles.css` as per PRD section 8.
-  - `package.json` at repo root defines build scripts for ESM and CJS output.
+  - `package.json` at repo root defines build scripts for ESM and CJS output,
+    sets `"sideEffects": false`, and declares
+    `peerDependencies` for `prosemirror-*` `^1.23.0`.
   - Storybook and examples folders created.
 - **Priority**: High
 - **Estimate**: 2d
@@ -126,6 +128,8 @@
 ### Issue: CI pipeline with linting and coverage
 - **Acceptance Criteria**
   - GitHub Actions run ESLint, Prettier, Jest and Playwright with coverage ≥90 % as specified in PRD section 5.
+  - Security checks run `npm audit` and `pip-audit`; workflow fails on detected vulnerabilities.
+  - Static scan ensures no network calls (`fetch`, `axios`) in the core package.
 - **Priority**: High
 - **Estimate**: 1d
 - **Labels**: ci, quality, phase:1
@@ -145,6 +149,15 @@
 - **Estimate**: 1d
 - **Labels**: accessibility, i18n, phase:1
 
+### Issue: Security review and SemVer policy
+- **Acceptance Criteria**
+  - Codebase contains no network calls; tooling checks for `fetch` or `axios` usage.
+  - CI includes `npm audit` and `pip-audit` with failures blocking merges.
+  - README documents the SemVer strategy aligned with host-editor major versions.
+- **Priority**: Medium
+- **Estimate**: 1d
+- **Labels**: security, docs, phase:1
+
 ### Issue: 0.1 alpha release
 - **Acceptance Criteria**
   - Publish package to npm; docs highlight preview limitations.
@@ -154,7 +167,9 @@
 
 ### Issue: 1.0 GA polish
 - **Acceptance Criteria**
-  - Resolve beta feedback, update examples and videos, and tag version 1.0.0.
+  - Resolve beta feedback and ship example videos showcasing core workflows.
+  - Finalise documentation and CHANGELOG for the 1.0.0 release.
+  - Tag version 1.0.0 following SemVer guidelines.
 - **Priority**: Medium
 - **Estimate**: 2d
 - **Labels**: release, phase:1
