@@ -197,6 +197,23 @@ def open_preferences_dialog() -> bool:
 
 
 # ---------------------------------------------------------------------------
+# Extension registry (for future FudgeAI integration)
+# ---------------------------------------------------------------------------
+
+_PANEL_EXTENSIONS: list[str] = []
+
+
+def register_panel_extension(name: str) -> None:
+    """Register the name of a side-panel extension."""
+    _PANEL_EXTENSIONS.append(name)
+
+
+def get_panel_extensions() -> list[str]:
+    """Return registered side-panel extension names."""
+    return list(_PANEL_EXTENSIONS)
+
+
+# ---------------------------------------------------------------------------
 # Miscellaneous utilities used in tests
 # ---------------------------------------------------------------------------
 

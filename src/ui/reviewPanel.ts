@@ -5,3 +5,25 @@ export function buildReviewPanel(changes: Array<{ id: string }>): string[] {
     return changes.map((c) => String(c.id)).sort();
 }
 
+// ---------------------------------------------------------------------------
+// Extension registry
+// ---------------------------------------------------------------------------
+
+export interface PanelExtension {
+    id: string;
+    mount(panelEl: HTMLElement, api: unknown): void;
+    dispose(): void;
+}
+
+const EXTENSIONS: PanelExtension[] = [];
+
+/** Register a side-panel extension (e.g. FudgeAI). */
+export function registerPanelExtension(ext: PanelExtension): void {
+    EXTENSIONS.push(ext);
+}
+
+/** Return all registered extensions. */
+export function getPanelExtensions(): PanelExtension[] {
+    return [...EXTENSIONS];
+}
+
