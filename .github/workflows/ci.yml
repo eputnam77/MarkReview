@@ -23,11 +23,24 @@ jobs:
           pip install poetry
           poetry install --with dev
           pnpm install --frozen-lockfile
-      - name: Lint and Test
+      - name: Run Python checks
         run: |
           poetry run ruff check src tests
           poetry run black --check src tests
           poetry run mypy --strict src
           poetry run bandit -r src -lll --skip B101
+          poetry run pip-audit -r <(pip freeze)
           poetry run pytest -q --cov=src --cov-fail-under=70
-          pnpm audit --audit-level=high
+      - name: Run Node checks
+        run: |
+          pnpm exec eslint .
+          pnpm exec prettier --check .
+          pnpm exec jest --coverage --passWithNoTests
+          if [ -f playwright.config.js ] || [ -f playwright.config.ts ]; then pnpm exec playwright test; fi
+      - name: Security audit (npm)
+        run: pnpm audit --audit-level=high
+      - name: Ensure no network calls
+        run: |
+          if grep -R "\b\(fetch\|axios\)\b" src packages | grep -v node_modules; then
+            echo "Network calls detected" && exit 1
+          fi

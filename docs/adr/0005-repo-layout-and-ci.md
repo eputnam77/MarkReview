@@ -10,7 +10,7 @@ PRD section 8 outlines a simplified repository where the runtime library lives a
 - Keep example editors in `examples/` and documentation under `docs/`.
 - Introduce a `storybook/` directory for component demos.
 - Future Python code moves to `mkdocs_markreview/` so import paths comply with `AGENTS.md`.
-- Replace previous CI with a workflow running the dev gate commands (ruff, black, mypy, bandit, pytest) and `pnpm audit`.
+- Replace previous CI with a workflow running the dev gate commands (ruff, black, mypy, bandit, pytest, pip-audit) alongside Node checks (ESLint, Prettier, Jest, Playwright) and `pnpm audit`.
 - A routing workflow (`agents.yml`) invokes the correct Codex agent after each push.
 
 ## Consequences
