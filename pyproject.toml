@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "markreview-monorepo"
+version = "0.1.0"
+description = "Development environment for MarkReview"
+authors = ["MarkReview Team <team@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+mkdocs = "^1.5"
+pymdown-extensions = "^10"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+ruff = "^0.4.7"
+mypy = "^1.10"
+pytest = "^8.2"
+bandit = "^1.7"
+pip-audit = "^2.7"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,7 +1,17 @@
 {
   "name": "markreview",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "build:esm": "tsc -p tsconfig.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json"
+  },
+  "peerDependencies": {
+    "prosemirror-model": "^1.23.0",
+    "prosemirror-state": "^1.23.0",
+    "prosemirror-view": "^1.23.0"
+  },
   "workspaces": [
     "packages/*"
   ]
