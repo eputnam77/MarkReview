@@ -1,7 +1,16 @@
-export function bindAction(action: string, defaultCode: string) {
-    throw new Error('Keyboard-map utility not implemented');
+const DEFAULT_KEYS: Record<string, string> = {
+    accept: 'KeyA',
+    reject: 'KeyR',
+    comment: 'KeyC',
+};
+
+/** Bind an action to a keyboard code. */
+export function bindAction(action: string, defaultCode: string): void {
+    DEFAULT_KEYS[action] = defaultCode;
 }
 
-export function loadKeymap() {
-    throw new Error('Keymap loading not implemented');
+/** Return the current keymap. */
+export function loadKeymap(): Record<string, string> {
+    return { ...DEFAULT_KEYS };
 }
+
