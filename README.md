@@ -1,6 +1,6 @@
 # MarkReview Monorepo
 
-MarkReview adds lightweight review tools to any ProseMirror based editor. It includes a MkDocs plugin that renders CriticMarkup, a tiny CLI for applying edits and a small set of helper utilities.
+MarkReview adds lightweight review tools to any ProseMirror based editor. It includes a MkDocs plugin that renders CriticMarkup and a small set of helper utilities.
 
 ## Using MarkReview in Your Project
 
@@ -27,12 +27,7 @@ plugins:
 Start your site with `mkdocs serve`.
 
 **Accepting or rejecting edits in the browser does not modify your source files.**
-Use the `markreview` CLI to apply changes and restart the dev server.
-
-```bash
-markreview accept docs/**/*.md
-mkdocs serve
-```
+Remove CriticMarkup from your documents and restart the dev server to see the changes.
 
 You can override the highlight colours in your CSS:
 
@@ -46,7 +41,7 @@ You can override the highlight colours in your CSS:
 The plugin automatically injects the runtime assets so tracked changes appear without manual imports.
 
 See the [docs](docs/index.md) for setup and usage instructions.
-The [API reference](docs/api/index.md) describes the CLI and plugin modules.
+The [API reference](docs/api/index.md) describes the plugin modules and helper APIs.
 
 ## Features
 
@@ -74,4 +69,12 @@ MarkReview follows [Semantic Versioning](https://semver.org/). Major versions
 align with the ProseMirror major series supported by the library. When a new
 ProseMirror major is released, MarkReview increments its own major version. Minor
 and patch releases deliver backwards‑compatible improvements and fixes.
+
+## Migrating from earlier versions
+
+Older releases exposed the MkDocs plugin as ``markreview.plugin`` and shipped a
+``markreview`` command line tool. The plugin now lives in the
+``mkdocs_markreview`` package and the CLI has been removed. Update your imports
+to ``from mkdocs_markreview.plugin import MarkReviewPlugin`` and remove any
+calls to the deprecated ``markreview`` command.
 

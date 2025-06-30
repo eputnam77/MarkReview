@@ -39,14 +39,8 @@ After installation, enable the plugin in `mkdocs.yml`.
 ## Persisting Changes
 
 Accepting or rejecting edits in the browser updates only the current page.
-The source Markdown files remain unchanged. Use the CLI to apply the edits
-and restart your dev server:
-
-```bash
-markreview accept docs/**/*.md
-# now restart to reload the files
-pnpm start
-```
+To make the changes permanent, remove CriticMarkup from your Markdown files and
+restart the dev server.
 
 ### Customising Shortcuts
 
