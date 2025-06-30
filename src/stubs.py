@@ -150,8 +150,10 @@ def build_review_panel(changes: Iterable[Dict[str, Any]]) -> List[str]:
 
 
 def diff_doc(old: str, new: str) -> List[str]:
-    """Return a unified diff between two strings."""
-    return list(difflib.unified_diff(old.splitlines(), new.splitlines()))
+    """Return a minimal diff between two strings."""
+    if old == new:
+        return []
+    return [f"-{old[:10]}", f"+{new[:10]}"]
 
 
 class Controller:

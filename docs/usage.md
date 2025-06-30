@@ -7,7 +7,7 @@ Add the plugin to your project configuration and start your site.
 ```yaml
 # mkdocs.yml
 plugins:
-  - markreview
+  - mkdocs_markreview
 ```
 
 Start the dev server:
@@ -16,18 +16,6 @@ Start the dev server:
 mkdocs serve
 ```
 
-## Docusaurus
-
-```js
-// docusaurus.config.js
-plugins: ['docusaurus-plugin-trackchanges'];
-```
-The plugin copies the runtime assets and injects the required tags automatically.
-Start the dev server:
-
-```bash
-pnpm start
-```
 
 ## Testing from Source
 
@@ -41,12 +29,12 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
-Install the plugins directly from this repository if a packaged release isn't available. Run these commands from the **MarkReview repository root** so the relative `packages/` paths resolve correctly. After installation, open your MkDocs or Docusaurus project in your IDE (e.g. VS Code) and enable the plugin in `mkdocs.yml` or `docusaurus.config.js`.
+Install the plugin directly from this repository if a packaged release isn't available:
 
 ```bash
-pip install -e packages/mkdocs-markreview
-pnpm add -D file:packages/docusaurus-plugin-trackchanges
+pip install -e .
 ```
+After installation, enable the plugin in `mkdocs.yml`.
 
 ## Persisting Changes
 
