@@ -12,7 +12,5 @@
     "prosemirror-state": "^1.23.0",
     "prosemirror-view": "^1.23.0"
   },
-  "workspaces": [
-    "packages/*"
-  ]
+  "workspaces": []
 }

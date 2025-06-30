@@ -44,6 +44,6 @@ jobs:
         run: pnpm audit --audit-level=high
       - name: Ensure no network calls
         run: |
-          if grep -R "\b\(fetch\|axios\)\b" src packages | grep -v node_modules; then
+          if grep -R "\b\(fetch\|axios\)\b" src mkdocs_markreview | grep -v node_modules; then
             echo "Network calls detected" && exit 1
           fi
