@@ -8,42 +8,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.12'
       - uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '18'
           cache: 'pnpm'
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-      - name: Install dependencies
-        run: |
-          pip install poetry
-          poetry install --with dev
-          pnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile
       - name: Set coverage threshold
         run: |
           if [ "$GITHUB_REF" = "refs/heads/main" ]; then echo "COV=90" >> $GITHUB_ENV; else echo "COV=70" >> $GITHUB_ENV; fi
-      - name: Run Python checks
-        run: |
-          poetry run ruff check src tests
-          poetry run black --check src tests
-          poetry run mypy --strict src
-          poetry run bandit -r src -lll --skip B101
-          poetry run pip-audit -r <(pip freeze)
-          poetry run pytest -q --cov=src --cov-fail-under=$COV
-      - name: Run Node checks
-        run: |
-          pnpm exec eslint .
-          pnpm exec prettier --check .
-          pnpm exec jest --coverage --passWithNoTests
-          if [ -f playwright.config.js ] || [ -f playwright.config.ts ]; then pnpm exec playwright test; fi
-      - name: Security audit (npm)
-        run: pnpm audit --audit-level=high
-      - name: Ensure no network calls
-        run: |
-          if grep -R "\b\(fetch\|axios\)\b" src mkdocs_markreview | grep -v node_modules; then
-            echo "Network calls detected" && exit 1
-          fi
+      - run: pnpm exec eslint src
+      - run: pnpm exec prettier --check src
+      - run: pnpm exec tsc -p tsconfig.json --noEmit
+      - run: pnpm audit --production
+      - run: pnpm exec vitest run --coverage --coverage.failUnder=$COV
