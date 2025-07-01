@@ -33,15 +33,17 @@ export function persistMarks(
   }
 
   const json = doc.toJSON()
-  const walk = (node: { text?: string; content?: unknown[] }): void => {
+  const stack: { text?: string; content?: unknown[] }[] = [json]
+  while (stack.length > 0) {
+    const node = stack.pop()!
     if (node.text) {
       node.text = node.text.replace(CHANGE_RE, replace)
     }
     if (node.content) {
-      for (const child of node.content)
-        walk(child as { text?: string; content?: unknown[] })
+      for (const child of node.content) {
+        stack.push(child as { text?: string; content?: unknown[] })
+      }
     }
   }
-  walk(json)
   return PMNode.fromJSON(doc.type.schema, json)
 }

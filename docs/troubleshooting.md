@@ -10,7 +10,7 @@ If styles are missing, make sure your theme imports `styles.css` from the packag
 
 ## Edits not persisted
 
-Keyboard shortcuts only modify the live page. Remove the CriticMarkup from your Markdown files and restart the dev server to see the changes.
+When editing Markdown you may still see CriticMarkup tags after accepting or rejecting changes. Run `persistMarks()` on the file before committing. Text entered in a ProseMirror editor is persisted automatically.
 
 ## Installation errors
 

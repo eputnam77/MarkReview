@@ -5,6 +5,7 @@ MarkReview adds lightweight review tools to any ProseMirror based editor. The li
 ## Using MarkReview in Your Project
 
 Install the package from source and import the helpers in your project.
+
 ```bash
 pnpm install
 pnpm build
@@ -37,8 +38,11 @@ controller.acceptAll()
 - Remappable keyboard shortcuts via `bindAction()` and `loadKeymap()`.
 - Format-change tracking and colourful change bars.
 - Review panel with counters and keyboard navigation.
+- Search and filter chips in the review panel keep conversations focused.
 - Toolbar state saved to `localStorage`.
+- Changes persist when saving ProseMirror documents via `persistMarks()`.
 - Locale packs for quick translation.
+- A performance gate checks bundle size and DOM scan time during CI.
 
 ```ts
 import { bindAction, loadKeymap } from 'markreview/keymap'
@@ -58,4 +62,3 @@ and patch releases deliver backwards‑compatible improvements and fixes.
 Older releases shipped a Python-based documentation plugin and a separate CLI.
 Both have been removed in favour of a single JavaScript library. Update any old
 imports or scripts accordingly.
-
