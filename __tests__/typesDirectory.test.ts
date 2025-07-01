@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { ensureTypesDirectory } from '../src/core/typesDirectory'
+import { ensureTypesDirectory } from '../src/node/typesDirectory'
 import fs from 'fs'
 
 describe('ensureTypesDirectory', () => {

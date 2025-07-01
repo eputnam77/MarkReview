@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import fs from 'fs'
-import { cleanupPythonSources } from '../src/core/cleanupPythonSources'
+import { cleanupPythonSources } from '../src/node/cleanupPythonSources'
 
 describe('cleanupPythonSources', () => {
   it('removes python sources', () => {

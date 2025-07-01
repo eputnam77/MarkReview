@@ -11,9 +11,14 @@ export interface BundleSizes {
  * Return the approximate size of the JavaScript and CSS bundles in kilobytes.
  * The calculation is based on the provided source strings.
  */
+import { gzipSync } from 'zlib'
+
 export function checkBundleSize(js = '', css = ''): BundleSizes {
   const toKb = (bytes: number) => Math.round((bytes / 1024) * 100) / 100
-  return { js: toKb(Buffer.byteLength(js)), css: toKb(Buffer.byteLength(css)) }
+  return {
+    js: toKb(gzipSync(js).length),
+    css: toKb(gzipSync(css).length),
+  }
 }
 
 /**

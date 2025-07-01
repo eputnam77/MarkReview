@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import fs from 'fs'
-import { migratePythonStubs } from '../src/core/stubsMigration'
+import { migratePythonStubs } from '../src/node/stubsMigration'
 
 describe('migratePythonStubs', () => {
   it('removes files if present', () => {
