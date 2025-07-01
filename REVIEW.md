@@ -4,7 +4,7 @@
 The repository implements a TypeScript package that adds Word-style review tools to ProseMirror editors. The `src/` folder holds modular code for parsing CriticMarkup, tracking format changes, rendering UI widgets and providing adapter hooks. Automated tests use Vitest and the project ships with a CI pipeline (GitHub Actions) that runs linting, type checks and coverage.
 
 ## PRD Coverage
-- Functional requirements F‑1 through F‑12 are represented in code. Examples include:
+- Functional requirements F‑1 through F‑13 are represented in code. Examples include:
   - `parseCriticMarkup` for F‑1【F:src/core/criticParser.ts†L1-L42】
   - `trackFormatChanges` for F‑2【F:src/core/formatTracker.ts†L1-L22】
   - `applyChangeBars` for F‑4【F:src/ui/changeBars.ts†L1-L42】
@@ -15,6 +15,7 @@ The repository implements a TypeScript package that adds Word-style review tools
   - `persistMarks` for F‑10【F:src/core/persistence.ts†L11-L52】
   - `bindAction`/`loadKeymap` for F‑11【F:src/keymap/index.ts†L1-L15】
   - `attach` and `diffDoc` for F‑12【F:src/index.ts†L1-L37】【F:src/diff-headless/index.ts†L1-L22】
+  - CI runs `pnpm run perf` which calls `scripts/performance-check.cjs` for F‑13【F:scripts/performance-check.cjs†L20-L29】【F:.github/workflows/ci.yml†L19-L28】
 - Non‑functional items such as peer dependencies and CI scripts are covered in `package.json` and `.github/workflows/ci.yml`【F:package.json†L18-L32】【F:.github/workflows/ci.yml†L20-L28】.
 - Documentation and locale packs satisfy F‑14【F:docs/accessibility.md†L1-L8】【F:docs/locales/en.json†L1-L5】.
 
@@ -25,7 +26,7 @@ The repository implements a TypeScript package that adds Word-style review tools
 
 ## Performance Considerations
 - `diffDoc`, `trackFormatChanges` and `applyChangeBars` run linear scans; they should handle moderately large documents efficiently.
-- Scripts under `scripts/performance-check.cjs` evaluate bundle size and DOM scan times but the CI job does not enforce strict thresholds.
+- The CI pipeline runs `pnpm run perf`, enforcing the bundle ≤10 kB and DOM scan <5 ms via `performance-check.cjs`.
 - Using synchronous FS calls (`fs.rmSync`) may block the event loop during build steps.
 
 ## Maintainability Notes
@@ -36,7 +37,7 @@ The repository implements a TypeScript package that adds Word-style review tools
 ## Mandatory Fixes
 1. Remove Node‑specific functions from browser bundles or clearly isolate them to avoid runtime errors when used in the browser.
 2. Expand tests for `persistMarks` and adapter modules to ensure ProseMirror documents integrate as expected.
-3. Enforce the performance gate (bundle ≤10 kB JS / 5 kB CSS and DOM scan <5 ms) in CI as required by F‑13.
+3. Keep the performance gate active so bundle and scan checks continue to run on every CI build.
 
 ## Optional Suggestions
 - Replace synchronous `fs` calls with asynchronous versions in build scripts.
