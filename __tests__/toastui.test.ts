@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { initToastUIAdapter } from '../src/adapters/toastui'
+import * as root from '../src'
+import { vi } from 'vitest'
 
 import { Schema } from 'prosemirror-model'
 describe('initToastUIAdapter', () => {
@@ -15,5 +17,13 @@ describe('initToastUIAdapter', () => {
     const doc = schema.node('doc', null, [schema.text('hi')])
     const ctrl = initToastUIAdapter(doc)
     expect(ctrl.editor).toBe(doc)
+  })
+
+  it('forwards options to attach', () => {
+    const spy = vi.spyOn(root, 'attach')
+    const opts = { a: 1 }
+    initToastUIAdapter({}, opts)
+    expect(spy).toHaveBeenCalledWith({}, opts)
+    spy.mockRestore()
   })
 })

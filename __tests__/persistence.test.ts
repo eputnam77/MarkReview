@@ -49,4 +49,26 @@ describe('persistMarks', () => {
     expect(accepted.textContent).toBe('x y w')
     expect(rejected.textContent).toBe('x z w')
   })
+
+  it('does not mutate the original document', () => {
+    const schema = new Schema({
+      nodes: {
+        doc: { content: 'paragraph+' },
+        paragraph: {
+          content: 'text*',
+          toDOM: () => ['p', 0],
+          parseDOM: [{ tag: 'p' }],
+        },
+        text: {},
+      },
+    })
+    const doc = schema.node('doc', null, [
+      schema.node('paragraph', null, schema.text('a {--b--} c')),
+    ])
+    const before = doc.toJSON()
+    const result = persistMarks(doc, false) as typeof doc
+    expect(doc.toJSON()).toEqual(before)
+    expect(result).not.toBe(doc)
+    expect(result.textContent).toBe('a b c')
+  })
 })
