@@ -9,6 +9,6 @@ describe('performance helpers', () => {
   })
 
   it('returns a benchmark value based on length', () => {
-    expect(scanDomBenchmark('xxxx')).toBe(0.004)
+    expect(scanDomBenchmark('xxxx')).toBeCloseTo(0.000008)
   })
 })

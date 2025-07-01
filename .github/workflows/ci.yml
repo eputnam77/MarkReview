@@ -24,3 +24,4 @@ jobs:
       - run: pnpm exec tsc -p tsconfig.json --noEmit
       - run: pnpm audit --production
       - run: pnpm exec vitest run --coverage --coverage.failUnder=$COV
+      - run: pnpm run perf

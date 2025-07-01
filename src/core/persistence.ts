@@ -1,7 +1,7 @@
-/** Representation of a minimal ProseMirror document. */
-export interface PMDoc {
-  text: string
-}
+import { Node as PMNode } from 'prosemirror-model'
+
+/** Alias for a ProseMirror document node. */
+export type PMDoc = PMNode
 
 /**
  * Accept or reject CriticMarkup marks inside a string or ProseMirror-like
@@ -13,7 +13,7 @@ export function persistMarks(
   accept = true,
 ): string | PMDoc {
   const CHANGE_RE = /\{([+\-~=]{2})(.+?)\1\}/g
-  const source = typeof doc === 'string' ? doc : doc.text
+  const source = typeof doc === 'string' ? doc : doc.textContent
   const replace = (_: string, tag: string, content: string): string => {
     switch (tag) {
       case '++':
@@ -28,5 +28,20 @@ export function persistMarks(
     }
   }
   const result = source.replace(CHANGE_RE, replace)
-  return typeof doc === 'string' ? result : { ...doc, text: result }
+  if (typeof doc === 'string') {
+    return result
+  }
+
+  const json = doc.toJSON()
+  const walk = (node: { text?: string; content?: unknown[] }): void => {
+    if (node.text) {
+      node.text = node.text.replace(CHANGE_RE, replace)
+    }
+    if (node.content) {
+      for (const child of node.content)
+        walk(child as { text?: string; content?: unknown[] })
+    }
+  }
+  walk(json)
+  return PMNode.fromJSON(doc.type.schema, json)
 }

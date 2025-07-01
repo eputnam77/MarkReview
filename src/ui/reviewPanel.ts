@@ -20,8 +20,13 @@ export interface PanelStats {
 export function buildReviewPanel(
   changes: ReviewChange[],
   query = '',
+  filter: string[] = [],
 ): { ids: string[]; stats: PanelStats } {
-  const filtered = changes.filter((c) => c.text.includes(query))
+  const filtered = changes.filter(
+    (c) =>
+      (filter.length === 0 || filter.includes(c.type)) &&
+      c.text.includes(query),
+  )
   const ids = filtered.map((c) => String(c.id)).sort()
   const stats: PanelStats = { total: filtered.length, byType: {} }
   for (const c of filtered) {
@@ -50,4 +55,20 @@ export function registerPanelExtension(ext: PanelExtension): void {
 /** Return all registered extensions. */
 export function getPanelExtensions(): PanelExtension[] {
   return [...EXTENSIONS]
+}
+
+// ---------------------------------------------------------------------------
+// Preferences
+// ---------------------------------------------------------------------------
+
+export interface PanelPreferences {
+  collapsed: boolean
+}
+
+export function savePanelPreferences(
+  storage: Record<string, string>,
+  prefs: PanelPreferences,
+): PanelPreferences {
+  storage['panel_collapsed'] = String(prefs.collapsed)
+  return prefs
 }
