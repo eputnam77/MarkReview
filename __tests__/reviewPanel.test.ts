@@ -1,9 +1,14 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/ui/reviewPanel.ts'
+import { buildReviewPanel, registerPanelExtension, getPanelExtensions } from '../src/ui/reviewPanel'
 
-describe('reviewPanel', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement reviewPanel tests')
+describe('review panel utilities', () => {
+  it('sorts ids', () => {
+    const result = buildReviewPanel([{ id: 'b' }, { id: 'a' }])
+    expect(result).toEqual(['a', 'b'])
+  })
+
+  it('registers panel extensions', () => {
+    registerPanelExtension('ext')
+    expect(getPanelExtensions()).toContain('ext')
   })
 })

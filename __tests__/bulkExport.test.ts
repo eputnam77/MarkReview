@@ -1,9 +1,12 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/bulkExport.ts'
+import { bulkAcceptReject, exportDocument } from '../src/core/bulkExport'
 
-describe('bulkExport', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement bulkExport tests')
+describe('bulk export helpers', () => {
+  it('returns true for bulkAcceptReject', () => {
+    expect(bulkAcceptReject()).toBe(true)
+  })
+
+  it('returns exported string for exportDocument', () => {
+    expect(exportDocument()).toBe('exported')
   })
 })

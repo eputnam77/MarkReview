@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/collaboration/index.ts'
+import { enableRealtimeCollaboration } from '../src/collaboration'
 
-describe('index', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement index tests')
+describe('enableRealtimeCollaboration', () => {
+  it('returns true', () => {
+    expect(enableRealtimeCollaboration()).toBe(true)
   })
 })

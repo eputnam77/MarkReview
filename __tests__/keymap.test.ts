@@ -1,9 +1,15 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/keymap/index.ts'
+import { bindAction, loadKeymap } from '../src/keymap'
+import { openPreferencesDialog } from '../src/keymap/preferences'
 
-describe('keymap', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement keymap tests')
+describe('keymap utils', () => {
+  it('bindAction updates the keymap', () => {
+    bindAction('accept', 'KeyZ')
+    const map = loadKeymap()
+    expect(map.accept).toBe('KeyZ')
+  })
+
+  it('openPreferencesDialog returns true', () => {
+    expect(openPreferencesDialog()).toBe(true)
   })
 })

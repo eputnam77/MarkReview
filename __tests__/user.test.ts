@@ -1,9 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/api/user.ts'
+import { getCurrentUser, setUserProvider } from '../src/api/user'
 
-describe('user', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement user tests')
+describe('user helpers', () => {
+  it('returns anonymous by default', () => {
+    expect(getCurrentUser()).toEqual({ id: 'anonymous', name: 'Anonymous' })
+  })
+
+  it('allows overriding provider', () => {
+    setUserProvider(() => ({ id: '1', name: 'Test' }))
+    expect(getCurrentUser()).toEqual({ id: '1', name: 'Test' })
   })
 })

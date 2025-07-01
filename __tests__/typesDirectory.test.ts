@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/typesDirectory.ts'
+import { ensureTypesDirectory } from '../src/core/typesDirectory'
 
-describe('typesDirectory', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement typesDirectory tests')
+describe('ensureTypesDirectory', () => {
+  it('returns true', () => {
+    expect(ensureTypesDirectory()).toBe(true)
   })
 })

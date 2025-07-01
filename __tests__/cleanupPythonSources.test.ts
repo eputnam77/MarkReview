@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/cleanupPythonSources.ts'
+import { cleanupPythonSources } from '../src/core/cleanupPythonSources'
 
 describe('cleanupPythonSources', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement cleanupPythonSources tests')
+  it('returns list of python files', () => {
+    const files = cleanupPythonSources()
+    expect(files).toContain('src/stubs.py')
   })
 })

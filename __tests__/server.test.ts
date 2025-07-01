@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/api/server.ts'
+import { startDiffServer } from '../src/api/server'
 
-describe('server', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement server tests')
+describe('startDiffServer', () => {
+  it('returns started', () => {
+    expect(startDiffServer()).toBe('started')
   })
 })

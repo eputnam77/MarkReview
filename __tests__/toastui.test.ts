@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/adapters/toastui.ts'
+import { initToastUIAdapter } from '../src/adapters/toastui'
 
-describe('toastui', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement toastui tests')
+describe('initToastUIAdapter', () => {
+  it('returns a controller', () => {
+    const ctrl = initToastUIAdapter({})
+    expect(ctrl).toHaveProperty('editor')
   })
 })

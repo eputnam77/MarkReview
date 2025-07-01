@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/ui/popupWidget.ts'
+import { attachPopupControls } from '../src/ui/popupWidget'
 
-describe('popupWidget', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement popupWidget tests')
+describe('attachPopupControls', () => {
+  it('accepts and rejects changes', () => {
+    const text = 'a {--b--}'
+    expect(attachPopupControls('reject', text)).toBe('a b')
+    expect(attachPopupControls('accept', text)).toBe('a ')
   })
 })
