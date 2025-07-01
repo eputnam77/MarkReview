@@ -17,15 +17,15 @@ export function attachPopupControls(
 
   switch (action) {
     case 'accept':
-      return persistMarks(text, true)
+      return persistMarks(text, true) as string
     case 'reject':
-      return persistMarks(text, false)
-    case 'comment':
+      return persistMarks(text, false) as string
+    case 'comment': {
       if (!thread) return text
       const change = changes[0]
       const comment: Comment = {
         id: String(Date.now()),
-        changeId: change.id ?? '0',
+        changeId: '0',
         content: change.text,
         author: getCurrentUser().name,
         timestamp: new Date(),
@@ -34,6 +34,7 @@ export function attachPopupControls(
       }
       thread.add(comment)
       return text
+    }
     default:
       return text
   }
