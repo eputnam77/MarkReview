@@ -1,56 +1,15 @@
 # MarkReview Monorepo
 
-This repository contains plugins for MkDocs and Docusaurus plus a CLI for processing CriticMarkup changes.
+MarkReview adds lightweight review tools to any ProseMirror based editor. The library exposes utilities for parsing CriticMarkup and wiring a friendly review UI into your editor.
 
 ## Using MarkReview in Your Project
 
-Install the plugin for your static site generator and enable it in your configuration.
-For isolated testing, create and activate a virtual environment in your site project
-(for example with `python -m venv .venv` and `source .venv/bin/activate` on
-macOS/Linux or `.venv\Scripts\activate` on Windows). Run the installation
-commands from the **MarkReview repository root** so the relative `packages/`
-paths resolve correctly.
+Install the package from source and import the helpers in your project.
 
 ```bash
-pip install mkdocs-markreview
-pnpm add -D docusaurus-plugin-trackchanges
+pnpm install
+pnpm build
 ```
-
-If the packages haven't been published yet, install them directly from this repository to test locally:
-Run these commands from the MarkReview repository root so the relative `packages/` paths resolve correctly.
-
-```bash
-pip install -e packages/mkdocs-markreview
-pnpm add -D file:packages/docusaurus-plugin-trackchanges
-```
-After installing, open your MkDocs or Docusaurus project in your IDE (for example VS Code)
-and list the plugin in `mkdocs.yml` or `docusaurus.config.js`.
-
-### MkDocs
-
-Add the plugin name to the `plugins` section of your `mkdocs.yml`:
-
-```yaml
-# mkdocs.yml
-plugins:
-  - markreview
-```
-
-Start your site with `mkdocs serve`.
-
-### Docusaurus
-
-Enable the plugin in `docusaurus.config.js`:
-
-```js
-// docusaurus.config.js
-plugins: ['docusaurus-plugin-trackchanges'];
-```
-
-Run `pnpm start` (or `npm start`) to view your site.
-
-**Accepting or rejecting edits in the browser does not modify your source files.**
-Use the `markreview` CLI to apply changes and restart the dev server.
 
 You can override the highlight colours in your CSS:
 
@@ -61,13 +20,61 @@ You can override the highlight colours in your CSS:
 }
 ```
 
-The plugin automatically injects the runtime assets so tracked changes appear without manual imports.
+See the [docs](docs/index.md) for setup and usage instructions.
+The [API reference](docs/api/index.md) covers the available modules and helper APIs.
 
-Run the CLI tests with:
+## Integration Notes
 
-```bash
-pnpm --filter markreview-cli run test
+MarkReview marks its Node-only utilities under `src/node` and declares a
+`browser` field in `package.json` to exclude them from browser bundles.
+Ensure your bundler respects this field so those helpers stay out of the final
+web build.
+
+When bundling for the browser, modern tools read the `exports` map and use an
+empty module for `markreview/node`. The repository ships `dist/empty.js` for this
+purpose.
+
+Two helper functions—`startDiffServer()` and `enableRealtimeCollaboration()`—are
+only placeholders for tests and demos. They do **not** start a real service or
+connect to any backend. Replace them with your own network logic when needed and
+refer to the API docs for details.
+
+## Features
+
+- Attach to any ProseMirror editor with a single call:
+
+```ts
+import { attach } from 'markreview'
+const controller = attach(editor)
+controller.acceptAll()
 ```
 
-See the [docs](docs/index.md) for setup and usage instructions.
-The [API reference](docs/api/index.md) describes the CLI and plugin modules.
+- Comment threads stored with `CommentThread` helpers.
+- Headless `diffDoc()` for simple comparisons.
+- Remappable keyboard shortcuts via `bindAction()` and `loadKeymap()`.
+- Format-change tracking and colourful change bars.
+- Review panel with counters and keyboard navigation.
+- Search and filter chips in the review panel keep conversations focused.
+- Toolbar state saved to `localStorage`.
+- Changes persist when saving ProseMirror documents via `persistMarks()`.
+- Locale packs for quick translation.
+- A performance gate checks bundle size and DOM scan time during CI.
+
+```ts
+import { bindAction, loadKeymap } from 'markreview/keymap'
+bindAction('accept', 'KeyZ')
+console.log(loadKeymap())
+```
+
+## Versioning
+
+MarkReview follows [Semantic Versioning](https://semver.org/). Major versions
+align with the ProseMirror major series supported by the library. When a new
+ProseMirror major is released, MarkReview increments its own major version. Minor
+and patch releases deliver backwards‑compatible improvements and fixes.
+
+## Migrating from earlier versions
+
+Older releases shipped a Python-based documentation plugin and a separate CLI.
+Both have been removed in favour of a single JavaScript library. Update any old
+imports or scripts accordingly.

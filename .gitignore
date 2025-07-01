@@ -143,8 +143,8 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
-# mkdocs documentation
-/site
+# VitePress documentation
+/docs/.vitepress/dist/
 
 # mypy
 .mypy_cache/
@@ -197,3 +197,5 @@ node_modules/
 .pnpm-store/
 *.tsbuildinfo
 
+coverage/
+package-lock.json

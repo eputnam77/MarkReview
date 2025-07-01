@@ -1,0 +1,10 @@
+/* Track changes styles */
+:root {
+  --markreview-add-color: #005fa3;
+  --markreview-del-color: #b32020;
+  --markreview-bar-color: #666666;
+  --markreview-highlight-bg: #fffd75;
+  --markreview-toggle-bg: #ffffff;
+  --markreview-toggle-border: #cccccc;
+  --markreview-toggle-text: #000000;
+}

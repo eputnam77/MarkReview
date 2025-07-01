@@ -1,38 +1,28 @@
-name: CI
-
+name: Dev CI
 on:
   pull_request:
   push:
     branches: [main]
-
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18]
-        python-version: ['3.10']
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'pnpm'
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      - name: Lint Python
+      - run: pnpm install --frozen-lockfile
+      - name: Set coverage threshold
         run: |
-          ruff check packages/mkdocs-markreview
-          black --check packages/mkdocs-markreview
-      - name: Run Tests
-        run: |
-          pnpm --filter markreview-cli test
-          pytest packages/mkdocs-markreview/tests
+          if [ "$GITHUB_REF" = "refs/heads/main" ]; then echo "COV=90" >> $GITHUB_ENV; else echo "COV=70" >> $GITHUB_ENV; fi
+      - run: pnpm exec eslint src
+      - run: pnpm exec prettier --check src
+      - run: pnpm exec tsc -p tsconfig.json --noEmit
+      - run: pnpm audit --production
+      - run: pnpm exec vitest run --coverage --coverage.failUnder=$COV
+      - run: pnpm run build
+      - run: pnpm run perf

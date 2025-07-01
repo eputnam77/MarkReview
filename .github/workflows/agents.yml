@@ -1,45 +1,15 @@
-# .github/workflows/agents.yml
 name: Codex Router
-
 on:
-  # Re-evaluate after every commit, whether on a feature branch or main
   push:
     branches: ["**"]
   pull_request:
-    types: [opened, synchronize, reopened, labeled]
-
-env:
-  PYTHON_VERSION: "3.12"              # keep in sync with AGENTS.md
-
 jobs:
-  route:
+  codex-router:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v4
-
-      - name: Install helper tools
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y jq gh        # jq to parse JSON, gh to read PR labels
-
-      - name: Determine next agent
-        id: next
-        env:
-          GH_TOKEN: ${{ github.token }}        # automatic token for gh CLI
-        run: |
-          chmod +x scripts/next-agent.sh
-          NEXT_AGENT=$(scripts/next-agent.sh)
-          echo "next=$NEXT_AGENT" >> "$GITHUB_OUTPUT"
-
-      - name: Launch agent via Codex
-        if: steps.next.outputs.next != ''
-        env:
-          CODEX_API_KEY: ${{ secrets.CODEX_API_KEY }}
-        run: |
-          echo "➡️  Launching Codex agent: ${{ steps.next.outputs.next }}"
-          # Replace with the CLI or curl invocation you use to talk to Codex
-          codex run --agent "${{ steps.next.outputs.next }}" \
-                    --repo "$GITHUB_REPOSITORY" \
-                    --sha "$GITHUB_SHA"
+      - uses: actions/checkout@v4
+      - name: Detect next agent
+        run: ./scripts/next-agent.sh
+      - name: Trigger agent via Codex API
+        if: env.NEXT_AGENT != ''
+        run: codex run --agent "$NEXT_AGENT"
