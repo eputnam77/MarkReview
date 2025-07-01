@@ -5,9 +5,12 @@
 ### Issue: Initialize core package layout
 - **Acceptance Criteria**
   - `src/` directory contains `core/`, `ui/`, `adapters/`, `keymap/`, `diff-headless/`, and `styles.css` as per PRD section 8.
-  - `package.json` at repo root defines build scripts for ESM and CJS output,
-    sets `"sideEffects": false`, and declares
-    `peerDependencies` for `prosemirror-*` `^1.23.0`.
+  - `package.json` defines `dev` and `build` scripts using **tsup** for ESM and
+    CJS output with declaration files, plus a `docs` script running **TypeDoc**.
+  - `tsconfig.json` and `tsconfig.build.json` enable TypeScript **strict** mode
+    and incremental builds.
+  - `sideEffects` set to `false` and `peerDependencies` declare
+    `prosemirror-*` `^1.23.0`.
   - Storybook and examples folders created.
 - **Priority**: High
 - **Estimate**: 2d
@@ -60,7 +63,7 @@
 - **Acceptance Criteria**
   - Parse and render add, delete, substitute, highlight, and comment marks (F-1).
   - Colours defined via CSS variables providing WCAG‑AA contrast (F-3).
-  - Jest unit tests cover parsing logic at ≥90 %.
+  - Vitest unit tests cover parsing logic at ≥90 %.
 - **Priority**: High
 - **Estimate**: 3d
 - **Labels**: core, accessibility, phase:1
@@ -154,14 +157,16 @@
 - **Acceptance Criteria**
   - `docs/` includes user guide, help/FAQ, and updated PRD and TASKS files (F-14).
   - Example code snippets and accessibility notes provided.
+  - API reference generated with **TypeDoc** under `docs/api/`.
 - **Priority**: Medium
 - **Estimate**: 2d
 - **Labels**: docs, accessibility, phase:1
 
 ### Issue: CI pipeline with linting and coverage
 - **Acceptance Criteria**
-  - GitHub Actions run ESLint, Prettier, Jest and Playwright with coverage ≥90 % as specified in PRD section 5.
-  - Security checks run `npm audit` and `pip-audit`; workflow fails on detected vulnerabilities.
+  - GitHub Actions run ESLint, Prettier, **Vitest** and Playwright with coverage gates (70 % on branches, 90 % on `main`).
+  - `tsc --noEmit` and `npm audit --production` executed on every run.
+  - Security checks include **Snyk CLI** and `pip-audit` with failures blocking merges.
   - Static scan ensures no network calls (`fetch`, `axios`) in the core package.
 - **Priority**: High
 - **Estimate**: 1d
@@ -185,7 +190,7 @@
 ### Issue: Security review and SemVer policy
 - **Acceptance Criteria**
   - Codebase contains no network calls; tooling checks for `fetch` or `axios` usage.
-  - CI includes `npm audit` and `pip-audit` with failures blocking merges.
+  - CI includes `npm audit --production`, **Snyk CLI**, and `pip-audit` with failures blocking merges.
   - README documents the SemVer strategy aligned with host-editor major versions.
 - **Priority**: Medium
 - **Estimate**: 1d
