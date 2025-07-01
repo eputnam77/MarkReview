@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { initMilkdownAdapter } from '../src/adapters/milkdown'
+import * as root from '../src'
+import { vi } from 'vitest'
 
 import { Schema } from 'prosemirror-model'
 describe('initMilkdownAdapter', () => {
@@ -15,5 +17,13 @@ describe('initMilkdownAdapter', () => {
     const doc = schema.node('doc', null, [schema.text('hi')])
     const ctrl = initMilkdownAdapter(doc)
     expect(ctrl.editor).toBe(doc)
+  })
+
+  it('forwards options to attach', () => {
+    const spy = vi.spyOn(root, 'attach')
+    const opts = { a: 1 }
+    initMilkdownAdapter({}, opts)
+    expect(spy).toHaveBeenCalledWith({}, opts)
+    spy.mockRestore()
   })
 })
