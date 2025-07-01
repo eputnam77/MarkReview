@@ -16,7 +16,10 @@
     "format:check": "prettier -c src",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
-    "docs": "typedoc --out docs/api src"
+    "docs": "typedoc --out docs/api src",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "peerDependencies": {
     "prosemirror-model": "^1.23.0",
@@ -33,6 +36,7 @@
     "typedoc": "^0.25.1",
     "typescript": "^5.4.5",
     "vite": "^5.2.0",
+    "vitepress": "^1.6.3",
     "vitest": "^1.5.0"
   }
 }

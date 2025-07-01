@@ -4,8 +4,8 @@
 
 MarkReview is distributed as a set of packages:
 
-- `mkdocs-markreview` – a Python package providing the MkDocs plugin.  The source
-  directory is `mkdocs_markreview` to align with `AGENTS.md`.
+- `mkdocs-markreview` – formerly a Python package for MkDocs. The source
+  directory was `mkdocs_markreview` to align with `AGENTS.md`.
 - `docusaurus-plugin-trackchanges` – a Node package for Docusaurus.
 - `markreview` – a new TypeScript package containing the reusable runtime logic,
   CSS and CLI.  It replaces the older `markreview-cli` package which will be
@@ -22,7 +22,7 @@ packages live under `packages/` and share a common lockfile. The Python plugin
 resides in `packages/mkdocs-markreview` with its source code in
 `mkdocs_markreview` and its own build metadata. A new shared library
 `packages/markreview` hosts the runtime assets and CLI used by both plugins.
-Documentation is stored under `docs/` and MkDocs drives the site build. Tests are
+Documentation is stored under `docs/` and VitePress drives the site build. Tests are
 located alongside each package with an additional `tests/` directory for
 integration tests.
 
