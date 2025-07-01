@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require('fs')
+const { gzipSync } = require('zlib')
 
 function checkBundleSize(js = '', css = '') {
   const toKb = (bytes) => Math.round((bytes / 1024) * 100) / 100
-  return { js: toKb(Buffer.byteLength(js)), css: toKb(Buffer.byteLength(css)) }
+  return { js: toKb(gzipSync(js).length), css: toKb(gzipSync(css).length) }
 }
 
 function scanDomBenchmark(doc) {

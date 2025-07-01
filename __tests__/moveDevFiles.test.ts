@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import fs from 'fs'
-import { moveProjectManagementFiles } from '../src/core/moveDevFiles'
+import { moveProjectManagementFiles } from '../src/node/moveDevFiles'
 
 describe('moveProjectManagementFiles', () => {
   it('simulates move without touching fs', () => {

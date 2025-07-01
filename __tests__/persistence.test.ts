@@ -27,4 +27,26 @@ describe('persistMarks', () => {
     const result = persistMarks(doc, false) as typeof doc
     expect(result.textContent).toBe('x y')
   })
+
+  it('handles nested structures', () => {
+    const schema = new Schema({
+      nodes: {
+        doc: { content: 'block+' },
+        block: {
+          content: 'text*',
+          toDOM: () => ['div', 0],
+          parseDOM: [{ tag: 'div' }],
+        },
+        text: {},
+      },
+    })
+    const doc = schema.node('doc', null, [
+      schema.node('block', null, schema.text('x {++y++}')),
+      schema.node('block', null, [schema.text('{--z--} w')]),
+    ])
+    const accepted = persistMarks(doc, true) as typeof doc
+    const rejected = persistMarks(doc, false) as typeof doc
+    expect(accepted.textContent).toBe('x y w')
+    expect(rejected.textContent).toBe('x z w')
+  })
 })

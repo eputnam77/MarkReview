@@ -197,3 +197,5 @@ node_modules/
 .pnpm-store/
 *.tsbuildinfo
 
+coverage/
+package-lock.json
