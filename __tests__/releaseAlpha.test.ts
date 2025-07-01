@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/releaseAlpha.ts'
+import { publishAlphaRelease } from '../src/core/releaseAlpha'
 
-describe('releaseAlpha', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement releaseAlpha tests')
+describe('publishAlphaRelease', () => {
+  it('returns version string', () => {
+    expect(publishAlphaRelease()).toBe('0.1.0')
   })
 })

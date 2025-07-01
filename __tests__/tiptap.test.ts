@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/adapters/tiptap.ts'
+import { initTiptapAdapter } from '../src/adapters/tiptap'
 
-describe('tiptap', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement tiptap tests')
+describe('initTiptapAdapter', () => {
+  it('returns a controller', () => {
+    const ctrl = initTiptapAdapter({})
+    expect(ctrl).toHaveProperty('editor')
   })
 })

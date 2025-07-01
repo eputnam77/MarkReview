@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/ciPipeline.ts'
+import { configureCiPipeline } from '../src/core/ciPipeline'
 
-describe('ciPipeline', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement ciPipeline tests')
+describe('configureCiPipeline', () => {
+  it('includes ruff and pytest in returned commands', () => {
+    const cmds = configureCiPipeline()
+    expect(cmds).toContain('ruff')
+    expect(cmds).toContain('pytest')
   })
 })

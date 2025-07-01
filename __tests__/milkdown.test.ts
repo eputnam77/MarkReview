@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/adapters/milkdown.ts'
+import { initMilkdownAdapter } from '../src/adapters/milkdown'
 
-describe('milkdown', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement milkdown tests')
+describe('initMilkdownAdapter', () => {
+  it('returns a controller', () => {
+    const ctrl = initMilkdownAdapter({})
+    expect(ctrl).toHaveProperty('editor')
   })
 })

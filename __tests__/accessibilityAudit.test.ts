@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/accessibilityAudit.ts'
+import { runAccessibilityIntlAudit } from '../src/core/accessibilityAudit'
 
-describe('accessibilityAudit', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement accessibilityAudit tests')
+describe('runAccessibilityIntlAudit', () => {
+  it('returns true to indicate audit succeeded', () => {
+    expect(runAccessibilityIntlAudit()).toBe(true)
   })
 })

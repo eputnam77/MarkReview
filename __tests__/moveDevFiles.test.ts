@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/moveDevFiles.ts'
+import { moveProjectManagementFiles } from '../src/core/moveDevFiles'
 
-describe('moveDevFiles', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement moveDevFiles tests')
+describe('moveProjectManagementFiles', () => {
+  it('returns list of project files', () => {
+    const files = moveProjectManagementFiles()
+    expect(files).toContain('AGENTS.md')
   })
 })

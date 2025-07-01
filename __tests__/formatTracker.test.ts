@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/formatTracker.ts'
+import { trackFormatChanges } from '../src/core/formatTracker'
 
-describe('formatTracker', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement formatTracker tests')
+describe('trackFormatChanges', () => {
+  it('diffs words between versions', () => {
+    const diff = trackFormatChanges('a b', 'a c')
+    expect(diff).toContain('-b')
+    expect(diff).toContain('+c')
   })
 })

@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/ui/changeBars.ts'
+import { applyChangeBars } from '../src/ui/changeBars'
 
-describe('changeBars', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement changeBars tests')
+describe('applyChangeBars', () => {
+  it('counts critic markup changes', () => {
+    const text = 'a {++b++} c {--d--}'
+    expect(applyChangeBars(text)).toBe(2)
   })
 })

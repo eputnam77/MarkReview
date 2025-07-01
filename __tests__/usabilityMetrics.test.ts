@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/usabilityMetrics.ts'
+import { validateUsabilityMetrics } from '../src/core/usabilityMetrics'
 
-describe('usabilityMetrics', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement usabilityMetrics tests')
+describe('validateUsabilityMetrics', () => {
+  it('returns true', () => {
+    expect(validateUsabilityMetrics()).toBe(true)
   })
 })

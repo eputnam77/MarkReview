@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/releaseGa.ts'
+import { finalizeGaRelease } from '../src/core/releaseGa'
 
-describe('releaseGa', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement releaseGa tests')
+describe('finalizeGaRelease', () => {
+  it('returns GA version string', () => {
+    expect(finalizeGaRelease()).toBe('1.0.0')
   })
 })

@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/diff-headless/index.ts'
+import { diffDoc } from '../src/diff-headless'
 
 describe('diffDoc', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement diffDoc tests')
+  it('returns git style diff lines', () => {
+    const diff = diffDoc('a\n', 'b\n')
+    expect(diff).toContain('- a')
+    expect(diff).toContain('+ b')
   })
 })

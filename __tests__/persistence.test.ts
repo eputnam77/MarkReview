@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/persistence.ts'
+import { persistMarks } from '../src/core/persistence'
 
-describe('persistence', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement persistence tests')
+describe('persistMarks', () => {
+  it('accepts or rejects markup', () => {
+    const text = 'a {++b++} {--c--}'
+    expect(persistMarks(text, true)).toBe('a b ')
+    expect(persistMarks(text, false)).toBe('a  c')
   })
 })

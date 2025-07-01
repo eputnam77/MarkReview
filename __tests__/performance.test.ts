@@ -1,9 +1,14 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/performance.ts'
+import { checkBundleSize, scanDomBenchmark } from '../src/core/performance'
 
-describe('performance', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement performance tests')
+describe('performance helpers', () => {
+  it('returns numeric bundle sizes', () => {
+    const sizes = checkBundleSize()
+    expect(typeof sizes.js).toBe('number')
+    expect(typeof sizes.css).toBe('number')
+  })
+
+  it('returns a benchmark value', () => {
+    expect(scanDomBenchmark('test')).toBe(0)
   })
 })

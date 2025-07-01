@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/criticParser.ts'
+import { parseCriticMarkup } from '../src/core/criticParser'
 
-describe('criticParser', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement criticParser tests')
+describe('parseCriticMarkup', () => {
+  it('parses supported tags', () => {
+    const changes = parseCriticMarkup('Hello {++World++} {--old--}')
+    expect(changes).toContainEqual({ type: 'add', text: 'World' })
+    expect(changes).toContainEqual({ type: 'delete', text: 'old' })
   })
 })

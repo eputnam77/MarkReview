@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/legacyCleanup.ts'
+import { removeLegacyPackages } from '../src/core/legacyCleanup'
 
-describe('legacyCleanup', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement legacyCleanup tests')
+describe('removeLegacyPackages', () => {
+  it('returns empty array', () => {
+    expect(removeLegacyPackages()).toEqual([])
   })
 })

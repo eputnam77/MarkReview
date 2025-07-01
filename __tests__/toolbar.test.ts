@@ -1,9 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/ui/toolbar.ts'
+import { setupToolbar } from '../src/ui/toolbar'
 
-describe('toolbar', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement toolbar tests')
+describe('setupToolbar', () => {
+  it('stores view in storage', () => {
+    const store: Record<string, string> = {}
+    const view = setupToolbar(store, 'markup')
+    expect(view).toBe('markup')
+    expect(store.track_view).toBe('markup')
   })
 })

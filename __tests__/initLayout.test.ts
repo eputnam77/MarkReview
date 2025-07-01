@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import * as mod from '../src/core/initLayout.ts'
+import { setupCoreLayout } from '../src/core/initLayout'
 
-describe('initLayout', () => {
-  it('needs implementation', () => {
-    expect(mod).toBeDefined()
-    expect.fail('TODO: implement initLayout tests')
+describe('setupCoreLayout', () => {
+  it('returns true', () => {
+    expect(setupCoreLayout()).toBe(true)
   })
 })
