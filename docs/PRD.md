@@ -39,7 +39,7 @@ All review data is stored as **ProseMirror marks** (or CriticMarkup in Markdown)
 | Persona       | Key Story                                                                                  |
 | ------------- | ------------------------------------------------------------------------------------------ |
 | **Writer**    | Turns *Track Changes ON*, drafts; blue insertions, red deletions, purple substitutions & format-changes appear with margin bars.           |
-| **Reviewer**  | Opens right panel, filters to “insertions”, arrow-keys through cards, ✓/✗ or comments without scrolling. |
+| **Reviewer**  | Opens right panel, filters to "insertions", arrow-keys through cards, ✓/✗ or comments without scrolling. |
 | **Docs Lead** | Publishes when panel counter hits **0 open changes**; only accepted text is saved.         |
 
 ---
@@ -78,11 +78,13 @@ All review data is stored as **ProseMirror marks** (or CriticMarkup in Markdown)
 
 ## 5 · Non-Functional Requirements
 
-* **Peer Deps** `prosemirror-*` **^1.23.0** (tested through 1.25.x).
-* **Bundles** ESM + CJS; side-effects flagged for tree-shaking.
-* **CI** Jest + Playwright ≥ 90 % coverage; ESLint + Prettier.
-* **Security** No network calls, CSP-safe.
-* **SemVer** Major bumps track host-editor majors.
+* **Peer Dependencies** `prosemirror-*` **^1.23.0** (tested through 1.25.x).
+* **Bundles** ESM + CJS; side-effects flagged for tree-shaking; TypeScript declarations included.
+* **Testing** Jest + Playwright ≥ 90% coverage; ESLint + Prettier; TypeScript strict mode enabled.
+* **Security** No network calls, CSP-safe, Content Security Policy compliant.
+* **SemVer** Major bumps track host-editor majors; follows npm semantic versioning.
+* **TypeScript** Strict mode enabled; comprehensive type definitions; no `any` types in public API.
+* **Performance** Bundle size ≤ 10 kB JS + 5 kB CSS (gzipped); tree-shakeable exports.
 
 ---
 
@@ -121,9 +123,14 @@ markreview/
 │  ├─ keymap/      # cross-layout keyboard utility
 │  ├─ diff-headless/
 │  └─ styles.css
+├─ types/          # TypeScript type declarations (if needed)
+├─ tests/          # Unit and integration tests (Jest/Playwright)
 ├─ docs/           # PRD.md, user-guide.md, help/faq.md, TASKS.md
-├─ storybook/
-├─ examples/
+├─ storybook/      # UI component stories
+├─ examples/       # Example usage and integration
+├─ .eslintrc.js    # ESLint config
+├─ .prettierrc     # Prettier config
+├─ tsconfig.json   # TypeScript config
 └─ package.json
 ```
 
