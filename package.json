@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "type": "module",
   "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsup src/index.ts --format esm,cjs --dts",
