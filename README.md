@@ -23,6 +23,18 @@ You can override the highlight colours in your CSS:
 See the [docs](docs/index.md) for setup and usage instructions.
 The [API reference](docs/api/index.md) covers the available modules and helper APIs.
 
+## Integration Notes
+
+MarkReview marks its Node-only utilities under `src/node` and declares a
+`browser` field in `package.json` to exclude them from browser bundles.
+Ensure your bundler respects this field so those helpers stay out of the final
+web build.
+
+Two helper functions—`startDiffServer()` and `enableRealtimeCollaboration()`—are
+stubs meant for tests and demos. They simply return a value and do not start a
+server or connect to real-time backends. Replace them with your own network
+implementation when needed.
+
 ## Features
 
 - Attach to any ProseMirror editor with a single call:
