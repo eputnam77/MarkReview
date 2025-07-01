@@ -125,7 +125,12 @@ markreview/
 │  └─ styles.css
 ├─ types/          # TypeScript type declarations (if needed)
 ├─ tests/          # Unit and integration tests (Jest/Playwright)
-├─ docs/           # PRD.md, user-guide.md, help/faq.md, TASKS.md
+├─ docs/           # PRD.md, user-guide.md, help/faq.md
+├─ dev/            # Development files (not distributed)
+│  ├─ AGENTS.md    # AI agent configurations
+│  ├─ TASKS.md     # Development tasks and roadmap
+│  ├─ ROADMAP.md   # Future development plans
+│  └─ NOTES.md     # Development notes and decisions
 ├─ storybook/      # UI component stories
 ├─ examples/       # Example usage and integration
 ├─ .eslintrc.js    # ESLint config
