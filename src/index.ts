@@ -7,32 +7,32 @@
  * can exercise the public API without depending on the unfinished core.
  */
 export interface Controller {
-    /** Reference to the editor passed to {@link attach}. */
-    editor: unknown;
-    /** Accept all pending changes. */
-    acceptAll(): void;
-    /** Reject all pending changes. */
-    rejectAll(): void;
+  /** Reference to the editor passed to {@link attach}. */
+  editor: unknown
+  /** Accept all pending changes. */
+  acceptAll(): void
+  /** Reject all pending changes. */
+  rejectAll(): void
 }
 
 export function attach(
-    editor: unknown,
-    _options: Record<string, unknown> | undefined = undefined,
+  editor: unknown,
+  _options: Record<string, unknown> | undefined = undefined,
 ): Controller {
-    if (editor === null || editor === undefined) {
-        throw new Error("Editor instance required");
-    }
-    return {
-        editor,
-        // No-op callbacks; real logic lives in future revisions.
-        acceptAll() {
-            /* noop */
-        },
-        rejectAll() {
-            /* noop */
-        },
-    };
+  void _options
+  if (editor === null || editor === undefined) {
+    throw new Error('Editor instance required')
+  }
+  return {
+    editor,
+    // No-op callbacks; real logic lives in future revisions.
+    acceptAll() {
+      /* noop */
+    },
+    rejectAll() {
+      /* noop */
+    },
+  }
 }
 
-export { getCurrentUser, setUserProvider } from './api/user';
-
+export { getCurrentUser, setUserProvider } from './api/user'

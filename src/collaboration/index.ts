@@ -5,6 +5,5 @@
  * ``true`` as a signal that the feature hook executed.
  */
 export function enableRealtimeCollaboration(): boolean {
-    return true;
+  return true
 }
-

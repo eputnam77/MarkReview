@@ -1,8 +1,7 @@
 export function bulkAcceptReject(): boolean {
-    return true;
+  return true
 }
 
 export function exportDocument(): string {
-    return 'exported';
+  return 'exported'
 }
-

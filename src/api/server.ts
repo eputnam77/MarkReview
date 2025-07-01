@@ -6,6 +6,5 @@
  * integration tests can verify the hook is callable.
  */
 export function startDiffServer(): string {
-    return 'started';
+  return 'started'
 }
-
