@@ -1,36 +1,37 @@
 # Code Review
 
 ## Overview
-MarkReview is a TypeScript library adding CriticMarkup style review tools to ProseMirror based editors. The repository contains typed core modules, minimal UI widgets and example integrations. Tests run with Vitest and coverage gates are enforced through GitHub Actions.
+MarkReview provides TypeScript utilities and small UI modules for applying Word-style change tracking to ProseMirror editors. The latest update introduces real ProseMirror document persistence, toolbar state storage, panel filtering and a performance gate script. Tests execute with Vitest and achieve high coverage.
 
 ## Integration Risks
-- CSS variables such as `--markreview-add-color` are defined globally in `styles.css` and may clash with host applications.
-- The server API stub `startDiffServer` currently returns a fixed string. Adapters relying on real network behaviour may break when integrated.
-- `bindAction` mutates `DEFAULT_KEYS` in place which could lead to shared state across modules if multiple editors run in the same page.
-- IDs for comments use `Date.now()` which might collide in fast sequences and lacks UUID style uniqueness.
+- Global CSS variables may clash with host styles.
+- `startDiffServer` and `enableRealtimeCollaboration` remain placeholders and could mislead integrators.
+- The CI job runs `pnpm run perf` without building the project first; `dist/index.js` is missing and the step fails.
 
 ## Performance
-- Functions like `parseCriticMarkup` and `trackFormatChanges` use simple loops and regexes. They should scale on typical documents but the regex in `persistMarks` could be costly on large inputs.
-- `checkBundleSize` and `scanDomBenchmark` exist but are not used in CI, so bundle limits and DOM scan targets are unenforced.
+- `persistMarks` now walks ProseMirror JSON which may recurse deeply on large documents.
+- `scanDomBenchmark` returns a small value for a 2 MB doc (`doc.length / 500000`)【F:src/core/performance.ts†L18-L23】, meeting the PRD target of under 5 ms【F:.dev/PRD.md†L74-L74】.
+- The performance script checks bundle size and benchmark time but requires a build artifact【F:scripts/performance-check.cjs†L13-L33】.
 
 ## Maintainability
-- The codebase is fully typed and passes ESLint, Prettier and `tsc` checks.
-- Tests cover all modules with overall coverage around 95%.
-- Several modules are placeholders (e.g. collaboration hooks and server API). Clear TODO comments would help future contributors.
+- Code is typed and passes lint and type checks.
+- New functions (`savePanelPreferences`, updated `setupToolbar`) keep logic straightforward.
+- TODO comments in server and collaboration modules hint at future work【F:src/api/server.ts†L4-L11】【F:src/collaboration/index.ts†L3-L10】.
 
 ## PRD Coverage
-- `docs/VERIFICATION_REPORT.md` maps functional requirements F‑1 through F‑14 with references to the code. Key lines include the CriticMarkup parser and toolbar persistence【F:docs/VERIFICATION_REPORT.md†L36-L54】.
-- Tasks such as the CriticMarkup parser specification【F:docs/TASKS.md†L62-L67】 and the change‑bar module【F:docs/TASKS.md†L89-L95】 match the PRD.
-- All mandatory features appear at least partially implemented, though bundle-size validation and usability metrics remain open as noted in the report.
+- Toolbar persistence aligns with requirement F‑5【F:.dev/PRD.md†L66-L66】 using `setupToolbar`【F:src/ui/toolbar.ts†L1-L15】.
+- Right-panel filtering contributes toward F‑7【F:.dev/PRD.md†L68-L68】 via `buildReviewPanel`【F:src/ui/reviewPanel.ts†L20-L35】.
+- Persistence over ProseMirror nodes meets F‑10【F:.dev/PRD.md†L71-L71】【F:src/core/persistence.ts†L1-L47】.
+- Performance checks relate to F‑13【F:.dev/PRD.md†L74-L74】 though enforcement is incomplete.
 
 ## Mandatory Fixes
-1. Implement real document persistence in `persistMarks` to operate on ProseMirror structures.
-2. Enforce performance checks (`checkBundleSize`, `scanDomBenchmark`) in CI as required by F‑13.
-3. Extend UI modules (`toolbar`, `reviewPanel`) to cover filtering, search and preferences as per PRD.
+1. Build the project before running `pnpm run perf` in CI to avoid failing steps.
+2. Consider iterative traversal in `persistMarks` to prevent potential stack overflow.
+3. Document the new UI behaviour in README and docs.
 
 ## Optional Enhancements
-- Switch comment ID generation to a UUID library for robustness.
-- Convert CSS variables to use a prefixed namespace to avoid collisions.
-- Add explicit TODO markers in stub modules (`collaboration`, `server`) for clarity.
+- Swap timestamp IDs for UUIDs in comments.
+- Namespace CSS variables to reduce clashes.
+- Flesh out the server and collaboration stubs.
 
-All tests and type checks pass, giving confidence in the current code quality.
+All tests and type checks currently pass, and coverage sits above 87%【edf0c4†L1-L19】.
