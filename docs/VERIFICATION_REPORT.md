@@ -26,42 +26,48 @@
 - SemVer policy aligned with host-editor majors
 
 ## Task Mapping
-The tasks in `docs/TASKS.md` correspond directly to the PRD. For example the
+The tasks in `docs/TASKS.md` match the PRD. For instance the
 *CriticMarkup parser with accessible palette* issue links **F‑1** and **F‑3**
-(lines 62‑67)【F:docs/TASKS.md†L62-L67】 and the *Change‑bar decoration module*
+(lines 62‑67)【F:docs/TASKS.md†L62-L67】 while the *Change‑bar decoration module*
 issue targets **F‑4** (lines 89‑95)【F:docs/TASKS.md†L89-L95】. Documentation and
-CI tasks map to the non‑functional requirements (lines 154‑174)【F:docs/TASKS.md†L154-L174】.
+CI tasks cover the non‑functional requirements (lines 154‑174)【F:docs/TASKS.md†L154-L174】.
 
 ## Implementation Verification
 
 ### ✅ Implemented Features
-- CriticMarkup parsing via `parseCriticMarkup`【F:src/core/criticParser.ts†L1-L40】
+- CriticMarkup parsing via `parseCriticMarkup`【F:src/core/criticParser.ts†L1-L42】
 - Format-change detection in `trackFormatChanges`【F:src/core/formatTracker.ts†L1-L22】
 - Accessible palette defined in CSS variables【F:src/styles.css†L1-L10】
+- Change bars with side, width and RTL options【F:src/ui/changeBars.ts†L1-L42】
 - Toolbar state persistence using `setupToolbar`【F:src/ui/toolbar.ts†L1-L5】
+- Pop-up control applying accept/reject/comment actions【F:src/ui/popupWidget.ts†L1-L40】
+- Review panel utilities computing IDs and stats【F:src/ui/reviewPanel.ts†L1-L52】
+- Comment thread manager with JSON persistence【F:src/core/comments.ts†L1-L54】
 - User identity hook `getCurrentUser` with provider override【F:src/api/user.ts†L1-L18】
+- Persistence helper for string or doc objects【F:src/core/persistence.ts†L1-L30】
 - Keyboard remapping via `bindAction` and `loadKeymap`【F:src/keymap/index.ts†L1-L15】
 - Public API `attach` and headless diff `diffDoc`【F:src/index.ts†L1-L37】【F:src/diff-headless/index.ts†L1-L22】
+- Performance helpers checking bundle size and scan time【F:src/core/performance.ts†L1-L25】
+- Accessibility notes and locale packs in docs【F:docs/accessibility.md†L1-L8】
 - SemVer strategy documented in README【F:README.md†L45-L56】
-- CI workflow invoking lint, typecheck and tests【F:.github/workflows/ci.yml†L16-L26】
+- Peer dependency declarations【F:package.json†L21-L24】
+- CI workflow invoking lint, typecheck and tests【F:.github/workflows/ci.yml†L20-L26】
 
 ### ⚠️ Partially Implemented Features
-- Change‑bar helper only counts changes; configurable width/side and RTL swap are not implemented【F:src/ui/changeBars.ts†L1-L8】
-- Pop-up widget lacks comment action and advanced behaviour【F:src/ui/popupWidget.ts†L1-L19】
-- Review panel utilities do not include counters or search【F:src/ui/reviewPanel.ts†L1-L24】
-- CommentThread lacks persistent storage or `@mentions` handling【F:src/core/comments.ts†L1-L31】
-- Persistence utility operates on plain text and not full ProseMirror docs【F:src/core/persistence.ts†L1-L22】
-- Performance helpers return stub values so F‑13 is unmet【F:src/core/performance.ts†L1-L15】
+- UI modules are minimal and omit advanced behaviour (e.g. toolbar options, review panel search)
+- Persistence helper handles plain text but not full ProseMirror structures
+- Performance checks are stubbed and not enforced in CI
+- Integration tests for adapter modules are basic stubs
+- Coverage cannot be verified as the test runner failed to execute
 
 ### ❌ Missing Features
-- No integration tests exercising editor adapters
-- Coverage data could not be collected (vitest failed to run in this environment)
+- No evidence of automated bundle size limits or DOM scan benchmarks
+- Usability metrics and performance targets from the PRD are not validated
 
 ## 📋 Recommended Next Steps
-- Flesh out the UI modules (change bars, popup, review panel) to meet the full
-  PRD spec.
-- Replace Python stubs with TypeScript implementations as described in
-  `docs/TASKS.md` lines 35‑42【F:docs/TASKS.md†L35-L42】.
-- Expand tests and configure coverage to reach 70 % on branches.
+- Expand UI components to meet all acceptance criteria
+- Implement real persistence for ProseMirror documents
+- Enforce bundle size and performance checks in CI
+- Re-run tests with coverage once dependencies install correctly
 
-Routing decision: `ready-for:tester` once coverage tooling is operational.
+Routing decision: `ready-for:tester` when the build environment allows running the dev gate.
