@@ -12,14 +12,16 @@ const changes = parseCriticMarkup('Hello {++World++}')
 // [{ type: 'add', text: 'World' }]
 ```
 
-## `persistMarks(text, accept = true)`
+## `persistMarks(textOrNode, accept = true)`
 
-Accepts or rejects markup in the provided string.
+Accepts or rejects markup in a string or ProseMirror `Node`. The function walks
+the document iteratively to avoid stack overflows and returns the cleaned value.
 
 ```ts
 import { persistMarks } from '../core/persistence'
 const accepted = persistMarks('a {--b--}', true)
 // 'a '
+const cleaned = persistMarks(pmDoc, true)
 ```
 
 ## `trackFormatChanges(oldDoc, newDoc)`
@@ -37,6 +39,14 @@ Manages threaded comments in memory.
 ```ts
 import { createCommentThread } from '../core/comments'
 const thread = createCommentThread()
-thread.add({ id: '1', changeId: 'c1', content: 'Looks good', author: 'me', timestamp: new Date(), resolved: false, replies: [] })
+thread.add({
+  id: '1',
+  changeId: 'c1',
+  content: 'Looks good',
+  author: 'me',
+  timestamp: new Date(),
+  resolved: false,
+  replies: [],
+})
 thread.resolve('1')
 ```

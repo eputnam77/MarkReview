@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "build": "tsup src/index.ts --format esm,cjs --dts --tsconfig tsconfig.build.json",
     "lint": "eslint src --ext .ts",
     "format": "prettier -w src",
     "format:check": "prettier -c src",
