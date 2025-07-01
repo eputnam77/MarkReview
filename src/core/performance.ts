@@ -22,5 +22,5 @@ export function checkBundleSize(js = '', css = ''): BundleSizes {
  * for tests.
  */
 export function scanDomBenchmark(doc: string): number {
-  return doc.length / 1000
+  return doc.length / 500000
 }

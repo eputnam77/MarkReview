@@ -8,6 +8,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
+    "moduleResolution": "node",
     "lib": ["ES2020", "DOM"],
     "types": ["node"]
   },
