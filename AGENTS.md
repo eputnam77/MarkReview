@@ -9,16 +9,16 @@
 | Key                  | Value                                                |
 | -------------------- | ---------------------------------------------------- |
 | Default shell        | `bash` (Linux)                                       |
-| Python version       | **3.12**                                             |
-| Virtual env manager  | **uv** (falls back to `python -m venv`)              |
-| Package manager      | **poetry** (`poetry install`)                        |
-| Test runner          | **pytest**                                           |
+| Node.js version      | **18.18+**                                           |
+| Package manager      | **npm** (with **pnpm** for CI)                       |
+| Bundler/transpiler   | **tsup** (zero-config esbuild wrapper)              |
+| Test runner          | **Vitest**                                           |
 | Coverage thresholds  | 70 % on feature branches → 90 % on `main`           |
-| Code formatter       | **black**                                            |
-| Linter               | **ruff** (includes import‑sorting)                   |
-| Static‑type checker  | **mypy --strict**                                    |
-| Security scanners    | **bandit -r src**, **pip-audit -r requirements.txt** |
-| Docs generator       | **MkDocs Material** (`mkdocs build`)                 |
+| Code formatter       | **Prettier**                                         |
+| Linter               | **ESLint + @typescript-eslint**                      |
+| Static‑type checker  | **TypeScript** (`tsc --noEmit`)                      |
+| Security scanners    | **npm audit --production**, **Snyk CLI**             |
+| Docs generator       | **TypeDoc** (`typedoc --out docs src`)               |
 | Commit message style | **Conventional Commits**                             |
 | CI provider          | **GitHub Actions**                                   |
 
@@ -31,14 +31,14 @@
 |  #  | Agent ID     | Purpose (summary)                                                                     | Auto‑trigger condition        |
 | --- | ------------ | ------------------------------------------------------------------------------------- | ----------------------------- |
 |  0  | `planner`    | Parse `PRD.md`, create `TASKS.md` (epics → issues with acceptance criteria & labels). | manual                        |
-|  1  | `architect`  | Design folder layout, write ADRs, initialise `pyproject.toml`, CI workflow.           | `planner` PR merged           |
+|  1  | `architect`  | Design folder layout, write ADRs, initialise `package.json`, CI workflow.           | `planner` PR merged           |
 |  2  | `scaffolder` | Generate skeleton code/tests for each open issue.                                     | `architect` PR merged         |
 |  3  | `builder`    | Implement code for issues marked **ready**; keep tests ≥70 % cov.                     | new ready issue               |
 |  4  | `verifier`   | Cross-reference PRD.md → TASKS.md → implemented code. Generate completeness report.   | after reviewer                |
-|  5  | `linter`     | Run `ruff --fix` & `black`; open PR if diff.                                          | after builder push            |
-|  6  | `tester`     | Execute dev‑gate (`pytest`, type‑check, coverage ≥70 %).                              | after linter green            |
+|  5  | `linter`     | Run `eslint --fix` & `prettier --write`; open PR if diff.                              | after builder push            |
+|  6  | `tester`     | Execute dev‑gate (`vitest`, type‑check, coverage ≥70 %).                              | after linter green            |
 |  7  | `fixer`      | Patch only failing files, re‑run gate until green.                                    | on test failure               |
-|  8  | `security`   | Run Bandit & pip‑audit; open CVE issues.                                              | nightly · before merge → main |
+|  8  | `security`   | Run `npm audit --production` & Snyk CLI; open CVE issues.                              | nightly · before merge → main |
 |  9  | `docwriter`  | Update `README.md`, API refs, examples, changelog.                                    | branch green & cov ≥90 %      |
 |  10  | `reviewer`   | Human‑style review; request approvals.                                                | after docwriter               |
 |  11  | `releasebot` | Bump semver, tag, build & push Docker image, draft release notes.                     | PR merged → main              |
@@ -56,30 +56,150 @@
 ### Dev Gate (feature branches)
 
 ```bash
-ruff check src tests
-black --check src tests
-mypy --strict src
-bandit -r src -lll --skip B101      # allow asserts during early dev
-pytest -q --cov=src --cov-fail-under=70
+eslint src tests
+prettier --check src tests
+tsc --noEmit
+npm audit --production
+vitest run --coverage --coverage.failUnder=70
 ```
 
 ### Release Gate (`main`)
 
 ```bash
-ruff check src tests
-black --check src tests
-mypy --strict src
-bandit -r src -lll
-pip-audit -r requirements.txt
-pytest -q --cov=src --cov-fail-under=90
-mkdocs build --strict
+eslint src tests
+prettier --check src tests
+tsc --noEmit
+npm audit --production
+snyk test
+vitest run --coverage --coverage.failUnder=90
+typedoc --out docs src --strict
 ```
 
 Any non‑zero exit hands control to **fixer**.
 
 ---
 
-## 3 · Writing Style Guidelines
+## 3.5 · TypeScript Project Structure
+
+### Standard Project Layout
+
+```
+my-lib/
+├── src/                # All .ts / .tsx source
+│   ├── index.ts        # Main entry point
+│   ├── types/          # Type definitions and interfaces
+│   ├── utils/          # Utility functions
+│   └── components/     # Reusable components (if applicable)
+├── tests/              # Unit & integration specs
+│   ├── unit/           # Unit tests
+│   ├── integration/    # Integration tests
+│   └── fixtures/       # Test data and mocks
+├── dist/               # Auto-generated build artefacts (git-ignored)
+├── docs/               # TypeDoc generated documentation
+├── examples/           # Working sample apps / snippets
+├── .github/workflows/  # CI (lint + test + type-check + release)
+├── .eslintrc.json      # Lint rules
+├── .prettierrc         # Formatter
+├── tsconfig.json       # Editor + type-checker config
+├── tsconfig.build.json # Narrow build-time config (⟂ tsup/tsc)
+├── vitest.config.ts    # Test runner setup
+├── package.json
+├── README.md
+└── LICENSE
+```
+
+### Core Configuration Files
+
+#### TypeScript Configuration
+```jsonc
+// tsconfig.json  – IDE-friendly, no Emit
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "rootDir": "src",
+    "strict": true,
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "incremental": true
+  },
+  "include": ["src/**/*.ts", "tests/**/*.ts"]
+}
+```
+
+```jsonc
+// tsconfig.build.json – used by tsup (extends the above)
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "noEmit": false, "outDir": "dist" },
+  "exclude": ["tests", "**/*.test.ts"]
+}
+```
+
+#### Test Configuration
+```ts
+// vitest.config.ts
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: { 
+    globals: true, 
+    environment: 'node',
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        'node_modules/',
+        'dist/',
+        'tests/',
+        '**/*.d.ts',
+        '**/*.test.ts',
+        '**/*.spec.ts'
+      ]
+    }
+  }
+});
+```
+
+#### Linting Configuration
+```jsonc
+// .eslintrc.json (flat config variant)
+{
+  "plugins": { "@typescript-eslint": "latest" },
+  "languageOptions": { "parser": "@typescript-eslint/parser" },
+  "rules": {
+    "no-unused-vars": "error",
+    "@typescript-eslint/explicit-function-return-type": "warn",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/prefer-const": "error",
+    "@typescript-eslint/no-unused-vars": "error"
+  }
+}
+```
+
+### Package.json Scripts
+```jsonc
+{
+  "scripts": {
+    "dev": "tsup src/index.ts --watch --dts",
+    "build": "tsup src/index.ts --dts --minify",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "docs": "typedoc --out docs src",
+    "release": "semantic-release",
+    "prepare": "husky install"
+  }
+}
+```
+
+---
+
+## 4 · Writing Style Guidelines
 
 ### Documentation Standards
 
@@ -116,12 +236,13 @@ All documentation generated by the `docwriter` agent must follow these style gui
 
 The `docwriter` agent should reference these templates:
 - `templates/README.md` - Standard README structure
-- `templates/API_DOCS.md` - API documentation format
+- `templates/API_DOCS.md` - API documentation format (TypeDoc compatible)
 - `templates/CHANGELOG.md` - Release notes template
+- `templates/TEST_EXAMPLES.md` - TypeScript test examples and patterns
 
 ---
 
-## 4 · Branch & Commit Policy
+## 5 · Branch & Commit Policy
 
 * **Branches** `plan/<slug>` · `scaffold/<slug>` · `feat/<slug>` · `fix/<issue>` · `docs/<topic>` · `test/<scope>`
 * **Commits** follow Conventional Commits, e.g.
@@ -135,7 +256,7 @@ The `docwriter` agent should reference these templates:
 
 ---
 
-## 5 · Automation Workflow (GitHub Actions)
+## 6 · Automation Workflow (GitHub Actions)
 
 The central router (`.github/workflows/agents.yml`) decides which agent to launch next:
 
@@ -158,21 +279,21 @@ jobs:
 
 ---
 
-## 6 · Environment Setup
+## 7 · Environment Setup
 
-* **Python 3.12** via `pyenv` or container.
+* **Node.js 18.18+** via `nvm` or container.
 * Local dev startup:
 
   ```bash
-  uv venv
-  uv pip install -r requirements-dev.txt
-  pre-commit install
+  npm install
+  npm run build
+  npx husky install
   ```
 * Codespaces/VS Code: devcontainer runs pre-commit on open.
 
 ---
 
-## 7 · Failure‑Recovery Matrix
+## 8 · Failure‑Recovery Matrix
 
 | Problem            | Responsible Agent | Remedy                         |
 | ------------------ | ----------------- | ------------------------------ |
@@ -185,13 +306,15 @@ jobs:
 
 ---
 
-## 8 · References
+## 9 · References
 
-* [Ruff documentation](https://docs.astral.sh/ruff/)
-* [Black documentation](https://black.readthedocs.io/)
-* [Pytest documentation](https://docs.pytest.org/)
-* [Bandit documentation](https://bandit.readthedocs.io/)
-* [pip-audit](https://pypi.org/project/pip-audit/)
+* [ESLint documentation](https://eslint.org/)
+* [Prettier documentation](https://prettier.io/)
+* [Vitest documentation](https://vitest.dev/)
+* [TypeScript documentation](https://www.typescriptlang.org/)
+* [tsup documentation](https://github.com/egoist/tsup)
+* [TypeDoc documentation](https://typedoc.org/)
+* [Snyk documentation](https://snyk.io/)
 
 ---
 
