@@ -4,13 +4,30 @@
   "type": "module",
   "sideEffects": false,
   "scripts": {
-    "build:esm": "tsc -p tsconfig.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json"
+    "dev": "vite",
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier -w src",
+    "format:check": "prettier -c src",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "docs": "typedoc --out docs/api src"
   },
   "peerDependencies": {
     "prosemirror-model": "^1.23.0",
     "prosemirror-state": "^1.23.0",
     "prosemirror-view": "^1.23.0"
   },
-  "workspaces": []
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.5",
+    "tsup": "^8.0.0",
+    "typedoc": "^0.25.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.0",
+    "vitest": "^1.5.0"
+  }
 }

@@ -9,12 +9,11 @@ PRD section 8 outlines a simplified repository where the runtime library lives a
 - Adopt the root `src/` layout with subfolders `core/`, `ui/`, `adapters/`, `keymap/`, `diff-headless/` and `styles.css`.
 - Keep example editors in `examples/` and documentation under `docs/`.
 - Introduce a `storybook/` directory for component demos.
-- Future Python code moves to `mkdocs_markreview/` so import paths comply with `AGENTS.md`.
-- Replace previous CI with a workflow running the dev gate commands (ruff, black, mypy, bandit, pytest, pip-audit) alongside Node checks (ESLint, Prettier, Jest, Playwright) and `pnpm audit`.
+- Replace previous CI with a Node-only workflow running the dev gate commands defined in `AGENTS.md` (ESLint, Prettier, `tsc --noEmit`, Vitest and `npm audit`).
 - A routing workflow (`agents.yml`) invokes the correct Codex agent after each push.
 
 ## Consequences
 
 - All build outputs and tooling operate from a single package which matches the PRD and simplifies publishing.
-- Old packages will be deleted once the new library fully replaces them. Python tests will target `mkdocs_markreview` after the rename.
+- Old packages were removed once the JavaScript library replaced them. No Python tests remain in the repository.
 - GitHub Actions enforce the quality gates described in `AGENTS.md`, providing consistent checks across languages.

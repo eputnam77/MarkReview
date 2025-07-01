@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "target": "ES2019",
-    "module": "ES6",
-    "declaration": true,
-    "outDir": "dist/esm",
+    "module": "ESNext",
     "rootDir": "src",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true
   },
   "include": ["src"]
 }
