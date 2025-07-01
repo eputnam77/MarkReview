@@ -1,9 +1,11 @@
 # Code Review — MarkReview
 
 ## Overview
-The repository implements a TypeScript package that adds Word-style review tools to ProseMirror editors. The `src/` folder holds modular code for parsing CriticMarkup, tracking format changes, rendering UI widgets and providing adapter hooks. Node-only utilities now live under `src/node` so bundlers can exclude them from browser builds. Automated tests use Vitest and the project ships with a CI pipeline (GitHub Actions) that runs linting, type checks and coverage.
+
+The repository implements a TypeScript package that adds Word-style review tools to ProseMirror editors. The `src/` folder holds modular code for parsing CriticMarkup, tracking format changes, rendering UI widgets and providing adapter hooks. Node-only utilities live under `src/node` so bundlers can exclude them from browser builds. Automated tests use Vitest and the project ships with a CI pipeline (GitHub Actions) that runs linting, type checks and coverage. Recent updates add search and filter chips in the review panel, persist ProseMirror changes via `persistMarks` and enforce a performance gate during CI.
 
 ## PRD Coverage
+
 - Functional requirements F‑1 through F‑12 are represented in code. Examples include:
   - `parseCriticMarkup` for F‑1【F:src/core/criticParser.ts†L1-L42】
   - `trackFormatChanges` for F‑2【F:src/core/formatTracker.ts†L1-L22】
@@ -20,29 +22,34 @@ The repository implements a TypeScript package that adds Word-style review tools
 - Documentation and locale packs satisfy F‑14【F:docs/accessibility.md†L1-L8】【F:docs/locales/en.json†L1-L5】.
 
 ## Integration Risks
-`cleanupPythonSources` and related utilities now live in `src/node`. Bundlers should ensure these Node-only modules are excluded from browser builds.
+
+`cleanupPythonSources` and related utilities now live in `src/node`. The `browser` field in `package.json` maps the directory to `false`, but integrators must ensure their bundler respects this so browser builds remain safe.
 The persistence functions operate on generic `PMNode` structures but only test plain text, so integration with real ProseMirror documents could reveal issues.
 The placeholder `startDiffServer` and collaboration stubs may mislead developers expecting network features.
 
 ## Performance Considerations
+
 - `diffDoc`, `trackFormatChanges` and `applyChangeBars` run linear scans; they should handle moderately large documents efficiently.
 - The `scripts/performance-check.cjs` script enforces F-13 by failing the build when bundles exceed 10kB JS, 5kB CSS or when the DOM scan is ≥5ms.
 - Using synchronous FS calls (`fs.rmSync`) may block the event loop during build steps.
 
 ## Maintainability Notes
+
 - The code base is well structured with small, documented modules.
-- Extensive unit tests exist with overall coverage about 88%, although coverage for some modules (e.g. UI behaviours) is limited.
+- Extensive unit tests exist with overall coverage about 88%; recent additions verify adapter option forwarding and immutability of `persistMarks` when operating on ProseMirror documents.
 - TODO comments in the API server and collaboration stubs indicate incomplete features; consider tracking them as issues.
 
 ## Mandatory Fixes
-1. Ensure the new `src/node` modules remain separate from the browser bundle to avoid runtime errors.
-2. Expand tests for `persistMarks` and adapter modules to ensure ProseMirror documents integrate as expected.
-3. Enforce the performance gate (bundle ≤10 kB JS / 5 kB CSS and DOM scan <5 ms) in CI as required by F‑13.
+
+1. Ensure bundlers respect the `browser` field so `src/node` utilities stay out of browser builds.
+2. Document the placeholder nature of `startDiffServer` and collaboration hooks to set expectations.
+3. Maintain the CI step that builds before running the performance gate so F‑13 remains enforced.
 
 ## Optional Suggestions
+
 - Replace synchronous `fs` calls with asynchronous versions in build scripts.
-- Document the placeholder nature of `startDiffServer` and collaboration hooks to set expectations.
 - Add more thorough E2E tests covering adapter integration with example editors.
 
 ## Next Steps
+
 Label this PR with `ready-for:releasebot` to continue the workflow.
