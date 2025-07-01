@@ -3,12 +3,12 @@ import { checkBundleSize, scanDomBenchmark } from '../src/core/performance'
 
 describe('performance helpers', () => {
   it('returns numeric bundle sizes', () => {
-    const sizes = checkBundleSize()
-    expect(typeof sizes.js).toBe('number')
-    expect(typeof sizes.css).toBe('number')
+    const sizes = checkBundleSize('aaa', 'bb')
+    expect(sizes.js).toBeGreaterThan(0)
+    expect(sizes.css).toBeGreaterThan(0)
   })
 
-  it('returns a benchmark value', () => {
-    expect(scanDomBenchmark('test')).toBe(0)
+  it('returns a benchmark value based on length', () => {
+    expect(scanDomBenchmark('xxxx')).toBe(0.004)
   })
 })
