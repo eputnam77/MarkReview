@@ -16,4 +16,4 @@ Earlier ADRs and the initial repository layout mixed Python and Node.js tooling.
 
 - Continuous integration is faster and simpler.
 - Future features will be implemented in TypeScript with Vitest for unit tests.
-- Python remains only for docs generation via MkDocs if needed.
+- Documentation is generated with VitePress, removing the last Python dependency.

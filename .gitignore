@@ -143,8 +143,8 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
-# mkdocs documentation
-/site
+# VitePress documentation
+/docs/.vitepress/dist/
 
 # mypy
 .mypy_cache/

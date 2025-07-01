@@ -51,7 +51,7 @@ and patch releases deliver backwards‑compatible improvements and fixes.
 
 ## Migrating from earlier versions
 
-Older releases shipped a Python-based MkDocs plugin and a separate CLI. Both
-have been removed in favour of a single JavaScript library. Update any old
+Older releases shipped a Python-based documentation plugin and a separate CLI.
+Both have been removed in favour of a single JavaScript library. Update any old
 imports or scripts accordingly.
 
