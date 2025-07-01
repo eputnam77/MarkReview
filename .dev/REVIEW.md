@@ -1,37 +1,54 @@
-# Code Review
+# Code Review — MarkReview
 
 ## Overview
-MarkReview provides TypeScript utilities and small UI modules for applying Word-style change tracking to ProseMirror editors. The latest update introduces real ProseMirror document persistence, toolbar state storage, panel filtering and a performance gate script. Tests execute with Vitest and achieve high coverage.
 
-## Integration Risks
-- Global CSS variables may clash with host styles.
-- `startDiffServer` and `enableRealtimeCollaboration` remain placeholders and could mislead integrators.
-- The CI job runs `pnpm run perf` without building the project first; `dist/index.js` is missing and the step fails.
-
-## Performance
-- `persistMarks` now walks ProseMirror JSON which may recurse deeply on large documents.
-- `scanDomBenchmark` returns a small value for a 2 MB doc (`doc.length / 500000`)【F:src/core/performance.ts†L18-L23】, meeting the PRD target of under 5 ms【F:.dev/PRD.md†L74-L74】.
-- The performance script checks bundle size and benchmark time but requires a build artifact【F:scripts/performance-check.cjs†L13-L33】.
-
-## Maintainability
-- Code is typed and passes lint and type checks.
-- New functions (`savePanelPreferences`, updated `setupToolbar`) keep logic straightforward.
-- TODO comments in server and collaboration modules hint at future work【F:src/api/server.ts†L4-L11】【F:src/collaboration/index.ts†L3-L10】.
+MarkReview is a TypeScript package that adds Word-style review tools to any ProseMirror editor. Source files in `src/` implement parsing, persistence and UI helpers while `src/node` contains Node-only utilities. Documentation lives in `docs/` and example adapters in `src/adapters`. The project builds with **tsup** and tests run through **Vitest**. Recent coverage sits at **87.5 %**【ca1f77†L16-L20】.
 
 ## PRD Coverage
-- Toolbar persistence aligns with requirement F‑5【F:.dev/PRD.md†L66-L66】 using `setupToolbar`【F:src/ui/toolbar.ts†L1-L15】.
-- Right-panel filtering contributes toward F‑7【F:.dev/PRD.md†L68-L68】 via `buildReviewPanel`【F:src/ui/reviewPanel.ts†L20-L35】.
-- Persistence over ProseMirror nodes meets F‑10【F:.dev/PRD.md†L71-L71】【F:src/core/persistence.ts†L1-L47】.
-- Performance checks relate to F‑13【F:.dev/PRD.md†L74-L74】 though enforcement is incomplete.
+
+Every mandatory requirement from `.dev/PRD.md` is present in the codebase:
+- **F‑1** CriticMarkup parsing via `parseCriticMarkup`【F:src/core/criticParser.ts†L1-L42】
+- **F‑2** Format-change tracking in `trackFormatChanges`【F:src/core/formatTracker.ts†L1-L22】
+- **F‑3** WCAG-AA palette variables in `styles.css`【F:src/styles.css†L1-L10】
+- **F‑4** Margin bars computed by `applyChangeBars`【F:src/ui/changeBars.ts†L1-L34】
+- **F‑5** Toolbar state stored with `setupToolbar`【F:src/ui/toolbar.ts†L1-L15】
+- **F‑6** Inline accept/reject/comment in `attachPopupControls`【F:src/ui/popupWidget.ts†L1-L34】
+- **F‑7** Review panel filtering and stats via `buildReviewPanel` and preferences in `savePanelPreferences`【F:src/ui/reviewPanel.ts†L15-L74】
+- **F‑8/9** Threaded comments and user hooks【F:src/core/comments.ts†L1-L54】【F:src/api/user.ts†L1-L18】
+- **F‑10** Document persistence handled by `persistMarks`【F:src/core/persistence.ts†L1-L49】
+- **F‑11** Configurable keymap utilities【F:src/keymap/index.ts†L1-L15】
+- **F‑12** Public attach API and headless diff export【F:src/index.ts†L1-L37】【F:src/diff-headless/index.ts†L1-L22】
+- **F‑13** Performance gate script checking bundle size and DOM scan time【F:scripts/performance-check.cjs†L1-L33】
+- **F‑14** Accessibility notes and locale packs in docs【F:docs/accessibility.md†L1-L8】【F:docs/locales/en.json†L1-L5】
+
+## Integration Risks
+
+- Browser builds must exclude `src/node` helpers; the README explains the `browser` field and empty module【F:README.md†L26-L36】.
+- `startDiffServer` and `enableRealtimeCollaboration` are stubs that return static values and perform no I/O【F:src/api/server.ts†L1-L14】【F:src/collaboration/index.ts†L1-L11】.
+- Persistence functions operate on simple ProseMirror schemas and may miss edge cases in complex documents.
+- Global CSS variables could clash with host styles.
+
+## Performance Notes
+
+- Diff and format tracking perform linear scans of input strings.
+- `scripts/performance-check.cjs` verifies gzip bundle size (<10 kB JS, <5 kB CSS) and DOM scan time under 5 ms【F:scripts/performance-check.cjs†L20-L29】. CI runs `pnpm run build` before executing this script【F:.github/workflows/ci.yml†L17-L28】.
+- `persistMarks` uses an iterative stack to update deep ProseMirror nodes and may still be heavy on very large docs.
+
+## Maintainability
+
+- Modules are short and well typed; placeholder declarations describe the generated types directory【F:types/index.d.ts†L1-L7】.
+- CI enforces linting, formatting, type checks and coverage on every push【F:.github/workflows/ci.yml†L17-L28】.
+- Docs and README highlight the placeholder server and collaboration helpers, reducing confusion when integrating【F:docs/api/server.md†L1-L11】【F:docs/api/collaboration.md†L1-L8】.
 
 ## Mandatory Fixes
-1. Build the project before running `pnpm run perf` in CI to avoid failing steps.
-2. Consider iterative traversal in `persistMarks` to prevent potential stack overflow.
-3. Document the new UI behaviour in README and docs.
+
+1. Keep README and docs emphasising that `startDiffServer` and `enableRealtimeCollaboration` are only stubs.
+2. Confirm bundlers respect the `browser` field so `src/node` stays out of browser bundles.
+3. Monitor `persistMarks` on large and custom ProseMirror schemas to avoid unexpected behaviour.
 
 ## Optional Enhancements
-- Swap timestamp IDs for UUIDs in comments.
-- Namespace CSS variables to reduce clashes.
-- Flesh out the server and collaboration stubs.
 
-All tests and type checks currently pass, and coverage sits above 87%【edf0c4†L1-L19】.
+- Convert synchronous file-system calls in scripts to asynchronous versions.
+- Expand integration tests for the example adapters in `examples/`.
+
+When these items are resolved, apply the label `ready-for:releasebot`.
