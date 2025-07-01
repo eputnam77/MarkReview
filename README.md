@@ -30,10 +30,14 @@ MarkReview marks its Node-only utilities under `src/node` and declares a
 Ensure your bundler respects this field so those helpers stay out of the final
 web build.
 
+When bundling for the browser, modern tools read the `exports` map and use an
+empty module for `markreview/node`. The repository ships `dist/empty.js` for this
+purpose.
+
 Two helper functions—`startDiffServer()` and `enableRealtimeCollaboration()`—are
-stubs meant for tests and demos. They simply return a value and do not start a
-server or connect to real-time backends. Replace them with your own network
-implementation when needed.
+only placeholders for tests and demos. They do **not** start a real service or
+connect to any backend. Replace them with your own network logic when needed and
+refer to the API docs for details.
 
 ## Features
 
