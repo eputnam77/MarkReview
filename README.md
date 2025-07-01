@@ -35,6 +35,10 @@ controller.acceptAll()
 - Comment threads stored with `CommentThread` helpers.
 - Headless `diffDoc()` for simple comparisons.
 - Remappable keyboard shortcuts via `bindAction()` and `loadKeymap()`.
+- Format-change tracking and colourful change bars.
+- Review panel with counters and keyboard navigation.
+- Toolbar state saved to `localStorage`.
+- Locale packs for quick translation.
 
 ```ts
 import { bindAction, loadKeymap } from 'markreview/keymap'

@@ -6,6 +6,9 @@
 - Headless diff function and persistence helpers
 - Keyboard remapping API
 - Updated documentation and usage examples
+- Format-change tracking and colourful change bars
+- Right-panel review panel with counters
+- Toolbar state persistence and locale packs
 ### Changed
 - Python package renamed to `mkdocs_markreview`
 ### Removed
