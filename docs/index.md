@@ -1,28 +1,31 @@
 # MarkReview Documentation
 
-Welcome to the MarkReview docs. These pages cover setup, usage and customisation for the core library.
+Welcome to your central resource for installing, configuring, and mastering MarkReview. This documentation walks you through setup, integration, and customization, ensuring you get up and running with minimal friction.
 
-## Quick Setup (≈5 minutes)
+## Quick Setup (About 5 Minutes)
 
-1. Install the package:
-   ```bash
-   pnpm install
-   pnpm build
-   ```
-2. Include the bundle in your ProseMirror-based editor.
+* **Install the package:**
 
-See the [API reference](api/index.md) for detailed module documentation.
+  ```bash
+  pnpm install
+  pnpm build
+  ```
+* **Integrate with your editor:**
+Add the MarkReview bundle to any ProseMirror-based editor. You’ll be ready to review and track changes in minutes.
 
-> **Note** The `server` and `collaboration` helpers referenced in the API docs
-> are only stubs. They don't perform any networking and exist solely for tests
-> and demos. Replace them with real implementations when integrating.
+Need technical details? The [API reference](api/index.md) covers every module in depth.
 
-Bundlers should read the `browser` field so the node-only helpers are replaced
-with the shipped `dist/empty.js` module when targeting the web.
+> **Heads up:** The `server` and `collaboration` helpers included in the API are demo stubs—use them only for tests or exploration. For production use, replace these with your own implementations.
+
+If you’re building for the browser, your bundler will detect the `browser` field and swap out any Node-only helpers with the provided `dist/empty.js` module, keeping your web app clean and lightweight.
 
 ## Key Features
 
-- Toolbar view and bar state persist across sessions using `setupToolbar()`.
-- The review panel provides search and filter chips with live counters.
-- `persistMarks()` saves accepted text back into your ProseMirror documents.
-- A performance check keeps the bundle under 10 kB and DOM scan under 5 ms.
+* **Persistent Toolbar and Bar State:**
+  The customizable toolbar and review bar remember their state across sessions with `setupToolbar()`.
+* **Advanced Review Panel:**
+  Search and filter chips—complete with live counters—keep document feedback organized and actionable.
+* **Seamless Text Acceptance:**
+  `persistMarks()` applies accepted suggestions directly into your ProseMirror documents.
+* **Optimized Performance:**
+  MarkReview is engineered to keep the bundle under 10 kB and DOM scan times under 5 ms, so your workflow stays fast.
