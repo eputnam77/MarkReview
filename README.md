@@ -1,80 +1,59 @@
 # MarkReview Monorepo
 
-MarkReview adds lightweight review tools to any ProseMirror based editor. The library exposes utilities for parsing CriticMarkup and wiring a friendly review UI into your editor.
+MarkReview equips any ProseMirror-based editor with fast, lightweight review tools. The library delivers CriticMarkup parsing, intuitive review UI components, and seamless integration for modern editorial workflows.
 
-## Using MarkReview in Your Project
+## Get Started
 
-Install the package from source and import the helpers in your project.
+1. **Install and build MarkReview:**
 
-```bash
-pnpm install
-pnpm build
-```
+   ```bash
+   pnpm install
+   pnpm build
+   ```
 
-You can override the highlight colours in your CSS:
+2. **Integrate with your editor:**
+   Import the MarkReview helpers and connect them to your ProseMirror instance:
 
-```css
-:root {
-  --markreview-add-color: #0044ff;
-  --markreview-del-color: #d20f39;
-}
-```
+   ```ts
+   import { attach } from 'markreview'
+   const controller = attach(editor)
+   controller.acceptAll()
+   ```
 
-See the [docs](docs/index.md) for setup and usage instructions.
-The [API reference](docs/api/index.md) covers the available modules and helper APIs.
+3. **Customize highlight colors:**
+   Override default styles to match your theme:
 
-## Integration Notes
+   ```css
+   :root {
+     --markreview-add-color: #0044ff;
+     --markreview-del-color: #d20f39;
+   }
+   ```
 
-MarkReview marks its Node-only utilities under `src/node` and declares a
-`browser` field in `package.json` to exclude them from browser bundles.
-Ensure your bundler respects this field so those helpers stay out of the final
-web build.
+* For detailed setup, visit the [documentation](docs/index.md).
+* See the [API reference](docs/api/index.md) for modules and helper functions.
 
-When bundling for the browser, modern tools read the `exports` map and use an
-empty module for `markreview/node`. The repository ships `dist/empty.js` for this
-purpose.
+## Integration Essentials
 
-Two helper functions—`startDiffServer()` and `enableRealtimeCollaboration()`—are
-only placeholders for tests and demos. They do **not** start a real service or
-connect to any backend. Replace them with your own network logic when needed and
-refer to the API docs for details.
+* Node-only utilities are isolated under `src/node`. The package exports a `browser` field and ships `dist/empty.js` to keep browser bundles clean.
+* Demo helpers like `startDiffServer()` and `enableRealtimeCollaboration()` are stubs—replace with real back-end code as needed.
 
-## Features
+## Key Features
 
-- Attach to any ProseMirror editor with a single call:
-
-```ts
-import { attach } from 'markreview'
-const controller = attach(editor)
-controller.acceptAll()
-```
-
-- Comment threads stored with `CommentThread` helpers.
-- Headless `diffDoc()` for simple comparisons.
-- Remappable keyboard shortcuts via `bindAction()` and `loadKeymap()`.
-- Format-change tracking and colourful change bars.
-- Review panel with counters and keyboard navigation.
-- Search and filter chips in the review panel keep conversations focused.
-- Toolbar state saved to `localStorage`.
-- Changes persist when saving ProseMirror documents via `persistMarks()`.
-- Locale packs for quick translation.
-- A performance gate checks bundle size and DOM scan time during CI.
-
-```ts
-import { bindAction, loadKeymap } from 'markreview/keymap'
-bindAction('accept', 'KeyZ')
-console.log(loadKeymap())
-```
+* One-call attachment to any ProseMirror editor.
+* Comment threads and headless document diffing.
+* Flexible, remappable keyboard shortcuts.
+* Colorful change bars and format-change tracking.
+* Review panel with live counters, keyboard navigation, search, and filter chips.
+* Toolbar state persists via `localStorage`.
+* Changes are saved with `persistMarks()`.
+* Locale packs for instant translation.
+* Built-in performance checks on bundle size and DOM scan time.
 
 ## Versioning
 
-MarkReview follows [Semantic Versioning](https://semver.org/). Major versions
-align with the ProseMirror major series supported by the library. When a new
-ProseMirror major is released, MarkReview increments its own major version. Minor
-and patch releases deliver backwards‑compatible improvements and fixes.
+MarkReview follows [Semantic Versioning](https://semver.org/), with major releases tracking the ProseMirror version series.
 
-## Migrating from earlier versions
+## Migrating from Previous Versions
 
-Older releases shipped a Python-based documentation plugin and a separate CLI.
-Both have been removed in favour of a single JavaScript library. Update any old
-imports or scripts accordingly.
+If you’re upgrading, note that legacy Python plugins and the CLI have been retired. MarkReview is now a unified JavaScript library—update imports and scripts as needed.
