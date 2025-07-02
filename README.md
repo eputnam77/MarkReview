@@ -53,7 +53,3 @@ MarkReview equips any ProseMirror-based editor with fast, lightweight review too
 ## Versioning
 
 MarkReview follows [Semantic Versioning](https://semver.org/), with major releases tracking the ProseMirror version series.
-
-## Migrating from Previous Versions
-
-If you’re upgrading, note that legacy Python plugins and the CLI have been retired. MarkReview is now a unified JavaScript library—update imports and scripts as needed.
