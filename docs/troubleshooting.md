@@ -1,17 +1,24 @@
 # Troubleshooting
 
-## Script not loading
+When issues arise, a quick check of the essentials will get you back on track.
 
-Ensure the package is installed and included in your build output. Restart your dev server after installing.
+## Script Not Loading
 
-## Styles not applied
+* Confirm the package is installed and included in your build process.
+* After installation, restart your development server to apply changes.
 
-If styles are missing, make sure your theme imports `styles.css` from the package. Custom setups may need to include the CSS manually.
+## Styles Not Applied
 
-## Edits not persisted
+* If you’re missing visual styling, verify that your theme imports `styles.css` from the MarkReview package.
+* For custom setups, you may need to import the CSS manually.
 
-When editing Markdown you may still see CriticMarkup tags after accepting or rejecting changes. Run `persistMarks()` on the file before committing. Text entered in a ProseMirror editor is persisted automatically.
+## Edits Not Persisted
 
-## Installation errors
+* Still seeing CriticMarkup tags in Markdown after accepting or rejecting changes?
+  Run `persistMarks()` on your file before committing.
+* All edits in a ProseMirror editor are saved automatically.
 
-If the package fails to install, double-check that you're running the command inside the repository root and that your package manager is up to date.
+## Installation Errors
+
+* If installation fails, make sure you’re working in the repository root.
+* Double-check that your package manager is up to date before retrying.
