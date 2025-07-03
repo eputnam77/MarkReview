@@ -3,6 +3,7 @@
 ## Overview
 
 MarkReview is a TypeScript package that adds Word-style review tools to any ProseMirror editor. Source files in `src/` implement parsing, persistence and UI helpers while `src/node` contains Node-only utilities. Documentation lives in `docs/` and example adapters in `src/adapters`. The project builds with **tsup** and tests run through **Vitest**. Recent coverage sits at **87.59 %**【dbc00a†L1-L5】.
+New API docs explain usability metrics validation.
 
 ## PRD Coverage
 
@@ -42,6 +43,7 @@ Every mandatory requirement from `.dev/PRD.md` is present in the codebase:
 - CI enforces linting, formatting, type checks and coverage on every push【F:.github/workflows/ci.yml†L17-L28】.
 - Docs and README highlight the placeholder server and collaboration helpers, reducing confusion when integrating【F:docs/api/server.md†L1-L11】【F:docs/api/collaboration.md†L1-L8】.
 - `validateUsabilityMetrics` checks that user tests meet success criteria【F:src/core/usabilityMetrics.ts†L1-L23】.
+- Metrics utilities now documented with usage example【F:docs/api/metrics.md†L1-L22】【F:docs/api/index.md†L1-L10】
 
 ## Mandatory Fixes
 
