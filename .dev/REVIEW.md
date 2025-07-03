@@ -2,11 +2,12 @@
 
 ## Overview
 
-MarkReview is a TypeScript package that adds Word-style review tools to any ProseMirror editor. Source files in `src/` implement parsing, persistence and UI helpers while `src/node` contains Node-only utilities. Documentation lives in `docs/` and example adapters in `src/adapters`. The project builds with **tsup** and tests run through **Vitest**. Recent coverage sits at **87.5 %**【ca1f77†L16-L20】.
+MarkReview is a TypeScript package that adds Word-style review tools to any ProseMirror editor. Source files in `src/` implement parsing, persistence and UI helpers while `src/node` contains Node-only utilities. Documentation lives in `docs/` and example adapters in `src/adapters`. The project builds with **tsup** and tests run through **Vitest**. Recent coverage sits at **87.59 %**【dbc00a†L1-L5】.
 
 ## PRD Coverage
 
 Every mandatory requirement from `.dev/PRD.md` is present in the codebase:
+
 - **F‑1** CriticMarkup parsing via `parseCriticMarkup`【F:src/core/criticParser.ts†L1-L42】
 - **F‑2** Format-change tracking in `trackFormatChanges`【F:src/core/formatTracker.ts†L1-L22】
 - **F‑3** WCAG-AA palette variables in `styles.css`【F:src/styles.css†L1-L10】
@@ -27,6 +28,7 @@ Every mandatory requirement from `.dev/PRD.md` is present in the codebase:
 - `startDiffServer` and `enableRealtimeCollaboration` are stubs that return static values and perform no I/O【F:src/api/server.ts†L1-L14】【F:src/collaboration/index.ts†L1-L11】.
 - Persistence functions operate on simple ProseMirror schemas and may miss edge cases in complex documents.
 - Global CSS variables could clash with host styles.
+- Node scripts rely on synchronous `fs` calls which could block builds on large directories【F:src/node/cleanupPythonSources.ts†L7-L15】.
 
 ## Performance Notes
 
@@ -39,6 +41,7 @@ Every mandatory requirement from `.dev/PRD.md` is present in the codebase:
 - Modules are short and well typed; placeholder declarations describe the generated types directory【F:types/index.d.ts†L1-L7】.
 - CI enforces linting, formatting, type checks and coverage on every push【F:.github/workflows/ci.yml†L17-L28】.
 - Docs and README highlight the placeholder server and collaboration helpers, reducing confusion when integrating【F:docs/api/server.md†L1-L11】【F:docs/api/collaboration.md†L1-L8】.
+- `validateUsabilityMetrics` checks that user tests meet success criteria【F:src/core/usabilityMetrics.ts†L1-L23】.
 
 ## Mandatory Fixes
 
@@ -50,5 +53,6 @@ Every mandatory requirement from `.dev/PRD.md` is present in the codebase:
 
 - Convert synchronous file-system calls in scripts to asynchronous versions.
 - Expand integration tests for the example adapters in `examples/`.
+- Document the new usability metrics helper and consider automated reporting.
 
 When these items are resolved, apply the label `ready-for:releasebot`.
