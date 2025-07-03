@@ -6,76 +6,89 @@
 
 ## 0 · Global Settings
 
-| Key                  | Value                                                |
-| -------------------- | ---------------------------------------------------- |
-| Default shell        | `bash` (Linux)                                       |
-| Node.js version      | **18.18+**                                           |
-| Package manager      | **npm** (with **pnpm** for CI)                       |
-| Bundler/transpiler   | **tsup** (zero-config esbuild wrapper)              |
-| Test runner          | **Vitest**                                           |
-| Coverage thresholds  | 70 % on feature branches → 90 % on `main`           |
-| Code formatter       | **Prettier**                                         |
-| Linter               | **ESLint + @typescript-eslint**                      |
-| Static‑type checker  | **TypeScript** (`tsc --noEmit`)                      |
-| Security scanners    | **npm audit --production**, **Snyk CLI**             |
-| Docs generator       | **TypeDoc** (`typedoc --out docs src`)               |
-| Commit message style | **Conventional Commits**                             |
-| CI provider          | **GitHub Actions**                                   |
+| Key                      | Value                                                                  |
+| ------------------------ | ---------------------------------------------------------------------- |
+| Default shell            | `bash` (Linux)                                                         |
+| Node.js version          | **20 LTS**                                                             |
+| Package manager          | **npm** (local) · **pnpm** (CI)                                        |
+| Bundler / transpiler     | **tsup** (esbuild wrapper)                                             |
+| Test runner              | **Vitest**                                                             |
+| **E2E framework**        | **Playwright + @playwright/test**                                      |
+| **Property‑based tests** | **fast‑check** (via Vitest)                                            |
+| **Mutation testing**     | **Stryker Mutator** (`stryker run`)                                    |
+| Coverage thresholds      | **75 %** on feature branches → **90 %** on `main` (branch + statement) |
+| Mutation score           | **≥60 %** on feature → **≥80 %** on `main`                             |
+| Code formatter           | **Prettier**                                                           |
+| Linter                   | **ESLint + @typescript‑eslint**                                        |
+| Static‑type checker      | **TypeScript** (`tsc --noEmit`)                                        |
+| Security scanners        | **npm audit --prod**, **Snyk CLI**                                     |
+| Docs generator           | **TypeDoc** (`typedoc --out docs src`)                                 |
+| Commit message style     | **Conventional Commits**                                               |
+| CI provider              | **GitHub Actions** *(experimental – see §6)*                           |
 
-> **Data flow** Every agent works from the latest commit on its branch and communicates only via GitHub Issues/PRs.
-
+> **Data flow**   Each agent works from the latest commit on its branch and communicates only via GitHub Issues / PRs.
+> 
 ---
 
 ## 1 · Agents & Execution Order
 
-|  #  | Agent ID     | Purpose (summary)                                                                     | Auto‑trigger condition        |
-| --- | ------------ | ------------------------------------------------------------------------------------- | ----------------------------- |
-|  0  | `planner`    | Parse `project-management/PRD.md`, create `project-management/TASKS.md` (epics → issues with acceptance criteria & labels). | manual                        |
-|  1  | `architect`  | Design folder layout, write ADRs in `project-management/ADRs/`, initialise `package.json`, CI workflow.           | `planner` PR merged           |
-|  2  | `scaffolder` | Generate skeleton code/tests for each open issue.                                     | `architect` PR merged         |
-|  3  | `builder`    | Implement code for issues marked **ready**; keep tests ≥70 % cov.                     | new ready issue               |
-|  4  | `verifier`   | Cross-reference project-management/PRD.md → project-management/TASKS.md → implemented code. Generate completeness report.   | after reviewer                |
-|  5  | `linter`     | Run `eslint --fix` & `prettier --write`; open PR if diff.                              | after builder push            |
-|  6  | `tester`     | Execute dev‑gate (`vitest`, type‑check, coverage ≥70 %).                              | after linter green            |
-|  7  | `fixer`      | Patch only failing files, re‑run gate until green.                                    | on test failure               |
-|  8  | `security`   | Run `npm audit --production` & Snyk CLI; open CVE issues.                              | nightly · before merge → main |
-|  9  | `docwriter`  | Update `README.md`, API refs, examples, changelog. Use templates from `project-management/Templates/`.                                    | branch green & cov ≥90 %      |
-|  10  | `reviewer`   | Human‑style review; request approvals.                                                | after docwriter               |
-|  11  | `releasebot` | Bump semver, tag, build & push Docker image, draft release notes.                     | PR merged → main              |
+| #  | Agent ID       | Purpose                                                                                     | Auto‑trigger             |
+| -- | -------------- | ------------------------------------------------------------------------------------------- | ------------------------ |
+| 0  | `planner`      | Parse **project‑management/PRD.md** → build **TASKS.md** (issues with acceptance criteria). | manual                   |
+| 1  | `architect`    | Repo layout, write ADRs, init `package.json`, stub CI.                                      | `planner` PR merged      |
+| 2  | `scaffolder`   | Generate skeleton code *and tests*.                                                         | `architect` PR merged    |
+| 3  | `scenario‑gen` | Convert acceptance criteria → Gherkin *.feature* files & fast‑check arbitraries.            | new ready issue          |
+| 4  | `builder`      | Implement code; keep unit/integration coverage ≥75 %.                                       | after `scenario‑gen`     |
+| 5  | `verifier`     | Trace PRD → TASKS → code; emit completeness report.                                         | after `builder`          |
+| 6  | `linter`       | `eslint --fix` + `prettier --write`.                                                        | after `verifier` green   |
+| 7  | `tester`       | Run *dev gate* (unit, property, type‑check, coverage).                                      | after `linter` green     |
+| 8  | `e2e‑tester`   | Playwright E2E suite (headless).                                                            | after `tester` green     |
+| 9  | `mutation`     | Stryker; fails if mutation score < threshold.                                               | after `e2e‑tester` green |
+| 10 | `fixer`        | Patch failing files; loop until green.                                                      | on any gate fail         |
+| 11 | `security`     | `npm audit --prod` + Snyk; open CVE issues.                                                 | nightly · pre‑merge      |
+| 12 | `docwriter`    | Update docs/changelog once all gates green & score ≥ thresholds.                            | after `security` green   |
+| 13 | `reviewer`     | Human code review.                                                                          | after `docwriter`        |
+| 14 | `releasebot`   | Bump semver, publish package + Docker, draft release notes.                                 | PR merged→`main`         |
 
-### Agent Handoff Conventions
+### Handoff conventions
 
-* **Feature branches** enforce the *dev gate* (70 % coverage).
-* The **main** branch enforces the *release gate* (90 % coverage, security pass, docs build).
-* Each agent finishing successfully applies the label `ready-for:<next-agent>`; a GitHub Action reads this label and triggers the next agent via the Codex API.
+* **Feature branches** enforce *dev gate* (≥75 % cov, ≥60 % mut).
+* **main** enforces *release gate* (≥90 % cov, ≥80 % mut, security, docs).
+* Agents tag PRs with `ready-for:<next-agent>`; a router Action (disabled by default) reads the tag and triggers the next agent.
 
 ---
 
 ## 2 · Quality Gates
 
-### Dev Gate (feature branches)
+### Dev Gate (feature)
 
 ```bash
-eslint src tests
-prettier --check src tests
+eslint "src/**/*.ts" "tests/**/*.ts"
+prettier --check .
 tsc --noEmit
-npm audit --production
-vitest run --coverage --coverage.failUnder=70
+npm audit --prod --audit-level=high || true  # warn only on feature
+vitest run --coverage --coverage.reporter=text --coverage.branches --coverage.statements --coverage.failUnder=75
+vitest run -m property                        # fast‑check suites
+playwright install --with-deps --dry-run      # ensure binaries cached
+playwright test --reporter=line --headless
+stryker run --coverageAnalysis=perTest --threshold-break 60
 ```
 
 ### Release Gate (`main`)
 
 ```bash
-eslint src tests
-prettier --check src tests
+eslint .
+prettier --check .
 tsc --noEmit
-npm audit --production
-snyk test
-vitest run --coverage --coverage.failUnder=90
+npm audit --prod
+snyk test --severity-threshold=high
+vitest run --coverage --coverage.reporter=html --coverage.failUnder=90
+playwright test --reporter=html --timeout 60000
+stryker run --threshold-break 80
 typedoc --out docs src --strict
 ```
 
-Any non‑zero exit hands control to **fixer**.
+Any non‑zero exit passes control to **fixer**.
 
 ---
 
@@ -316,25 +329,41 @@ The `docwriter` agent should reference these templates:
 
 ---
 
-## 6 · Automation Workflow (GitHub Actions)
+## 6 · Automation Workflow (GitHub Actions - Experimental)
 
-The central router (`.github/workflows/agents.yml`) decides which agent to launch next:
+<!--
+⚠️  EXPERIMENTAL_CI: false
+     The workflow below is kept for future use. Agents MUST ignore it
+     unless this flag is switched to true (repo secret or env var).
+-->
+
+> **Why disabled?**   Codex CLI currently crashes in GitHub Actions due to Ink’s interactive TTY requirement (issue #1080). Enable when a non‑interactive flag ships or use a self‑hosted runner with pseudo‑TTY.
 
 ```yaml
+# .github/workflows/agents.yml.disabled
+name: Codex‑router
 on:
   push:
     branches: ["**"]
+
+env:
+  NODE_VERSION: "20"
+  PNPM_VERSION: "9"
+  EXPERIMENTAL_CI: ${{ secrets.EXPERIMENTAL_CI }}
+
 jobs:
   codex-router:
+    if: ${{ env.EXPERIMENTAL_CI == 'true' }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with: { version: "${{ env.PNPM_VERSION }}" }
       - name: Detect next agent
-        run: >-
-          ./scripts/next-agent.sh  # sets $NEXT_AGENT env var
+        run: ./scripts/next-agent.sh  # sets $NEXT_AGENT
       - name: Trigger agent via Codex API
         if: env.NEXT_AGENT != ''
-        run: >-
-          codex run --agent "$NEXT_AGENT"
+        run: codex run --quiet --agent "$NEXT_AGENT"
 ```
 
 ---
@@ -345,38 +374,41 @@ jobs:
 * Local dev startup:
 
   ```bash
+  nvm install --lts
   npm install
   npm run build
   npx husky install
   ```
 * Codespaces/VS Code: devcontainer runs pre-commit on open.
+* Playwright browsers are cached in `~/.cache/ms-playwright` to speed up local runs; CI layers cache that directory too.
 
 ---
 
 ## 8 · Failure‑Recovery Matrix
 
-| Problem            | Responsible Agent | Remedy                         |
-| ------------------ | ----------------- | ------------------------------ |
-| Lint error         | linter            | Auto-fix & push                |
-| Type error         | tester → fixer    | Patch types/code               |
-| Test failure       | fixer             | Minimal diff fix, ensure green |
-| Coverage drop      | builder/tester    | Add tests or mark exceptions   |
-| High CVE           | security          | Bump dependency or patch code  |
-| Docs build failure | docwriter         | Regenerate & push fix          |
+| Problem                 | Responsible Agent | Remedy                               |
+| ----------------------- | ----------------- | ------------------------------------ |
+| Lint error              | linter            | Auto‑fix & push                      |
+| Type error              | tester → fixer    | Patch types / code                   |
+| Unit / property failure | fixer             | Tweak logic or tests                 |
+| **E2E failure**         | fixer             | Patch UI / service; rerun Playwright |
+| **Mutation drop**       | fixer             | Add or improve tests                 |
+| Coverage drop           | builder / tester  | Add tests / mark exceptions          |
+| High CVE                | security          | Upgrade dependency or patch          |
+| Docs fail               | docwriter         | Regenerate & push                    |
 
 ---
 
 ## 9 · References
 
-* [ESLint documentation](https://eslint.org/)
-* [Prettier documentation](https://prettier.io/)
-* [Vitest documentation](https://vitest.dev/)
-* [TypeScript documentation](https://www.typescriptlang.org/)
-* [tsup documentation](https://github.com/egoist/tsup)
-* [TypeDoc documentation](https://typedoc.org/)
-* [Snyk documentation](https://snyk.io/)
+* [Playwright](https://playwright.dev/)
+* [fast-check](https://github.com/dubzzz/fast-check)
+* [Stryker‑mutator](https://stryker-mutator.io/)
+* [Vitest](https://vitest.dev/)
+* [TypeScript](https://www.typescriptlang.org/)
+* [tsup](https://github.com/egoist/tsup)
+* [TypeDoc](https://typedoc.org/)
 
 ---
 
 *End of AGENTS.md*
-
