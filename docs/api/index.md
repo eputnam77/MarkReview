@@ -7,4 +7,4 @@ This section documents the modules provided by MarkReview.
 - [user identity](user.md) – plug in your own auth provider
 - [server helpers](server.md) – optional diff service
 - [collaboration helpers](collaboration.md) – placeholder realtime hooks
-
+- [metrics utilities](metrics.md) – validate usability success metrics
