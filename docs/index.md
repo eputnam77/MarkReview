@@ -4,14 +4,15 @@ Welcome to your central resource for installing, configuring, and mastering Mark
 
 ## Quick Setup (About 5 Minutes)
 
-* **Install the package:**
+- **Install the package:**
 
   ```bash
   pnpm install
   pnpm build
   ```
-* **Integrate with your editor:**
-Add the MarkReview bundle to any ProseMirror-based editor. You’ll be ready to review and track changes in minutes.
+
+- **Integrate with your editor:**
+  Add the MarkReview bundle to any ProseMirror-based editor. You’ll be ready to review and track changes in minutes.
 
 Need technical details? The [API reference](api/index.md) covers every module in depth.
 
@@ -21,11 +22,13 @@ If you’re building for the browser, your bundler will detect the `browser` fie
 
 ## Key Features
 
-* **Persistent Toolbar and Bar State:**
+- **Persistent Toolbar and Bar State:**
   The customizable toolbar and review bar remember their state across sessions with `setupToolbar()`.
-* **Advanced Review Panel:**
+- **Advanced Review Panel:**
   Search and filter chips—complete with live counters—keep document feedback organized and actionable.
-* **Seamless Text Acceptance:**
+- **Seamless Text Acceptance:**
   `persistMarks()` applies accepted suggestions directly into your ProseMirror documents.
-* **Optimized Performance:**
+- **Optimized Performance:**
   MarkReview is engineered to keep the bundle under 10 kB and DOM scan times under 5 ms, so your workflow stays fast.
+- **Usability Metrics:**
+  Verify success criteria with `validateUsabilityMetrics()`.

@@ -30,25 +30,26 @@ MarkReview equips any ProseMirror-based editor with fast, lightweight review too
    }
    ```
 
-* For detailed setup, visit the [documentation](docs/index.md).
-* See the [API reference](docs/api/index.md) for modules and helper functions.
+- For detailed setup, visit the [documentation](docs/index.md).
+- See the [API reference](docs/api/index.md) for modules and helper functions.
 
 ## Integration Essentials
 
-* Node-only utilities are isolated under `src/node`. The package exports a `browser` field and ships `dist/empty.js` to keep browser bundles clean.
-* Demo helpers like `startDiffServer()` and `enableRealtimeCollaboration()` are stubs—replace with real back-end code as needed.
+- Node-only utilities are isolated under `src/node`. The package exports a `browser` field and ships `dist/empty.js` to keep browser bundles clean.
+- Demo helpers like `startDiffServer()` and `enableRealtimeCollaboration()` are stubs—replace with real back-end code as needed.
 
 ## Key Features
 
-* One-call attachment to any ProseMirror editor.
-* Comment threads and headless document diffing.
-* Flexible, remappable keyboard shortcuts.
-* Colorful change bars and format-change tracking.
-* Review panel with live counters, keyboard navigation, search, and filter chips.
-* Toolbar state persists via `localStorage`.
-* Changes are saved with `persistMarks()`.
-* Locale packs for instant translation.
-* Built-in performance checks on bundle size and DOM scan time.
+- One-call attachment to any ProseMirror editor.
+- Comment threads and headless document diffing.
+- Flexible, remappable keyboard shortcuts.
+- Colorful change bars and format-change tracking.
+- Review panel with live counters, keyboard navigation, search, and filter chips.
+- Toolbar state persists via `localStorage`.
+- Changes are saved with `persistMarks()`.
+- Locale packs for instant translation.
+- Built-in performance checks on bundle size and DOM scan time.
+- Usability metrics validation via `validateUsabilityMetrics()`.
 
 ## Versioning
 
