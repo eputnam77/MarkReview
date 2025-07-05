@@ -12,7 +12,7 @@ Welcome to your central resource for installing, configuring, and mastering Mark
   ```
 
 - **Integrate with your editor:**
-  Add the MarkReview bundle to any ProseMirror-based editor. You’ll be ready to review and track changes in minutes.
+  Add the MarkReview bundle to any ProseMirror-based editor. You’ll be ready to review and track changes in minutes. For a working TipTap example, see the [TipTap Integration](tiptap.md) guide.
 
 Need technical details? The [API reference](api/index.md) covers every module in depth.
 
