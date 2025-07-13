@@ -1,11 +1,8 @@
 # End-to-End Test Report
 
-Playwright installed successfully but tests failed.
-
-## Failures
-
-- Error redefining `$$jest-matchers-object` prevented Playwright from running.
+All Playwright scenarios executed successfully.
 
 ## Passed Scenarios
 
-None.
+- full workflow integration
+- additional workflow utilities
