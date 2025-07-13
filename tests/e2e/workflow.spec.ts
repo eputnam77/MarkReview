@@ -25,8 +25,10 @@ import {
   buildReviewPanel,
   registerPanelExtension,
   getPanelExtensions,
+  savePanelPreferences,
 } from '../../src/ui/reviewPanel'
 import { bindAction, loadKeymap } from '../../src/keymap'
+import { setupToolbar } from '../../src/ui/toolbar'
 import { openPreferencesDialog } from '../../src/keymap/preferences'
 
 test('full workflow integration', async ({ page }) => {
@@ -46,7 +48,20 @@ test('full workflow integration', async ({ page }) => {
   const fmt = trackFormatChanges('a b', 'a c')
   assert.deepStrictEqual(fmt, ['-b', '+c'])
 
+  const store: Record<string, string> = {}
+  const tbOn = setupToolbar(store, 'markup', true)
+  assert.ok(tbOn.showBars)
+  const tbOff = setupToolbar(store, 'markup', false)
+  assert.ok(!tbOff.showBars)
+  const prefs = savePanelPreferences(store, { collapsed: false })
+  assert.strictEqual(prefs.collapsed, false)
+
   assert.strictEqual(persistMarks('x {--y--}', false), 'x y')
+
+  const accepted = attachPopupControls('accept', '{++ok++}')
+  assert.strictEqual(accepted, 'ok')
+  const rejected = attachPopupControls('reject', '{++no++}')
+  assert.strictEqual(rejected, '')
 
   const thread: CommentThread = createCommentThread()
   attachPopupControls('comment', '{++hello++}', thread)
