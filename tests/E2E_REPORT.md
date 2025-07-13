@@ -1,13 +1,10 @@
 # End-to-End Test Report
 
-No Playwright installation detected; commands failed.
+Playwright installed successfully but tests failed.
 
 ## Failures
 
-- `pnpm exec playwright install --with-deps` failed: Command "playwright" not found.
-- `pnpm playwright test --reporter=line` failed: Command "playwright" not found.
-
-No E2E tests executed. No screenshots generated.
+- Error redefining `$$jest-matchers-object` prevented Playwright from running.
 
 ## Passed Scenarios
 
