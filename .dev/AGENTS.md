@@ -92,7 +92,7 @@ Any non‑zero exit passes control to **fixer**.
 
 ---
 
-## 3.5 · TypeScript Project Structure
+## 3 · TypeScript Project Structure
 
 ### Repository Structure
 
@@ -113,8 +113,7 @@ my-lib/
 │   │   ├── CHANGELOG.md
 │   │   └── TEST_EXAMPLES.md
 │   └── Workflows/              # GitHub Actions and automation
-│       ├── agents.yml
-│       └── next-agent.sh
+│       └── agents.yml
 ├── src/                        # All .ts / .tsx source (included in NPM package)
 │   ├── index.ts                # Main entry point
 │   ├── types/                  # Type definitions and interfaces
@@ -181,95 +180,6 @@ The `project-management/` folder provides several advantages:
 - **Templates/**: Reusable templates for documentation and code generation
 - **Workflows/**: GitHub Actions and automation scripts
 
-### Core Configuration Files
-
-#### TypeScript Configuration
-```jsonc
-// tsconfig.json  – IDE-friendly, no Emit
-{
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "ES2022",
-    "rootDir": "src",
-    "strict": true,
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "incremental": true
-  },
-  "include": ["src/**/*.ts", "tests/**/*.ts"]
-}
-```
-
-```jsonc
-// tsconfig.build.json – used by tsup (extends the above)
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": { "noEmit": false, "outDir": "dist" },
-  "exclude": ["tests", "**/*.test.ts"]
-}
-```
-
-#### Test Configuration
-```ts
-// vitest.config.ts
-import { defineConfig } from 'vitest/config';
-
-export default defineConfig({
-  test: { 
-    globals: true, 
-    environment: 'node',
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-      exclude: [
-        'node_modules/',
-        'dist/',
-        'tests/',
-        '**/*.d.ts',
-        '**/*.test.ts',
-        '**/*.spec.ts'
-      ]
-    }
-  }
-});
-```
-
-#### Linting Configuration
-```jsonc
-// .eslintrc.json (flat config variant)
-{
-  "plugins": { "@typescript-eslint": "latest" },
-  "languageOptions": { "parser": "@typescript-eslint/parser" },
-  "rules": {
-    "no-unused-vars": "error",
-    "@typescript-eslint/explicit-function-return-type": "warn",
-    "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/prefer-const": "error",
-    "@typescript-eslint/no-unused-vars": "error"
-  }
-}
-```
-
-### Package.json Scripts
-```jsonc
-{
-  "scripts": {
-    "dev": "tsup src/index.ts --watch --dts",
-    "build": "tsup src/index.ts --dts --minify",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write .",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "docs": "typedoc --out docs src",
-    "release": "semantic-release",
-    "prepare": "husky install"
-  }
-}
-```
-
 ---
 
 ## 4 · Writing Style Guidelines
@@ -329,46 +239,7 @@ The `docwriter` agent should reference these templates:
 
 ---
 
-## 6 · Automation Workflow (GitHub Actions - Experimental)
-
-<!--
-⚠️  EXPERIMENTAL_CI: false
-     The workflow below is kept for future use. Agents MUST ignore it
-     unless this flag is switched to true (repo secret or env var).
--->
-
-> **Why disabled?**   Codex CLI currently crashes in GitHub Actions due to Ink’s interactive TTY requirement (issue #1080). Enable when a non‑interactive flag ships or use a self‑hosted runner with pseudo‑TTY.
-
-```yaml
-# .github/workflows/agents.yml.disabled
-name: Codex‑router
-on:
-  push:
-    branches: ["**"]
-
-env:
-  NODE_VERSION: "20"
-  PNPM_VERSION: "9"
-  EXPERIMENTAL_CI: ${{ secrets.EXPERIMENTAL_CI }}
-
-jobs:
-  codex-router:
-    if: ${{ env.EXPERIMENTAL_CI == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with: { version: "${{ env.PNPM_VERSION }}" }
-      - name: Detect next agent
-        run: ./scripts/next-agent.sh  # sets $NEXT_AGENT
-      - name: Trigger agent via Codex API
-        if: env.NEXT_AGENT != ''
-        run: codex run --quiet --agent "$NEXT_AGENT"
-```
-
----
-
-## 7 · Environment Setup
+## 6 · Environment Setup
 
 * **Node.js 18.18+** via `nvm` or container.
 * Local dev startup:
@@ -384,7 +255,7 @@ jobs:
 
 ---
 
-## 8 · Failure‑Recovery Matrix
+## 7 · Failure‑Recovery Matrix
 
 | Problem                 | Responsible Agent | Remedy                               |
 | ----------------------- | ----------------- | ------------------------------------ |
@@ -396,18 +267,6 @@ jobs:
 | Coverage drop           | builder / tester  | Add tests / mark exceptions          |
 | High CVE                | security          | Upgrade dependency or patch          |
 | Docs fail               | docwriter         | Regenerate & push                    |
-
----
-
-## 9 · References
-
-* [Playwright](https://playwright.dev/)
-* [fast-check](https://github.com/dubzzz/fast-check)
-* [Stryker‑mutator](https://stryker-mutator.io/)
-* [Vitest](https://vitest.dev/)
-* [TypeScript](https://www.typescriptlang.org/)
-* [tsup](https://github.com/egoist/tsup)
-* [TypeDoc](https://typedoc.org/)
 
 ---
 
