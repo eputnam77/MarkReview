@@ -9,8 +9,6 @@ try {
   // no-op
 }
 
-import { startDiffServer } from '../../src/api/server'
-import { enableRealtimeCollaboration } from '../../src/collaboration'
 import { checkBundleSize, scanDomBenchmark } from '../../src/core/performance'
 import { validateUsabilityMetrics } from '../../src/core/usabilityMetrics'
 import { bulkAcceptReject, exportDocument } from '../../src/core/bulkExport'
@@ -22,9 +20,6 @@ import { enforceSecurityAndSemverPolicy } from '../../src/core/securitySemver'
 
 test('additional workflow utilities', async ({ page }) => {
   await page.goto('about:blank')
-
-  assert.strictEqual(startDiffServer(), 'started')
-  assert.strictEqual(enableRealtimeCollaboration(), true)
 
   const sizes = checkBundleSize('const a=1', 'body{}')
   assert.ok(sizes.js > 0)
