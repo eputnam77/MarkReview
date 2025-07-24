@@ -16,10 +16,6 @@ Welcome to your central resource for installing, configuring, and mastering Mark
 
 Need technical details? The [API reference](api/index.md) covers every module in depth.
 
-> **Heads up:** The `server` and `collaboration` helpers included in the API are demo stubs—use them only for tests or exploration. For production use, replace these with your own implementations.
-
-If you’re building for the browser, your bundler will detect the `browser` field and swap out any Node-only helpers with the provided `dist/empty.js` module, keeping your web app clean and lightweight.
-
 ## Key Features
 
 - **Persistent Toolbar and Bar State:**

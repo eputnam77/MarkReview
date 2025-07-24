@@ -25,11 +25,8 @@ Every mandatory requirement from `.dev/PRD.md` is present in the codebase:
 
 ## Integration Risks
 
-- Browser builds must exclude `src/node` helpers; the README explains the `browser` field and empty module【F:README.md†L26-L36】.
-- `startDiffServer` and `enableRealtimeCollaboration` are stubs that return static values and perform no I/O【F:src/api/server.ts†L1-L14】【F:src/collaboration/index.ts†L1-L11】.
 - Persistence functions operate on simple ProseMirror schemas and may miss edge cases in complex documents.
 - Global CSS variables could clash with host styles.
-- Node scripts rely on synchronous `fs` calls which could block builds on large directories【F:src/node/cleanupPythonSources.ts†L7-L15】.
 
 ## Performance Notes
 
@@ -41,14 +38,14 @@ Every mandatory requirement from `.dev/PRD.md` is present in the codebase:
 
 - Modules are short and well typed; placeholder declarations describe the generated types directory【F:types/index.d.ts†L1-L7】.
 - CI enforces linting, formatting, type checks and coverage on every push【F:.github/workflows/ci.yml†L17-L28】.
-- Docs and README highlight the placeholder server and collaboration helpers, reducing confusion when integrating【F:docs/api/server.md†L1-L11】【F:docs/api/collaboration.md†L1-L8】.
+- Docs reference metrics and usability utilities, clarifying integration steps.
 - `validateUsabilityMetrics` checks that user tests meet success criteria【F:src/core/usabilityMetrics.ts†L1-L23】.
 - Metrics utilities now documented with usage example【F:docs/api/metrics.md†L1-L22】【F:docs/api/index.md†L1-L10】
 
 ## Mandatory Fixes
 
-1. Keep README and docs emphasising that `startDiffServer` and `enableRealtimeCollaboration` are only stubs.
-2. Confirm bundlers respect the `browser` field so `src/node` stays out of browser bundles.
+1. Remove stub helpers for `startDiffServer` and `enableRealtimeCollaboration` from code and documentation.
+2. Bundler checks for the `browser` field are no longer required after deleting Node-only utilities.
 3. Monitor `persistMarks` on large and custom ProseMirror schemas to avoid unexpected behaviour.
 
 ## Optional Enhancements

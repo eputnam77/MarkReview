@@ -35,8 +35,7 @@ MarkReview equips any ProseMirror-based editor with fast, lightweight review too
 
 ## Integration Essentials
 
-- Node-only utilities are isolated under `src/node`. The package exports a `browser` field and ships `dist/empty.js` to keep browser bundles clean.
-- Demo helpers like `startDiffServer()` and `enableRealtimeCollaboration()` are stubs—replace with real back-end code as needed.
+MarkReview ships as a pure front-end library with no server or real-time dependencies.
 
 ## Key Features
 
