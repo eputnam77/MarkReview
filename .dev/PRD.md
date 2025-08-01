@@ -153,7 +153,7 @@ markreview/
 ├── vitest.config.ts            # Test runner setup
 ├── package.json
 ├── README.md
-└── LICENSE
+└── LICENSE               # GPL-3.0-or-later license
 ```
 
 ---
@@ -204,6 +204,7 @@ markreview/
 | Change bar color rule | Highest-priority change wins (del > subst > add).                                    |
 | AI              | Separate NPM package; not in core.                                      |
 | CLI             | Legacy `markreview-cli` archived; no CLI in core.                                    |
+| License         | Distributed under the GPL-3.0-or-later license.                           |
 
 ---
 

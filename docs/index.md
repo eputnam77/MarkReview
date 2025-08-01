@@ -28,3 +28,7 @@ Need technical details? The [API reference](api/index.md) covers every module in
   MarkReview is engineered to keep the bundle under 10 kB and DOM scan times under 5 ms, so your workflow stays fast.
 - **Usability Metrics:**
   Verify success criteria with `validateUsabilityMetrics()`.
+
+## License
+
+MarkReview is released under the [GNU General Public License v3.0](../LICENSE).

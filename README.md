@@ -53,3 +53,7 @@ MarkReview ships as a pure front-end library with no server or real-time depende
 ## Versioning
 
 MarkReview follows [Semantic Versioning](https://semver.org/), with major releases tracking the ProseMirror version series.
+
+## License
+
+This project is distributed under the [GNU General Public License v3.0](LICENSE).

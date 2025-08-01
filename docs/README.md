@@ -7,3 +7,7 @@ npm run docs:dev
 ```
 
 You’ll see updates in real time as you work. This setup ensures you can develop, review, and refine your documentation with confidence and efficiency.
+
+## License
+
+MarkReview's documentation and code are available under the [GNU General Public License v3.0](../LICENSE).
