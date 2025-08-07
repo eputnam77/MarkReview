@@ -14,4 +14,9 @@ describe('attachPopupControls', () => {
     attachPopupControls('comment', 'x {++y++}', thread)
     expect(thread.list()).toHaveLength(1)
   })
+
+  it('ignores unknown actions', () => {
+    // @ts-expect-error testing fallback path
+    expect(attachPopupControls('other', 'z')).toBe('z')
+  })
 })

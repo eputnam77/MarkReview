@@ -7,4 +7,8 @@ describe('diffDoc', () => {
     expect(diff).toContain('- a')
     expect(diff).toContain('+ b')
   })
+
+  it('returns empty array when docs match', () => {
+    expect(diffDoc('same', 'same')).toHaveLength(0)
+  })
 })

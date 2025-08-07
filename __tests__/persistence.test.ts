@@ -4,9 +4,9 @@ import { persistMarks } from '../src/core/persistence'
 
 describe('persistMarks', () => {
   it('accepts or rejects markup', () => {
-    const text = 'a {++b++} {--c--}'
-    expect(persistMarks(text, true)).toBe('a b ')
-    expect(persistMarks(text, false)).toBe('a  c')
+    const text = 'a {++b++} {--c--} {==d==} {~~e~>f~~}'
+    expect(persistMarks(text, true)).toBe('a b  d e~>f')
+    expect(persistMarks(text, false)).toBe('a  c d e~>f')
   })
 
   it('works with ProseMirror nodes', () => {
