@@ -25,5 +25,9 @@ describe('CommentThread', () => {
     expect(CommentThread.extractMentions(c.content)).toContain('u')
     t2.resolve('1')
     expect(t2.list()[0].resolved).toBe(true)
+
+    const bad = new CommentThread()
+    bad.loadFromJSON('not json')
+    expect(bad.list()).toHaveLength(0)
   })
 })

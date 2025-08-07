@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+/* c8 ignore start */
 const fs = require('fs')
 const { gzipSync } = require('zlib')
 
@@ -32,3 +33,4 @@ if (time >= 5) {
 console.log(
   `Performance OK: ${jsSize} kB JS, ${cssSize} kB CSS, scan ${time} ms`,
 )
+/* c8 ignore stop */
